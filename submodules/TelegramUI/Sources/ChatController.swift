@@ -2477,6 +2477,12 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                 return false
             }
 
+            // AyuGram: without Premium, a premium sticker is re-uploaded and sent as a plain copy
+            if AyuGramSettings.bool(.premiumStickersAsCopy) && fileReference.media.isPremiumSticker && (!strongSelf.presentationInterfaceState.isPremium || AyuGramSettings.bool(.localPremium)) && (!AyuGramSettings.bool(.stickerConfirmation) || strongSelf.ayuSendConfirmed) {
+                strongSelf.ayuSendStickerCopy(fileReference)
+                return true
+            }
+
             // AyuGram: ask before sending a sticker
             if AyuGramSettings.bool(.stickerConfirmation) && !strongSelf.ayuSendConfirmed {
                 strongSelf.present(textAlertController(context: strongSelf.context, updatedPresentationData: strongSelf.updatedPresentationData, title: nil, text: "Send this sticker?", actions: [TextAlertAction(type: .genericAction, title: strongSelf.presentationData.strings.Common_Cancel, action: {}), TextAlertAction(type: .defaultAction, title: strongSelf.presentationData.strings.Common_OK, action: { [weak self] in
@@ -11707,5 +11713,59 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     
     public var contentContainerNode: ASDisplayNode {
         return self.chatDisplayNode.contentContainerNode
+    }
+}
+
+// AyuGram: downloads a sticker file and sends its contents again as a new upload,
+// so the message no longer points at the premium sticker document.
+extension ChatControllerImpl {
+    func ayuSendStickerCopy(_ fileReference: FileMediaReference) {
+        guard let peerId = self.chatLocation.peerId else {
+            return
+        }
+        let file = fileReference.media
+        let account = self.context.account
+        let threadId = self.chatLocation.threadId
+        AyuGramSettings.debugLog("sticker copy start mime=\(file.mimeType)")
+        let fetchDisposable = fetchedMediaResource(mediaBox: account.postbox.mediaBox, userLocation: .other, userContentType: MediaResourceUserContentType(file: file), reference: fileReference.resourceReference(file.resource)).startStandalone()
+        let _ = (account.postbox.mediaBox.resourceData(file.resource)
+        |> filter { $0.complete }
+        |> take(1)
+        |> deliverOnMainQueue).startStandalone(next: { data in
+            fetchDisposable.dispose()
+            guard let content = try? Data(contentsOf: URL(fileURLWithPath: data.path)), !content.isEmpty else {
+                AyuGramSettings.debugLog("sticker copy FAILED to read data")
+                return
+            }
+            let resource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
+            account.postbox.mediaBox.storeResourceData(resource.id, data: content)
+
+            var attributes: [TelegramMediaFileAttribute] = []
+            var displayText = ""
+            for attribute in file.attributes {
+                switch attribute {
+                case let .Sticker(text, _, _):
+                    displayText = text
+                case .ImageSize, .Video:
+                    attributes.append(attribute)
+                default:
+                    break
+                }
+            }
+            attributes.append(.Sticker(displayText: displayText, packReference: nil, maskData: nil))
+            let fileExtension: String
+            if file.mimeType == "application/x-tgsticker" {
+                fileExtension = "tgs"
+            } else if file.mimeType == "video/webm" {
+                fileExtension = "webm"
+            } else {
+                fileExtension = "webp"
+            }
+            attributes.append(.FileName(fileName: "sticker.\(fileExtension)"))
+
+            let copy = TelegramMediaFile(fileId: EngineMedia.Id(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: file.immediateThumbnailData, mimeType: file.mimeType, size: Int64(content.count), attributes: attributes, alternativeRepresentations: [])
+            AyuGramSettings.debugLog("sticker copy enqueue bytes=\(content.count)")
+            let _ = enqueueMessages(account: account, peerId: peerId, messages: [.message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: copy), threadId: threadId, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])]).startStandalone()
+        })
     }
 }

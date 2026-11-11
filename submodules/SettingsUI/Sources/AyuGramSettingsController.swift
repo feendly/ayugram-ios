@@ -350,6 +350,7 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.disableCustomBackgrounds, "Ignore Per-Chat Backgrounds"),
         (.semiTransparentDeletedMessages, "Dim Deleted Messages"),
         (.streamerMode, "Streamer Mode (Hide Phone Number)"),
+        (.premiumStickersAsCopy, "Send Premium Stickers as a Copy"),
         (.hideNotificationCounters, "Hide Unread Counter on Chats Tab"),
         (.gifConfirmation, "Confirm Before Sending GIFs"),
         (.disableGreetingSticker, "No Greeting Sticker in Empty Chats"),

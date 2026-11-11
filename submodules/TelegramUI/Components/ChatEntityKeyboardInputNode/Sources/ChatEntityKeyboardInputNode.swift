@@ -1266,7 +1266,7 @@ public final class ChatEntityKeyboardInputNode: ChatInputNode {
                             }
                         })
                     } else {
-                        if file.isPremiumSticker && !hasPremium {
+                        if file.isPremiumSticker && !hasPremium && !AyuGramSettings.bool(.premiumStickersAsCopy) {
                             let controller = PremiumIntroScreen(context: context, source: .stickers)
                             interaction.getNavigationController()?.pushViewController(controller)
 
