@@ -31,6 +31,7 @@ public final class AyuGramSettings {
         case showPeerId
         case sendWithoutSoundAlways
         case sendWithoutSoundInGhost
+        case allowSavingRestrictedContent
 
         public var defaultValue: Bool {
             switch self {
@@ -59,6 +60,8 @@ public final class AyuGramSettings {
             case .showPeerId:
                 return true
             case .sendWithoutSoundAlways, .sendWithoutSoundInGhost:
+                return false
+            case .allowSavingRestrictedContent:
                 return false
             }
         }

@@ -230,7 +230,8 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.keepAliveInBackground, "Stay Connected in Background"),
         (.disableStories, "Hide Stories in Chat List"),
         (.disableOpenLinkWarning, "Skip Hidden Link Warning"),
-        (.showPeerId, "Show User ID in Profile")
+        (.showPeerId, "Show User ID in Profile"),
+        (.allowSavingRestrictedContent, "Allow Copy and Save in Restricted Chats")
     ]
     index = 0
     for (key, title) in otherToggles {

@@ -536,6 +536,10 @@ public extension Message {
     }
     
     func isCopyProtected() -> Bool {
+        // AyuGram: optionally ignore copy protection locally (copy, save, select).
+        if AyuGramSettings.bool(.allowSavingRestrictedContent) {
+            return false
+        }
         if self.flags.contains(.CopyProtected) {
             return true
         } else if let group = self.peers[self.id.peerId] as? TelegramGroup, group.flags.contains(.copyProtectionEnabled) {
