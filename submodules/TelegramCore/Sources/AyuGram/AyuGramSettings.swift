@@ -24,6 +24,7 @@ public final class AyuGramSettings {
         // Other
         case disableAds
         case localPremium
+        case showMessageSeconds
 
         public var defaultValue: Bool {
             switch self {
@@ -42,6 +43,8 @@ public final class AyuGramSettings {
             case .disableAds:
                 return true
             case .localPremium:
+                return false
+            case .showMessageSeconds:
                 return false
             }
         }

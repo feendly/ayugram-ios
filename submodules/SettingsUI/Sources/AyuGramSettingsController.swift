@@ -23,6 +23,8 @@ private final class AyuGramSettingsControllerArguments {
 private enum AyuGramSettingsSection: Int32 {
     case ghostMaster
     case ghost
+    case history
+    case other
 }
 
 private enum AyuGramSettingsEntry: ItemListNodeEntry {
@@ -31,6 +33,12 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
     case ghostHeader(String)
     case toggle(Int32, AyuGramSettings.BoolKey, String, Bool)
     case ghostInfo(String)
+    case historyHeader(String)
+    case historyToggle(Int32, AyuGramSettings.BoolKey, String, Bool)
+    case historyInfo(String)
+    case otherHeader(String)
+    case otherToggle(Int32, AyuGramSettings.BoolKey, String, Bool)
+    case otherInfo(String)
 
     var section: ItemListSectionId {
         switch self {
@@ -38,6 +46,10 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             return AyuGramSettingsSection.ghostMaster.rawValue
         case .ghostHeader, .toggle, .ghostInfo:
             return AyuGramSettingsSection.ghost.rawValue
+        case .historyHeader, .historyToggle, .historyInfo:
+            return AyuGramSettingsSection.history.rawValue
+        case .otherHeader, .otherToggle, .otherInfo:
+            return AyuGramSettingsSection.other.rawValue
         }
     }
 
@@ -53,6 +65,18 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             return 10 + index
         case .ghostInfo:
             return 1000
+        case .historyHeader:
+            return 2000
+        case let .historyToggle(index, _, _, _):
+            return 2010 + index
+        case .historyInfo:
+            return 2900
+        case .otherHeader:
+            return 3000
+        case let .otherToggle(index, _, _, _):
+            return 3010 + index
+        case .otherInfo:
+            return 3900
         }
     }
 
@@ -88,6 +112,42 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             } else {
                 return false
             }
+        case let .historyHeader(text):
+            if case .historyHeader(text) = rhs {
+                return true
+            } else {
+                return false
+            }
+        case let .historyToggle(index, key, title, value):
+            if case .historyToggle(index, key, title, value) = rhs {
+                return true
+            } else {
+                return false
+            }
+        case let .historyInfo(text):
+            if case .historyInfo(text) = rhs {
+                return true
+            } else {
+                return false
+            }
+        case let .otherHeader(text):
+            if case .otherHeader(text) = rhs {
+                return true
+            } else {
+                return false
+            }
+        case let .otherToggle(index, key, title, value):
+            if case .otherToggle(index, key, title, value) = rhs {
+                return true
+            } else {
+                return false
+            }
+        case let .otherInfo(text):
+            if case .otherInfo(text) = rhs {
+                return true
+            } else {
+                return false
+            }
         }
     }
 
@@ -111,6 +171,14 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
                 arguments.toggle(key, value)
             })
         case let .ghostInfo(text):
+            return ItemListTextItem(presentationData: presentationData, text: .plain(text), sectionId: self.section)
+        case let .historyHeader(text), let .otherHeader(text):
+            return ItemListSectionHeaderItem(presentationData: presentationData, text: text, sectionId: self.section)
+        case let .historyToggle(_, key, title, value), let .otherToggle(_, key, title, value):
+            return ItemListSwitchItem(presentationData: presentationData, systemStyle: .glass, title: title, value: value, sectionId: self.section, style: .blocks, updated: { value in
+                arguments.toggle(key, value)
+            })
+        case let .historyInfo(text), let .otherInfo(text):
             return ItemListTextItem(presentationData: presentationData, text: .plain(text), sectionId: self.section)
         }
     }
@@ -137,6 +205,32 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         index += 1
     }
     entries.append(.ghostInfo("With read receipts off, chats are marked as read on this device only. Sending a message still marks the chat as read on the server."))
+
+    entries.append(.historyHeader("MESSAGE HISTORY"))
+    let historyToggles: [(AyuGramSettings.BoolKey, String)] = [
+        (.saveDeletedMessages, "Save Deleted Messages"),
+        (.saveMessagesHistory, "Save Edit History"),
+        (.saveForBots, "Save in Bot Chats")
+    ]
+    index = 0
+    for (key, title) in historyToggles {
+        entries.append(.historyToggle(index, key, title, AyuGramSettings.bool(key)))
+        index += 1
+    }
+    entries.append(.historyInfo("Deleted messages stay in the chat with a broom mark. Hold an edited message and choose Edit History to see earlier versions."))
+
+    entries.append(.otherHeader("OTHER"))
+    let otherToggles: [(AyuGramSettings.BoolKey, String)] = [
+        (.disableAds, "Hide Sponsored Messages"),
+        (.showMessageSeconds, "Show Seconds in Message Time"),
+        (.localPremium, "Local Telegram Premium")
+    ]
+    index = 0
+    for (key, title) in otherToggles {
+        entries.append(.otherToggle(index, key, title, AyuGramSettings.bool(key)))
+        index += 1
+    }
+    entries.append(.otherInfo("Local Premium only unlocks features on this device and takes effect after restarting the app."))
 
     return entries
 }

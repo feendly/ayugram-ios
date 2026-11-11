@@ -163,7 +163,8 @@ public func stringForMessageTimestampStatus(
         timestamp = orignalDate
     }
     
-    var dateText = stringForMessageTimestamp(timestamp: timestamp, dateTimeFormat: dateTimeFormat)
+    // AyuGram: optional seconds in message timestamps.
+    var dateText = stringForMessageTimestamp(timestamp: timestamp, dateTimeFormat: dateTimeFormat, withSeconds: AyuGramSettings.bool(.showMessageSeconds))
     if timestamp == scheduleWhenOnlineTimestamp {
         dateText = "         "
     }
