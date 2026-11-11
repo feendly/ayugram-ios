@@ -72,6 +72,8 @@ A feature counts as done only when its row says PASS.
 | 47 | Hide unread counter on Chats tab | run 43084196247 | Override on | No badge on the Chats tab | Badge gone (it showed 1.2K before) | PASS |
 | 48 | Streamer mode | run 43084196247 | Override on; open Settings | Own phone number hidden | Header shows only the username. The "Is +1 ... still your number?" card still showed the number | PASS with gap (card fix coded, not built) |
 | 49 | Hide quick share, ignore per-chat backgrounds | run 43084196247 | - | - | No channel post or custom chat background in the test chat | NOT TESTED |
+| 50 | Filtered message hidden in chat list preview | run 43094601854 | Install; look at luki's row in nash's chat list (last message is filtered) | Preview does not show the message text | Row shows "Filtered message" (it showed the text "Lazy" on the previous build) | PASS |
+| 51 | Premium sticker sent as a copy | run 43094601854 | Open the sticker panel, tap a premium sticker | Sticker sent | Not reached: the iPad dropped off the network (15% battery warning seconds earlier) before a premium sticker was found in the panel | NOT TESTED |
 
 ## Notes
 
