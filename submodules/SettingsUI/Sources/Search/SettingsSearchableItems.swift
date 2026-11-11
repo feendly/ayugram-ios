@@ -4583,6 +4583,11 @@ func searchSettingsItems(items: [SettingsSearchableItem], query: String) -> [Set
 }
 
 public func handleSettingsPathUrl(context: AccountContext, path: String, navigationController: NavigationController) {
+    // AyuGram: tg://settings/ayu and tg://ayusettings
+    if path == "ayu" || path.hasPrefix("ayu/") {
+        navigationController.pushViewController(ayuGramSettingsController(context: context))
+        return
+    }
     var notificationExceptionsList: Signal<NotificationExceptionsList?, NoError> = .single(nil)
     var activeSessionsContext: Signal<ActiveSessionsContext?, NoError> = .single(nil)
     var webSessionsContext: Signal<WebSessionsContext?, NoError> = .single(nil)

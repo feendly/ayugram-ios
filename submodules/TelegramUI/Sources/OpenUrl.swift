@@ -1010,6 +1010,9 @@ private func openCheckedExternalUrl(context: AccountContext, urlContext: OpenURL
                         }
                     }
                     handleResolvedUrl(.postStory(section))
+                case "ayusettings", "ayu":
+                    // AyuGram: tg://ayusettings opens the AyuGram settings screen
+                    handleResolvedUrl(.settings(.path("ayu")))
                 case "settings":
                     if let lastComponent = parsedUrl.pathComponents.last {
                         let fullPath = parsedUrl.pathComponents.joined(separator: "/").replacingOccurrences(of: "//", with: "")
