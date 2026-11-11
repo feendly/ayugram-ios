@@ -19,7 +19,7 @@ which provides the Xcode 27.1 that `versions.json` pins.
 
 ```bash
 gh workflow run build.yml -R feendly/ayugram-ios --ref ayugram
-gh run watch <run-id> -R feendly/ayugram-ios --exit-status
+gh run view <run-id> -R feendly/ayugram-ios --json status,conclusion
 ```
 
 Timing on the standard runner: about 100 minutes cold, 10 minutes with no
@@ -59,8 +59,8 @@ Inside the app's data container, `tmp/`:
   to the in-app switches.
 
 Screen control: noVNC at `http://192.168.2.22:5801/` in Chrome with
-`&resize=scale`. Switches respond to a short right-to-left drag across them,
-not to a click. `uiopen --url "tg://resolve?domain=<username>"` opens a chat.
+`&resize=scale`. Switches, context-menu items and alert buttons respond to a
+scripted press of about 150 ms on the noVNC canvas, not to a plain click. `uiopen --url "tg://resolve?domain=<username>"` opens a chat.
 
 ## Upstream updates
 

@@ -33,7 +33,16 @@ A feature counts as done only when its row says PASS.
 | 9 | Edit history | run 42973074591 | nash edits "ghost 5 from nash" to "... v2"; luki long-presses it | "Edit History" item shows the old text | Item present; alert shows "ghost 5 from nash" | PASS |
 | 10 | No sponsored messages | run 42973074591 | - | - | Not tested (needs a channel that shows ads) | NOT TESTED |
 | 11 | Local Premium | run 42973074591 | - | - | Not tested (no switch in the UI yet) | NOT TESTED |
-| 12 | Deleted messages while the app is closed | - | - | - | Not implemented (Phase 4) | NOT DONE |
+| 12 | Deleted messages while the app is closed | run 42990218595 | Stay Connected on, restart, allow location, put the app in the background for 200 s | Process keeps running; a deletion sent meanwhile is kept | Location permission granted (log `keepalive authorization=3`), process alive after 200 s. No deletion could be sent from a second device, so the end-to-end case is open | NOT TESTED end to end |
+| 13 | New settings sections | run 42990218595 | Open AyuGram settings, scroll | Ghost extras, filters, other switches | All present; switches flip; Add Filter prompt adds a row | PASS |
+| 14 | Seconds in message time | run 42990218595 | Turn on, open a chat | Times show seconds | `1:48:22 AM` style in the chat | PASS |
+| 15 | User ID in profile | run 42990218595 | Open nash's profile as luki | ID row | `ID 6700664454` above the username | PASS |
+| 16 | Message filters | run 42990218595 | Filter `blockme`, filters on incl. private chats; nash sends "blockme 1" and "plain 7" | luki sees only "plain 7" | Only "plain 7" shown | PASS |
+| 17 | Send via schedule | run 42990218595 | Override `useScheduledMessages` on and `sendOnlinePackets` off; nash sends | Message leaves the chat view, arrives about 12 s later | Arrived 12 to 20 s later with the scheduled time. Bug: the input field kept the text | PASS with bug (fix in run 43002076982) |
+| 18 | Send Read Receipt action | run 42990218595 | Receipts off; luki long-presses nash's new message, taps Send Read Receipt | Log `read push SENT`, two ticks for nash | Menu item present; log shows `push=false validate=true` and `read validate kept local`, no receipt sent | FAIL (fix in run 43002076982) |
+| 19 | Go Offline Immediately | run 42990218595 | Override `sendOfflinePacketAfterOnline` on | Log `forceOffline=true` | Logged every 5 s | PASS at log level |
+| 20 | Deletion kept in a channel or group | run 42990218595 | (happened during testing) | Log line for a channel peer | `deleted message kept 2:Id(...)` | PASS at log level; not looked at in the chat |
+| 21 | Hide stories, skip link warning, copy in restricted chats, local Premium, silent sending | run 42990218595 | Switches on | - | No test material at hand (no stories, hidden links or restricted chats in the test accounts); silent sending is not visible to the sender | NOT TESTED |
 
 ## Notes
 

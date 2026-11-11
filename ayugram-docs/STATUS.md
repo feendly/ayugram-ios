@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-11.
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-11 (after testing run 42990218595).
 
 Status values:
 
@@ -16,11 +16,11 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 6 |
-| LOG ONLY | 2 |
-| UNTESTED | 11 |
-| TODO | 76 |
-| N/A | 8 |
+| TESTED | 12 |
+| LOG ONLY | 5 |
+| UNTESTED | 17 |
+| TODO | 65 |
+| N/A | 9 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
 
@@ -32,15 +32,15 @@ Some rows group several related desktop settings, so the row count is lower than
 | sendReadStories | on | UNTESTED | Gate in place, no story test yet |
 | sendOnlinePackets | on | LOG ONLY | |
 | sendUploadProgress (typing) | on | LOG ONLY | |
-| sendOfflinePacketAfterOnline | off | UNTESTED | Switch exists; effect not checked |
+| sendOfflinePacketAfterOnline | off | LOG ONLY | Log shows an offline status sent every 5 s while enabled |
 | ghostModeActive (master switch) | off | UNTESTED | Switch exists; sets the five above |
-| markReadAfterAction | on | TODO | Sending a message already marks read server-side; reactions and explicit "Read" action missing |
-| useScheduledMessages | off | TODO | |
-| sendWithoutSound | Never | TODO | |
+| markReadAfterAction | on | TODO | Sending a message already marks read server-side; reactions missing |
+| useScheduledMessages | off | TESTED | Only with online status off, as on desktop. Message arrives about 12 s later. Input field was not cleared after sending (fix in run 43002076982, untested) |
+| sendWithoutSound | Never | UNTESTED | Two switches: always, or only in ghost mode. Not observable from the sender's side |
 | suggestGhostModeBeforeViewingStory | on | TODO | |
 | Per-setting "locked" flags (5) | off | TODO | |
 | useGlobalGhostMode (per-account ghost) | on | TODO | iOS build is global only |
-| "Read message" context action | - | TODO | |
+| "Read message" context action | - | UNTESTED | "Send Read Receipt" in the long-press menu. First version FAILED on device (queued a check instead of a push); fix in run 43002076982 |
 
 ## Message history
 
@@ -49,11 +49,11 @@ Some rows group several related desktop settings, so the row count is lower than
 | saveDeletedMessages | on | TESTED | Live deletion in a private chat |
 | saveMessagesHistory (edits) | on | TESTED | "Edit History" in the long-press menu |
 | saveForBots | off | UNTESTED | |
-| deletedMark | broom | TESTED | Fixed to the broom; not customizable yet (TODO) |
+| deletedMark | broom | TESTED | Broom shown. Custom mark setting added in run 43002076982 (UNTESTED) |
 | editedMark | "edited" | TODO | |
 | semiTransparentDeletedMessages | off | TODO | |
-| Deleted messages while app is closed | - | UNTESTED | Background keep-alive, building now |
-| Deleted messages in groups and channels | - | UNTESTED | Code path exists; only private chats tested |
+| Deleted messages while app is closed | - | UNTESTED | Keep-alive runs (location permission granted, process alive after 200 s in background). Needs a deletion sent from another device while the iPad is on the home screen |
+| Deleted messages in groups and channels | - | LOG ONLY | Log shows a channel deletion kept; not looked at in the chat |
 | Self-destructing media, cleared history, deleted chats | - | TODO | |
 | Proper database instead of a plist file | - | TODO | |
 | Full-screen edit history viewer | - | TODO | Currently an alert listing old texts |
@@ -62,8 +62,8 @@ Some rows group several related desktop settings, so the row count is lower than
 
 | Setting | Desktop default | iOS status |
 |---|---|---|
-| filtersEnabled (regex filters) | off | TODO |
-| filtersEnabledInChats | off | TODO |
+| filtersEnabled (regex filters) | off | TESTED (filter "blockme" hid nash's message for luki) |
+| filtersEnabledInChats | off | TESTED |
 | hideFromBlocked | off | TODO |
 | shadowBanIds | empty | TODO |
 | filterZalgo | off | TODO |
@@ -75,9 +75,9 @@ Some rows group several related desktop settings, so the row count is lower than
 |---|---|---|---|
 | disableAds | on | UNTESTED | Needs a channel that shows ads |
 | localPremium | off | UNTESTED | Needs restart to apply |
-| disableStories | off | TODO | |
+| disableStories | off | UNTESTED | Switch on; no stories were available to compare |
 | disableCustomBackgrounds | off | TODO | |
-| disableOpenLinkWarning | off | TODO | |
+| disableOpenLinkWarning | off | UNTESTED | Needs a message with a hidden link |
 | disableNotificationsDelay | off | TODO | |
 | disableGreetingSticker | off | TODO | |
 | hidePremiumStatuses | off | TODO | |
@@ -90,7 +90,7 @@ Some rows group several related desktop settings, so the row count is lower than
 
 | Setting | Desktop default | iOS status |
 |---|---|---|
-| stickerConfirmation | off | TODO |
+| stickerConfirmation | off | UNTESTED (run 43002076982) |
 | gifConfirmation | off | TODO |
 | voiceConfirmation | off | TODO |
 | roundConfirmation | off | TODO |
@@ -99,8 +99,8 @@ Some rows group several related desktop settings, so the row count is lower than
 
 | Setting | Desktop default | iOS status | Notes |
 |---|---|---|---|
-| showMessageSeconds | off | UNTESTED | Building now |
-| showPeerId | Bot API | TODO | |
+| showMessageSeconds | off | TESTED | |
+| showPeerId | Bot API | TESTED | ID row in user profiles; on/off only |
 | appIcon | default | TODO | |
 | monoFont / main font | system | TODO | |
 | messageBubbleRadius | 16 | TODO | |
@@ -118,7 +118,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | showPrivateChatReactions | on | TODO | |
 | wideMultiplier | 1.0 | N/A | Desktop window layout |
 | hideNotificationCounters | off | TODO | |
-| hideNotificationBadge | off | TODO | |
+| hideNotificationBadge | off | UNTESTED | Run 43002076982 |
 | hideAllChatsFolder | off | TODO | |
 | channelBottomButton | Discuss | TODO | |
 | quickAdminShortcuts | on | TODO | |
@@ -145,9 +145,9 @@ Some rows group several related desktop settings, so the row count is lower than
 | showViewsPanelInContextMenu | Visible | TODO |
 | showHideMessageInContextMenu | Hidden | TODO |
 | showUserMessagesInContextMenu | With modifier | TODO |
-| showMessageDetailsInContextMenu | With modifier | TODO |
+| showMessageDetailsInContextMenu | With modifier | UNTESTED (run 43002076982; on/off) |
 | showRepeatMessageInContextMenu | Hidden | TODO |
-| showAddFilterInContextMenu | Visible | TODO |
+| showAddFilterInContextMenu | Visible | UNTESTED (run 43002076982; on/off) |
 
 ## Side drawer and tray (desktop navigation)
 
@@ -163,10 +163,10 @@ Some rows group several related desktop settings, so the row count is lower than
 
 | Feature | iOS status | Notes |
 |---|---|---|
-| AyuGram settings screen | TESTED | Ghost section; more sections building now |
+| AyuGram settings screen | TESTED | Ghost, history, filters and other sections; Add Filter prompt works |
 | Streamer mode | TODO | |
 | Message shot (messages as image) | TODO | 7 options |
-| Forward without author / from restricted chats / repeat message | TODO | |
+| Forward without author / from restricted chats / repeat message | TODO | Copy and save in restricted chats is implemented (UNTESTED, no restricted chat at hand) |
 | Translator providers (Telegram, Google, Yandex, native) | TODO | |
 | Webview options (spoof Android, larger size) | TODO | 3 options |
 | `tg://ayu` settings links | TODO | |
@@ -178,6 +178,6 @@ Some rows group several related desktop settings, so the row count is lower than
 
 | Feature | Status | Notes |
 |---|---|---|
-| Stay Connected in Background | UNTESTED | Location-based keep-alive, off by default |
+| Stay Connected in Background | UNTESTED | Starts after restart, location permission granted on the iPad; end-to-end deletion test still open |
 | All accounts receive updates at once | UNTESTED | Part of keep-alive |
 | Debug log and test override files | TESTED | Test aids; to be removed or hidden before release |
