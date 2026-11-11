@@ -181,6 +181,25 @@ func chatHistoryEntriesForView(
         if pendingRemovedMessages.contains(message.id) {
             continue
         }
+        // AyuGram: reactions can be hidden per chat type
+        do {
+            let ayuPeerId = message.id.peerId
+            var ayuHideReactions = false
+            if ayuPeerId.namespace == Namespaces.Peer.CloudUser {
+                ayuHideReactions = !AyuGramSettings.bool(.showPrivateChatReactions)
+            } else if ayuPeerId.namespace == Namespaces.Peer.CloudGroup {
+                ayuHideReactions = !AyuGramSettings.bool(.showGroupReactions)
+            } else if ayuPeerId.namespace == Namespaces.Peer.CloudChannel {
+                if let channel = message.peers[ayuPeerId] as? TelegramChannel, case .broadcast = channel.info {
+                    ayuHideReactions = !AyuGramSettings.bool(.showChannelReactions)
+                } else {
+                    ayuHideReactions = !AyuGramSettings.bool(.showGroupReactions)
+                }
+            }
+            if ayuHideReactions {
+                message = message.withUpdatedAttributes(message.attributes.filter { !($0 is ReactionsMessageAttribute) && !($0 is PendingReactionsMessageAttribute) })
+            }
+        }
         // AyuGram: messages hidden on this device
         if AyuMessagesStore.shared.isHidden(message.id) {
             continue

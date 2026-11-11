@@ -44,6 +44,9 @@ public final class AyuGramSettings {
         case voiceConfirmation
         case hideSimilarChannels
         case hidePremiumStatuses
+        case showChannelReactions
+        case showGroupReactions
+        case showPrivateChatReactions
 
         public var defaultValue: Bool {
             switch self {
@@ -83,6 +86,8 @@ public final class AyuGramSettings {
                 return false
             case .voiceConfirmation, .hideSimilarChannels, .hidePremiumStatuses:
                 return false
+            case .showChannelReactions, .showGroupReactions, .showPrivateChatReactions:
+                return true
             case .showMessageDetailsInContextMenu, .showAddFilterInContextMenu:
                 return true
             }

@@ -345,7 +345,10 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.disableGreetingSticker, "No Greeting Sticker in Empty Chats"),
         (.voiceConfirmation, "Confirm Before Sending Recordings"),
         (.hideSimilarChannels, "Hide Similar Channels"),
-        (.hidePremiumStatuses, "Hide Premium Badges in Chat List")
+        (.hidePremiumStatuses, "Hide Premium Badges in Chat List"),
+        (.showChannelReactions, "Show Reactions in Channels"),
+        (.showGroupReactions, "Show Reactions in Groups"),
+        (.showPrivateChatReactions, "Show Reactions in Private Chats")
     ]
     index = 0
     for (key, title) in otherToggles {
