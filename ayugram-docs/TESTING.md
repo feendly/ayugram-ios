@@ -38,10 +38,11 @@ A feature counts as done only when its row says PASS.
 | 14 | Seconds in message time | run 42990218595 | Turn on, open a chat | Times show seconds | `1:48:22 AM` style in the chat | PASS |
 | 15 | User ID in profile | run 42990218595 | Open nash's profile as luki | ID row | `ID 6700664454` above the username | PASS |
 | 16 | Message filters | run 42990218595 | Filter `blockme`, filters on incl. private chats; nash sends "blockme 1" and "plain 7" | luki sees only "plain 7" | Only "plain 7" shown | PASS |
-| 17 | Send via schedule | run 42990218595 | Override `useScheduledMessages` on and `sendOnlinePackets` off; nash sends | Message leaves the chat view, arrives about 12 s later | Arrived 12 to 20 s later with the scheduled time. Bug: the input field kept the text | PASS with bug (fix in run 43002076982) |
-| 18 | Send Read Receipt action | run 42990218595 | Receipts off; luki long-presses nash's new message, taps Send Read Receipt | Log `read push SENT`, two ticks for nash | Menu item present; log shows `push=false validate=true` and `read validate kept local`, no receipt sent | FAIL (fix in run 43002076982) |
+| 17 | Send via schedule | run 42990218595 | Override `useScheduledMessages` on and `sendOnlinePackets` off; nash sends | Message leaves the chat view, arrives about 12 s later | Arrived 12 to 20 s later with the scheduled time. Bug: the input field kept the text | PASS with bug (fix in run 43002933120) |
+| 18 | Send Read Receipt action | run 42990218595 | Receipts off; luki long-presses nash's new message, taps Send Read Receipt | Log `read push SENT`, two ticks for nash | Menu item present; log shows `push=false validate=true` and `read validate kept local`, no receipt sent | FAIL (fix in run 43002933120) |
 | 19 | Go Offline Immediately | run 42990218595 | Override `sendOfflinePacketAfterOnline` on | Log `forceOffline=true` | Logged every 5 s | PASS at log level |
 | 20 | Deletion kept in a channel or group | run 42990218595 | (happened during testing) | Log line for a channel peer | `deleted message kept 2:Id(...)` | PASS at log level; not looked at in the chat |
+| 20b | Master Ghost Mode switch | run 42990218595 | Tap Ghost Mode on, then off | All five ghost switches follow | Receipts, story views, online, typing went off and Go Offline on; all reversed on the second tap | PASS |
 | 21 | Hide stories, skip link warning, copy in restricted chats, local Premium, silent sending | run 42990218595 | Switches on | - | No test material at hand (no stories, hidden links or restricted chats in the test accounts); silent sending is not visible to the sender | NOT TESTED |
 
 ## Notes
