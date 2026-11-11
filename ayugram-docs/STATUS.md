@@ -52,7 +52,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | deletedMark | broom | TESTED | Broom shown. Custom mark: prompt opens with the current value; custom mark saved and shown (row 42) |
 | editedMark | "edited" | TESTED | Custom text, run 43002933120 |
 | semiTransparentDeletedMessages | off | TESTED | Bubble messages only (run 43084196247) |
-| Deleted messages while app is closed | - | TESTED | App now stays running in the background (see Stay Connected). Needs a deletion sent from another device while the iPad is on the home screen or locked |
+| Deleted messages while app is closed | - | TESTED | App now stays running in the background (see Stay Connected). Kept a deletion sent from another device while the app was in the background (TESTING row 43). Not captured after a device reboot until the app runs again |
 | Deleted messages in groups and channels | - | LOG ONLY | Log shows a channel deletion kept; not looked at in the chat |
 | Self-destructing media, cleared history, deleted chats | - | TODO | |
 | Proper database instead of a plist file | - | TODO | |
