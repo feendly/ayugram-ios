@@ -332,12 +332,15 @@ private func pushPeerReadState(network: Network, postbox: Postbox, stateManager:
             default:
                 switch readState {
                 case let .idBased(maxIncomingReadId, _, _, _, markedUnread):
+                    AyuGramSettings.debugLog("readHistory request peer=\(peerId.toInt64()) maxId=\(maxIncomingReadId) markedUnread=\(markedUnread)")
                     var pushSignal: Signal<Void, NoError> = network.request(Api.functions.messages.readHistory(peer: inputPeer, maxId: maxIncomingReadId))
                     |> map(Optional.init)
-                    |> `catch` { _ -> Signal<Api.messages.AffectedMessages?, NoError> in
+                    |> `catch` { error -> Signal<Api.messages.AffectedMessages?, NoError> in
+                        AyuGramSettings.debugLog("readHistory ERROR code=\(error.errorCode) \(error.errorDescription ?? "")")
                         return .single(nil)
                     }
                     |> mapToSignal { result -> Signal<Void, NoError> in
+                        AyuGramSettings.debugLog("readHistory done ok=\(result != nil)")
                         if let result = result {
                             switch result {
                                 case let .affectedMessages(affectedMessagesData):
@@ -388,6 +391,7 @@ private func pushPeerReadState(network: Network, postbox: Postbox, stateManager:
     
     let pushedState = currentReadState
     |> mapToSignalPromotingError { namespaceAndReadState -> Signal<(MessageId.Namespace, PeerReadState), PeerReadStateValidationError> in
+        AyuGramSettings.debugLog("read push state peer=\(peerId.toInt64()) hasState=\(namespaceAndReadState != nil) count=\(namespaceAndReadState?.1.count ?? -1)")
         if let (namespace, readState) = namespaceAndReadState {
             return pushPeerReadState(network: network, postbox: postbox, stateManager: stateManager, peerId: peerId, readState: readState)
             |> map { updatedReadState -> (MessageId.Namespace, PeerReadState) in
