@@ -86,21 +86,33 @@ jobs:
           path: /Users/Shared/bazel-cache
           key: bazel-${{ hashFiles('versions.json') }}-${{ github.sha }}
 
-      - name: Upload original IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: Telegram-original
-          path: /Users/Shared/telegram-ios/build/artifacts/Telegram-original.ipa
-          retention-days: 7
-
       - name: Re-identify for TrollStore
+        id: reid
+        continue-on-error: true
         run: |
           cd /Users/Shared/telegram-ios
           bash ayugram-build/reid.sh build/artifacts/Telegram-original.ipa build/artifacts/AyuGram.ipa com.feendly.ayugram AyuGram
 
-      - name: Upload AyuGram IPA
+      # The IPA embeds the Telegram API credentials and artifacts of a public
+      # repository are downloadable, so only encrypted files are uploaded.
+      - name: Encrypt artifacts
+        env:
+          ARTIFACT_KEY: ${{ secrets.ARTIFACT_KEY }}
+        run: |
+          cd /Users/Shared/telegram-ios/build/artifacts
+          mkdir -p enc
+          for f in *.ipa; do
+            openssl enc -aes-256-cbc -pbkdf2 -salt -pass env:ARTIFACT_KEY -in "$f" -out "enc/$f.enc"
+          done
+          ls -l enc
+
+      - name: Upload encrypted IPAs
         uses: actions/upload-artifact@v4
         with:
-          name: AyuGram
-          path: /Users/Shared/telegram-ios/build/artifacts/AyuGram.ipa
-          retention-days: 7
+          name: ipas-encrypted
+          path: /Users/Shared/telegram-ios/build/artifacts/enc/
+          retention-days: 3
+
+      - name: Fail if re-identify failed
+        if: steps.reid.outcome == 'failure'
+        run: exit 1
