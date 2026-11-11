@@ -6,7 +6,7 @@ A feature counts as done only when its row says PASS.
 
 ## How builds get onto the device
 
-1. `gh workflow run build.yml -R feendly/ayugram-ios --ref ayugram`
+1. `gh workflow run build.yml -R feendly/repo-a6738d29 --ref ayugram`
 2. `gh run download <run> -n ipas-encrypted`, decrypt with the key in `F:\ayugram-ios\.artifact-key`
    (`openssl enc -d -aes-256-cbc -pbkdf2`).
 3. `scp AyuGram.ipa mobile@192.168.2.22:/var/mobile/Documents/`

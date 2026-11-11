@@ -1,7 +1,7 @@
 # Building and installing AyuGram for iOS
 
 Nothing compiles locally. Builds run on GitHub Actions in
-`feendly/ayugram-ios` (branch `ayugram`), on the `xcode-27` runner image,
+`feendly/repo-a6738d29` (branch `ayugram`), on the `xcode-27` runner image,
 which provides the Xcode 27.1 that `versions.json` pins.
 
 ## One-time setup (already done)
@@ -18,8 +18,8 @@ which provides the Xcode 27.1 that `versions.json` pins.
 ## Build
 
 ```bash
-gh workflow run build.yml -R feendly/ayugram-ios --ref ayugram
-gh run view <run-id> -R feendly/ayugram-ios --json status,conclusion
+gh workflow run build.yml -R feendly/repo-a6738d29 --ref ayugram
+gh run view <run-id> -R feendly/repo-a6738d29 --json status,conclusion
 ```
 
 Timing on the standard runner: about 100 minutes cold, 10 minutes with no
@@ -30,7 +30,7 @@ cancels an in-progress run when a new one starts.
 ## Download and decrypt
 
 ```bash
-gh run download <run-id> -R feendly/ayugram-ios -n ipas-encrypted -D .
+gh run download <run-id> -R feendly/repo-a6738d29 -n ipas-encrypted -D .
 openssl enc -d -aes-256-cbc -pbkdf2 -pass "pass:$(cat F:/ayugram-ios/.artifact-key)" \
   -in AyuGram.ipa.enc -out AyuGram.ipa
 ```
