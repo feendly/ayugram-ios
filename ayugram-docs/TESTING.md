@@ -95,3 +95,4 @@ A feature counts as done only when its row says PASS.
 - A device reboot ends keep-alive until the app is opened again (or iOS relaunches it); deletions during that gap are not captured.
 - Over VNC a scripted press of about 60 ms taps sticker and GIF grid cells; a normal click acts as a long press there.
 - The custom marks from row 42 (`Chg`, broom plus `x`) are still set on the device.
+- The two iPad reboots on 2026-11-11 (09:40 and 17:29 device time) were low-battery shutdowns: each has a LowBatteryLog at 1% capacity. The logs show the screen held on for hours, AyuGram in the foreground, and (second time) AyuGram's location keep-alive holding the system awake for 43 min. Not a crash or kernel panic.
