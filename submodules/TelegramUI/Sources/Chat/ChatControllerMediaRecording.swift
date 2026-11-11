@@ -687,6 +687,18 @@ extension ChatControllerImpl {
         messageEffect: ChatSendMessageEffect? = nil,
         postpone: Bool = false
     ) {
+        // AyuGram: ask before sending a recorded voice or video message
+        if AyuGramSettings.bool(.voiceConfirmation) && !self.ayuSendConfirmed {
+            self.present(textAlertController(context: self.context, updatedPresentationData: self.updatedPresentationData, title: nil, text: "Send this recording?", actions: [TextAlertAction(type: .genericAction, title: self.presentationData.strings.Common_Cancel, action: {}), TextAlertAction(type: .defaultAction, title: self.presentationData.strings.Common_OK, action: { [weak self] in
+                guard let self else {
+                    return
+                }
+                self.ayuSendConfirmed = true
+                self.sendMediaRecording(silentPosting: silentPosting, scheduleTime: scheduleTime, repeatPeriod: repeatPeriod, viewOnce: viewOnce, messageEffect: messageEffect, postpone: postpone)
+                self.ayuSendConfirmed = false
+            })]), in: .window(.root))
+            return
+        }
         self.chatDisplayNode.updateRecordedMediaDeleted(false)
         
         guard let recordedMediaPreview = self.presentationInterfaceState.interfaceState.mediaDraftState else {

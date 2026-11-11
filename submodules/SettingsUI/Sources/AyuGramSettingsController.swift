@@ -342,7 +342,10 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.showAddFilterInContextMenu, "Add to Filters in Message Menu"),
         (.showHideMessageInContextMenu, "Hide in Message Menu"),
         (.gifConfirmation, "Confirm Before Sending GIFs"),
-        (.disableGreetingSticker, "No Greeting Sticker in Empty Chats")
+        (.disableGreetingSticker, "No Greeting Sticker in Empty Chats"),
+        (.voiceConfirmation, "Confirm Before Sending Recordings"),
+        (.hideSimilarChannels, "Hide Similar Channels"),
+        (.hidePremiumStatuses, "Hide Premium Badges in Chat List")
     ]
     index = 0
     for (key, title) in otherToggles {

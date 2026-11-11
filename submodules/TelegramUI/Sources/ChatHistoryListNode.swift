@@ -1896,7 +1896,7 @@ public final class ChatHistoryListNodeImpl: ASDisplayNode, ChatHistoryNode, Chat
         }
         
         let recommendedChannels: Signal<RecommendedChannels?, NoError>
-        if let peerId = self.chatLocation.peerId, peerId.namespace == Namespaces.Peer.CloudChannel {
+        if let peerId = self.chatLocation.peerId, peerId.namespace == Namespaces.Peer.CloudChannel, !AyuGramSettings.bool(.hideSimilarChannels) {
             recommendedChannels = self.context.engine.peers.recommendedChannels(peerId: peerId)
         } else {
             recommendedChannels = .single(nil)

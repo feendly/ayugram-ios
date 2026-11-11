@@ -41,6 +41,9 @@ public final class AyuGramSettings {
         case showHideMessageInContextMenu
         case gifConfirmation
         case disableGreetingSticker
+        case voiceConfirmation
+        case hideSimilarChannels
+        case hidePremiumStatuses
 
         public var defaultValue: Bool {
             switch self {
@@ -77,6 +80,8 @@ public final class AyuGramSettings {
             case .hideNotificationBadge, .stickerConfirmation:
                 return false
             case .showHideMessageInContextMenu, .gifConfirmation, .disableGreetingSticker:
+                return false
+            case .voiceConfirmation, .hideSimilarChannels, .hidePremiumStatuses:
                 return false
             case .showMessageDetailsInContextMenu, .showAddFilterInContextMenu:
                 return true
