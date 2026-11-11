@@ -349,6 +349,8 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.hideFastShare, "Hide Quick Share Button"),
         (.disableCustomBackgrounds, "Ignore Per-Chat Backgrounds"),
         (.semiTransparentDeletedMessages, "Dim Deleted Messages"),
+        (.streamerMode, "Streamer Mode (Hide Phone Number)"),
+        (.hideNotificationCounters, "Hide Unread Counter on Chats Tab"),
         (.gifConfirmation, "Confirm Before Sending GIFs"),
         (.disableGreetingSticker, "No Greeting Sticker in Empty Chats"),
         (.voiceConfirmation, "Confirm Before Sending Recordings"),

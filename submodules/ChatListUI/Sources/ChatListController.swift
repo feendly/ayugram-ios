@@ -500,7 +500,7 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController 
         
         self.badgeDisposable = (combineLatest(renderedTotalUnreadCount(accountManager: context.sharedContext.accountManager, engine: context.engine), self.presentationDataValue.get()) |> deliverOnMainQueue).startStrict(next: { [weak self] count, presentationData in
             if let strongSelf = self {
-                if count.0 == 0 {
+                if count.0 == 0 || AyuGramSettings.bool(.hideNotificationCounters) {
                     strongSelf.tabBarItem.badgeValue = ""
                     strongSelf.tabBarItem.accessibilityValue = nil
                 } else {
