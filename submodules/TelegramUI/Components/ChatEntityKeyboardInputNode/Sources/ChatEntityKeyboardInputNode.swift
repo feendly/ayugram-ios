@@ -2966,7 +2966,7 @@ public final class EmojiContentPeekBehaviorImpl: EmojiContentPeekBehavior {
                         var menuItems: [ContextMenuItem] = []
 
                         let presentationData = context.sharedContext.currentPresentationData.with { $0 }
-                        let isLocked = file.isPremiumSticker && !hasPremium
+                        let isLocked = file.isPremiumSticker && !hasPremium && !AyuGramSettings.bool(.premiumStickersAsCopy)
 
                         if let interaction = strongSelf.interaction {
                             let sendSticker: (FileMediaReference, Bool, Bool, String?, Bool, UIView?, CGRect?, CALayer?) -> Void = { fileReference, silentPosting, schedule, query, clearInput, sourceView, sourceRect, sourceLayer in
