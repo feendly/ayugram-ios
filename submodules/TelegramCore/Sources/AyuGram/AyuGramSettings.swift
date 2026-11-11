@@ -116,6 +116,18 @@ public final class AyuGramSettings {
         defaults.set(value, forKey: "ayu.deletedMark")
     }
 
+    /// Custom replacement for the "edited" label; nil means the stock label.
+    public static var editedMark: String? {
+        if let value = defaults.string(forKey: "ayu.editedMark"), !value.isEmpty {
+            return value
+        }
+        return nil
+    }
+
+    public static func setEditedMark(_ value: String) {
+        defaults.set(value, forKey: "ayu.editedMark")
+    }
+
     // MARK: Test hooks
 
     // A plist of setting name -> Bool at <tmp>/ayu-override.plist overrides stored values.

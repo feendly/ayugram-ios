@@ -17,13 +17,15 @@ private final class AyuGramSettingsControllerArguments {
     let addFilter: () -> Void
     let removeFilter: (String) -> Void
     let editDeletedMark: () -> Void
+    let editEditedMark: () -> Void
 
-    init(toggleGhostMode: @escaping (Bool) -> Void, toggle: @escaping (AyuGramSettings.BoolKey, Bool) -> Void, addFilter: @escaping () -> Void, removeFilter: @escaping (String) -> Void, editDeletedMark: @escaping () -> Void) {
+    init(toggleGhostMode: @escaping (Bool) -> Void, toggle: @escaping (AyuGramSettings.BoolKey, Bool) -> Void, addFilter: @escaping () -> Void, removeFilter: @escaping (String) -> Void, editDeletedMark: @escaping () -> Void, editEditedMark: @escaping () -> Void) {
         self.toggleGhostMode = toggleGhostMode
         self.toggle = toggle
         self.addFilter = addFilter
         self.removeFilter = removeFilter
         self.editDeletedMark = editDeletedMark
+        self.editEditedMark = editEditedMark
     }
 }
 
@@ -45,6 +47,7 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
     case historyToggle(Int32, AyuGramSettings.BoolKey, String, Bool)
     case historyInfo(String)
     case historyDeletedMark(String)
+    case historyEditedMark(String)
     case otherHeader(String)
     case otherToggle(Int32, AyuGramSettings.BoolKey, String, Bool)
     case otherInfo(String)
@@ -60,7 +63,7 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             return AyuGramSettingsSection.ghostMaster.rawValue
         case .ghostHeader, .toggle, .ghostInfo:
             return AyuGramSettingsSection.ghost.rawValue
-        case .historyHeader, .historyToggle, .historyInfo, .historyDeletedMark:
+        case .historyHeader, .historyToggle, .historyInfo, .historyDeletedMark, .historyEditedMark:
             return AyuGramSettingsSection.history.rawValue
         case .otherHeader, .otherToggle, .otherInfo:
             return AyuGramSettingsSection.other.rawValue
@@ -87,6 +90,8 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             return 2010 + index
         case .historyDeletedMark:
             return 2898
+        case .historyEditedMark:
+            return 2899
         case .historyInfo:
             return 2900
         case .otherHeader:
@@ -160,6 +165,12 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             }
         case let .historyDeletedMark(text):
             if case .historyDeletedMark(text) = rhs {
+                return true
+            } else {
+                return false
+            }
+        case let .historyEditedMark(text):
+            if case .historyEditedMark(text) = rhs {
                 return true
             } else {
                 return false
@@ -244,6 +255,10 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             return ItemListActionItem(presentationData: presentationData, systemStyle: .glass, title: text, kind: .generic, alignment: .natural, sectionId: self.section, style: .blocks, action: {
                 arguments.editDeletedMark()
             })
+        case let .historyEditedMark(text):
+            return ItemListActionItem(presentationData: presentationData, systemStyle: .glass, title: text, kind: .generic, alignment: .natural, sectionId: self.section, style: .blocks, action: {
+                arguments.editEditedMark()
+            })
         case let .filterAdd(text):
             return ItemListActionItem(presentationData: presentationData, systemStyle: .glass, title: text, kind: .generic, alignment: .natural, sectionId: self.section, style: .blocks, action: {
                 arguments.addFilter()
@@ -297,6 +312,7 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         index += 1
     }
     entries.append(.historyDeletedMark("Deleted Mark: \(AyuGramSettings.deletedMark)"))
+    entries.append(.historyEditedMark("Edited Mark: \(AyuGramSettings.editedMark ?? "edited")"))
     entries.append(.historyInfo("Deleted messages stay in the chat with a broom mark. Hold an edited message and choose Edit History to see earlier versions."))
 
     entries.append(.filterHeader("MESSAGE FILTERS"))
@@ -376,6 +392,15 @@ public func ayuGramSettingsController(context: AccountContext) -> ViewController
                 return
             }
             AyuGramSettings.setDeletedMark(value.trimmingCharacters(in: .whitespacesAndNewlines))
+            bump()
+        })
+        presentControllerImpl?(controller)
+    }, editEditedMark: {
+        let controller = promptController(context: context, text: "Edited Mark", subtitle: "Replaces the \"edited\" label on edited messages. Leave empty for the default.", value: AyuGramSettings.editedMark, placeholder: "edited", apply: { value in
+            guard let value = value else {
+                return
+            }
+            AyuGramSettings.setEditedMark(value.trimmingCharacters(in: .whitespacesAndNewlines))
             bump()
         })
         presentControllerImpl?(controller)
