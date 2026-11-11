@@ -117,6 +117,7 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
 }
 
 private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
+    AyuGramSettings.debugLog("ui building entries")
     var entries: [AyuGramSettingsEntry] = []
 
     entries.append(.ghostMode(AyuGramSettings.isGhostModeActive))
@@ -141,6 +142,7 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
 }
 
 public func ayuGramSettingsController(context: AccountContext) -> ViewController {
+    AyuGramSettings.debugLog("ui ayuGramSettingsController created")
     let version = Atomic<Int>(value: 0)
     let versionPromise = ValuePromise<Int>(0, ignoreRepeated: false)
     let bump: () -> Void = {

@@ -214,6 +214,7 @@ private func validatePeerReadState(network: Network, postbox: Postbox, stateMana
                                 if localReadMarkIsAheadOfServer(localMaxIncomingReadId: localMaxIncomingReadId, serverMaxIncomingReadId: updatedMaxIncomingReadId, serverCount: updatedCount, serverMarkedUnread: updatedMarkedUnread) {
                                     // AyuGram: ghost mode. The local mark is ahead on purpose; keep it and stop retrying.
                                     if !AyuGramSettings.sendReadMessages {
+                                        AyuGramSettings.debugLog("read validate kept local peer=\(peerId.toInt64())")
                                         transaction.confirmSynchronizedIncomingReadState(peerId)
                                         return nil
                                     }
@@ -259,8 +260,10 @@ private func validatePeerReadState(network: Network, postbox: Postbox, stateMana
 private func pushPeerReadState(network: Network, postbox: Postbox, stateManager: AccountStateManager, peerId: PeerId, readState: PeerReadState) -> Signal<PeerReadState, PeerReadStateValidationError> {
     // AyuGram: ghost mode. Keep the chat read locally without telling the server.
     if !AyuGramSettings.sendReadMessages && !AyuGramSettings.consumeForcedRead(peerId: peerId.toInt64()) {
+        AyuGramSettings.debugLog("read push SKIPPED peer=\(peerId.toInt64())")
         return .single(readState)
     }
+    AyuGramSettings.debugLog("read push SENT peer=\(peerId.toInt64())")
     if peerId.namespace == Namespaces.Peer.SecretChat {
         // Decide whether a request is needed before looking the peer up: inputSecretChat goes
         // through loadedPeerWithId, which never emits when the peer row is missing and fails
@@ -434,6 +437,7 @@ private func pushPeerReadState(network: Network, postbox: Postbox, stateManager:
 }
 
 func synchronizePeerReadState(network: Network, postbox: Postbox, stateManager: AccountStateManager, peerId: PeerId, push: Bool, validate: Bool) -> Signal<Never, PeerReadStateValidationError> {
+    AyuGramSettings.debugLog("read sync peer=\(peerId.toInt64()) push=\(push) validate=\(validate)")
     // A channel the account is not a member of has no read state on the server
     // (NonMemberChannelReadState.swift): nothing is pushed or validated, and the queued operation
     // is confirmed so the manager does not pick it up again. This also covers paths that queue one

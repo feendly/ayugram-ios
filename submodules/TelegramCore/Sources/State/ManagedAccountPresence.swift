@@ -62,6 +62,7 @@ private final class AccountPresenceManagerImpl {
             self.onlineTimer = nil
             request = self.network.request(Api.functions.account.updateStatus(offline: .boolTrue))
         }
+        AyuGramSettings.debugLog("presence isOnline=\(isOnline) suppress=\(ayuSuppressOnline) forceOffline=\(ayuSendOffline)")
         if ayuSendOffline {
             request = self.network.request(Api.functions.account.updateStatus(offline: .boolTrue))
         } else if ayuSuppressOnline {

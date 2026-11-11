@@ -144,6 +144,7 @@ private func actionFromActivity(_ activity: PeerInputActivity?) -> Api.SendMessa
 private func requestActivity(postbox: Postbox, network: Network, accountPeerId: PeerId, peerId: PeerId, threadId: Int64?, activity: PeerInputActivity?) -> Signal<Void, NoError> {
     // AyuGram: ghost mode. Do not report typing, recording or uploading.
     if !AyuGramSettings.sendUploadProgress {
+        AyuGramSettings.debugLog("typing SKIPPED peer=\(peerId.toInt64())")
         return .complete()
     }
     return postbox.transaction { transaction -> Signal<Void, NoError> in

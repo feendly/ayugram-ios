@@ -54,6 +54,9 @@ public final class AyuGramSettings {
     private static let defaults = UserDefaults.standard
 
     public static func bool(_ key: BoolKey) -> Bool {
+        if let value = overrideValue(key) {
+            return value
+        }
         if let value = defaults.object(forKey: key.storageKey) as? Bool {
             return value
         }
@@ -62,6 +65,48 @@ public final class AyuGramSettings {
 
     public static func setBool(_ key: BoolKey, _ value: Bool) {
         defaults.set(value, forKey: key.storageKey)
+    }
+
+    // MARK: Test hooks
+
+    // A plist of setting name -> Bool at <tmp>/ayu-override.plist overrides stored values.
+    // Used by the on-device test loop to switch settings without touching the UI.
+    private static let overrideLock = NSLock()
+    private static var overrideCache: [String: Bool] = [:]
+    private static var overrideCheckedAt: Double = 0.0
+
+    private static func overrideValue(_ key: BoolKey) -> Bool? {
+        overrideLock.lock()
+        defer {
+            overrideLock.unlock()
+        }
+        let now = CFAbsoluteTimeGetCurrent()
+        if now - overrideCheckedAt > 2.0 {
+            overrideCheckedAt = now
+            let path = NSTemporaryDirectory() + "ayu-override.plist"
+            if let dict = NSDictionary(contentsOfFile: path) as? [String: Bool] {
+                overrideCache = dict
+            } else {
+                overrideCache = [:]
+            }
+        }
+        return overrideCache[key.rawValue]
+    }
+
+    private static let logLock = NSLock()
+
+    /// Appends a line to <tmp>/ayu-debug.log.
+    public static func debugLog(_ text: String) {
+        let line = "\(Date().timeIntervalSince1970) \(text)\n"
+        let path = NSTemporaryDirectory() + "ayu-debug.log"
+        logLock.lock()
+        defer {
+            logLock.unlock()
+        }
+        if let file = fopen(path, "a") {
+            fputs(line, file)
+            fclose(file)
+        }
     }
 
     // MARK: Ghost mode

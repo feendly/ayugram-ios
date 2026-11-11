@@ -280,7 +280,8 @@ extension PeerInfoScreenNode {
         case .profileColor:
             self.interaction.editingOpenNameColorSetup()
         case .ayuGram:
-            push(ayuGramSettingsController(context: self.context))
+            AyuGramSettings.debugLog("ui openSettings(.ayuGram) controller=\(self.controller != nil)")
+            self.controller?.push(ayuGramSettingsController(context: self.context))
         case .powerSaving:
             push(energySavingSettingsScreen(context: self.context))
         case .businessSetup:
