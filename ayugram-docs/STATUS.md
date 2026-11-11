@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-11 (after testing run 42990218595; run 43002933120 installed and partly tested).
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-11 (after testing run 42990218595; run 43012742764 installed).
 
 Status values:
 
@@ -17,9 +17,9 @@ Status values:
 | Status | Rows |
 |---|---|
 | TESTED | 20 |
-| LOG ONLY | 6 |
-| UNTESTED | 22 |
-| TODO | 50 |
+| LOG ONLY | 7 |
+| UNTESTED | 23 |
+| TODO | 48 |
 | N/A | 10 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
@@ -35,7 +35,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | sendOfflinePacketAfterOnline | off | LOG ONLY | Log shows an offline status sent every 5 s while enabled |
 | ghostModeActive (master switch) | off | TESTED | Flips the five switches both ways |
 | markReadAfterAction | on | LOG ONLY | Reacting sends one read receipt (log `read forced`, `read push SENT`) |
-| useScheduledMessages | off | TESTED | Only with online status off, as on desktop. Message arrives about 12 s later. Input field still not cleared in run 43002933120; second fix coded, untested |
+| useScheduledMessages | off | TESTED | Only with online status off, as on desktop. Message arrives about 12 s later; input field clears at once (run 43012742764) |
 | sendWithoutSound | Never | UNTESTED | Two switches: always, or only in ghost mode. Not observable from the sender's side |
 | suggestGhostModeBeforeViewingStory | on | TODO | |
 | Per-setting "locked" flags (5) | off | TODO | |
@@ -52,7 +52,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | deletedMark | broom | TESTED | Broom shown. Custom mark: prompt opens with the current value; saving not confirmed over VNC (UNTESTED) |
 | editedMark | "edited" | UNTESTED | Custom text, run 43002933120 |
 | semiTransparentDeletedMessages | off | TODO | |
-| Deleted messages while app is closed | - | UNTESTED | Keep-alive runs (location permission granted, process alive after 200 s in background). Needs a deletion sent from another device while the iPad is on the home screen |
+| Deleted messages while app is closed | - | UNTESTED | App now stays running in the background (see Stay Connected). Needs a deletion sent from another device while the iPad is on the home screen or locked |
 | Deleted messages in groups and channels | - | LOG ONLY | Log shows a channel deletion kept; not looked at in the chat |
 | Self-destructing media, cleared history, deleted chats | - | TODO | |
 | Proper database instead of a plist file | - | TODO | |
@@ -66,7 +66,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | filtersEnabledInChats | off | TESTED |
 | hideFromBlocked | off | TODO |
 | shadowBanIds | empty | TODO |
-| filterZalgo | off | TODO |
+| filterZalgo | off | UNTESTED (run 43012742764) |
 | Per-chat filters, import/export | - | TODO |
 
 ## Premium, ads and clutter
@@ -146,7 +146,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | showHideMessageInContextMenu | Hidden | TESTED (Message disappears on this device and stays hidden after reopening) |
 | showUserMessagesInContextMenu | With modifier | TODO |
 | showMessageDetailsInContextMenu | With modifier | TESTED (Alert with message, chat and sender IDs and date) |
-| showRepeatMessageInContextMenu | Hidden | TODO |
+| showRepeatMessageInContextMenu | Hidden | UNTESTED (run 43012742764; item appears in the menu, sending not tried; text messages only) |
 | showAddFilterInContextMenu | Visible | TESTED (Adds the text as a filter; matching messages hide; tap the filter in settings to remove) |
 
 ## Side drawer and tray (desktop navigation)
@@ -178,6 +178,6 @@ Some rows group several related desktop settings, so the row count is lower than
 
 | Feature | Status | Notes |
 |---|---|---|
-| Stay Connected in Background | UNTESTED | Starts after restart; heartbeat logged every 30 s in the foreground; background and end-to-end deletion test still open |
+| Stay Connected in Background | LOG ONLY | Heartbeat and location updates continued for 170 s in the background (run 43012742764). Shows the system location indicator. Catching a deletion from another device not yet tried |
 | All accounts receive updates at once | UNTESTED | Part of keep-alive |
 | Debug log and test override files | TESTED | Test aids; to be removed or hidden before release |

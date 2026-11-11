@@ -56,6 +56,10 @@ A feature counts as done only when its row says PASS.
 | 31 | Sticker confirmation | run 43002933120 | Override on, open sticker panel, tap a sticker | Alert | Taps on stickers did not register over VNC; nothing sent, no alert | NOT TESTED |
 | 32 | Custom deleted mark | run 43002933120 | Settings, Deleted Mark, type text, Done | Mark changes | Prompt opens with the broom; Done did not respond while a keyboard accent popup was open, prompt closed with Escape, value not saved | NOT TESTED |
 | 33 | Keep-alive heartbeat | run 43002933120 | Watch the log | `keepalive heartbeat` every 30 s | Logged in the foreground; background not yet checked | PARTIAL |
+| 34 | Keep-alive in the background | run 43002933120 | Background the app, watch the heartbeat | Heartbeat continues | Stopped about 30 s after backgrounding: the location indicator was off, so iOS suspended the app | FAIL (fixed in run 43012742764) |
+| 35 | Keep-alive in the background (retest) | run 43012742764 | Same, 170 s in the background | Heartbeat every 30 s with state=2 | Heartbeats and location updates continued the whole time | PASS at log level; deletion from another device not yet tried |
+| 36 | Scheduled send clears the input (second retest) | run 43012742764 | As row 17 | Field empties at once | Field cleared immediately; message arrived about 15 s later | PASS |
+| 37 | Repeat in message menu | run 43012742764 | Override on, long-press a text message | Repeat item | Item shown; sending not tried | PARTIAL |
 
 ## Notes
 
@@ -75,3 +79,4 @@ A feature counts as done only when its row says PASS.
 - nash is also in use on another device; ticks on old messages may come from there.
 - During testing one of nash's group chats (Quang Blue IOS) was opened by a
   mis-timed tap and closed again. Read receipts were off at the time.
+- Row 36 was run by mistake while nash was the active account, so the test message 's12' went to nash's Saved Messages. It was deleted there right after.
