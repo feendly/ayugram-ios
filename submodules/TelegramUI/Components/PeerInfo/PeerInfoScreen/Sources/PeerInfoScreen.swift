@@ -7383,6 +7383,14 @@ public final class PeerInfoScreenImpl: ViewController, PeerInfoScreen, KeyShortc
         let strings = self.presentationData.strings
         
         var items: [ContextMenuItem] = []
+        // AyuGram: quick ghost mode toggle
+        let ayuGhostActive = AyuGramSettings.isGhostModeActive
+        items.append(.action(ContextMenuActionItem(text: ayuGhostActive ? "Turn Ghost Mode Off" : "Turn Ghost Mode On", icon: { theme in
+            return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Eye"), color: theme.contextMenu.primaryColor)
+        }, action: { _, f in
+            AyuGramSettings.setGhostModeActive(!ayuGhostActive)
+            f(.default)
+        })))
         items.append(.action(ContextMenuActionItem(text: strings.Settings_AddAccount, icon: { theme in
             return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Add"), color: theme.contextMenu.primaryColor)
         }, action: { [weak self] _, f in
