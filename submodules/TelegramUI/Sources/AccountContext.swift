@@ -562,7 +562,8 @@ public final class AccountContextImpl: AccountContext {
         
         self.userLimitsConfigurationDisposable = (self.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: account.peerId))
         |> mapToSignal { peer -> Signal<(Bool, EngineConfiguration.UserLimits), NoError> in
-            let isPremium = peer?.isPremium ?? false
+            // AyuGram: local Premium. Applied when the account loads; changing the setting needs an app restart.
+            let isPremium = (peer?.isPremium ?? false) || AyuGramSettings.bool(.localPremium)
             return self.engine.data.subscribe(TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: isPremium))
             |> map { userLimits in
                 return (isPremium, userLimits)
