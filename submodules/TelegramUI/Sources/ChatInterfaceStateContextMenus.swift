@@ -1400,6 +1400,17 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
             })))
         }
 
+        // AyuGram: hide the message on this device
+        if AyuGramSettings.bool(.showHideMessageInContextMenu) && message.id.namespace == Namespaces.Message.Cloud {
+            let ayuHideId = message.id
+            actions.append(.action(ContextMenuActionItem(text: "Hide", icon: { theme in
+                return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/HideArchive"), color: theme.actionSheet.primaryTextColor)
+            }, action: { _, f in
+                f(.dismissWithoutContent)
+                let _ = ayuHideMessageLocally(account: context.account, id: ayuHideId).startStandalone()
+            })))
+        }
+
         // AyuGram: add the message text to the filters
         if AyuGramSettings.bool(.showAddFilterInContextMenu) && message.flags.contains(.Incoming) && !message.text.isEmpty {
             let ayuFilterText = message.text

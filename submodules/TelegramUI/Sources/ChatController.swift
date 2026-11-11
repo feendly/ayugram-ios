@@ -2764,6 +2764,18 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                 }
             }
         }, sendGif: { [weak self] fileReference, sourceView, sourceRect, silentPosting, schedule in
+            // AyuGram: ask before sending a GIF
+            if let strongSelf = self, AyuGramSettings.bool(.gifConfirmation) && !strongSelf.ayuSendConfirmed {
+                strongSelf.present(textAlertController(context: strongSelf.context, updatedPresentationData: strongSelf.updatedPresentationData, title: nil, text: "Send this GIF?", actions: [TextAlertAction(type: .genericAction, title: strongSelf.presentationData.strings.Common_Cancel, action: {}), TextAlertAction(type: .defaultAction, title: strongSelf.presentationData.strings.Common_OK, action: { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    self.ayuSendConfirmed = true
+                    let _ = self.controllerInteraction?.sendGif(fileReference, sourceView, sourceRect, silentPosting, schedule)
+                    self.ayuSendConfirmed = false
+                })]), in: .window(.root))
+                return false
+            }
             if let strongSelf = self {
                 if let _ = strongSelf.presentationInterfaceState.slowmodeState, strongSelf.presentationInterfaceState.subject != .scheduledMessages {
                     strongSelf.interfaceInteraction?.displaySlowmodeTooltip(sourceView, sourceRect)

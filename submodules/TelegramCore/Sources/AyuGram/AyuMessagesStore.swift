@@ -19,6 +19,7 @@ public final class AyuMessagesStore {
     private let writeQueue = DispatchQueue(label: "ayugram.messages-store")
     private var deletedByKey: [String: Int32] = [:]
     private var editsByKey: [String: [[String: Any]]] = [:]
+    private var hiddenKeys = Set<String>()
     private var writeScheduled = false
     private let path: String
 
@@ -33,6 +34,9 @@ public final class AyuMessagesStore {
             }
             if let edits = root["edits"] as? [String: [[String: Any]]] {
                 self.editsByKey = edits
+            }
+            if let hidden = root["hidden"] as? [String] {
+                self.hiddenKeys = Set(hidden)
             }
         }
     }
@@ -54,6 +58,23 @@ public final class AyuMessagesStore {
         let key = AyuMessagesStore.key(id)
         self.lock.lock()
         self.deletedByKey[key] = timestamp
+        self.lock.unlock()
+        self.scheduleWrite()
+    }
+
+    public func isHidden(_ id: MessageId) -> Bool {
+        let key = AyuMessagesStore.key(id)
+        self.lock.lock()
+        defer {
+            self.lock.unlock()
+        }
+        return self.hiddenKeys.contains(key)
+    }
+
+    public func markHidden(_ id: MessageId) {
+        let key = AyuMessagesStore.key(id)
+        self.lock.lock()
+        self.hiddenKeys.insert(key)
         self.lock.unlock()
         self.scheduleWrite()
     }
@@ -101,11 +122,31 @@ public final class AyuMessagesStore {
             for (key, value) in self.deletedByKey {
                 deleted[key] = NSNumber(value: value)
             }
-            let root: [String: Any] = ["deleted": deleted, "edits": self.editsByKey]
+            let root: [String: Any] = ["deleted": deleted, "edits": self.editsByKey, "hidden": Array(self.hiddenKeys)]
             self.lock.unlock()
             let _ = (root as NSDictionary).write(toFile: self.path, atomically: true)
         })
     }
+}
+
+// Rewrites a message unchanged so its version changes and the chat redraws it.
+private func ayuTouchMessage(transaction: Transaction, id: MessageId) {
+    transaction.updateMessage(id, update: { currentMessage in
+        var storeForwardInfo: StoreMessageForwardInfo?
+        if let forwardInfo = currentMessage.forwardInfo {
+            storeForwardInfo = StoreMessageForwardInfo(authorId: forwardInfo.author?.id, sourceId: forwardInfo.source?.id, sourceMessageId: forwardInfo.sourceMessageId, date: forwardInfo.date, authorSignature: forwardInfo.authorSignature, psaType: forwardInfo.psaType, flags: forwardInfo.flags)
+        }
+        return .update(StoreMessage(id: currentMessage.id, customStableId: nil, globallyUniqueId: currentMessage.globallyUniqueId, groupingKey: currentMessage.groupingKey, threadId: currentMessage.threadId, timestamp: currentMessage.timestamp, flags: StoreMessageFlags(currentMessage.flags), tags: currentMessage.tags, globalTags: currentMessage.globalTags, localTags: currentMessage.localTags, forwardInfo: storeForwardInfo, authorId: currentMessage.author?.id, text: currentMessage.text, attributes: currentMessage.attributes, media: currentMessage.media))
+    })
+}
+
+/// Hides a message on this device only. The message stays on the server and for everyone else.
+public func ayuHideMessageLocally(account: Account, id: MessageId) -> Signal<Never, NoError> {
+    AyuMessagesStore.shared.markHidden(id)
+    return account.postbox.transaction { transaction -> Void in
+        ayuTouchMessage(transaction: transaction, id: id)
+    }
+    |> ignoreValues
 }
 
 /// Decides what happens to messages the server reports as deleted.

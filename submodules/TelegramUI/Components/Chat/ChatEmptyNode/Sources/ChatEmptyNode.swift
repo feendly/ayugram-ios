@@ -199,7 +199,10 @@ public final class ChatEmptyNodeGreetingChatContent: ASDisplayNode, ChatEmptyNod
             self.stickerNode.updateLayout(item: item, size: stickerSize, isVisible: true, synchronousLoads: true)
         } else if !self.didSetupSticker || previousCustomStickerFile != customStickerFile {
             let sticker: Signal<TelegramMediaFile?, NoError>
-            if let customStickerFile {
+            if AyuGramSettings.bool(.disableGreetingSticker) {
+                // AyuGram: no greeting sticker in empty chats
+                sticker = .single(nil)
+            } else if let customStickerFile {
                 sticker = .single(customStickerFile)
             } else if let preloadedSticker = interfaceState.greetingData?.sticker {
                 sticker = preloadedSticker

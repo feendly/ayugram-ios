@@ -323,7 +323,10 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.hideNotificationBadge, "Hide App Icon Badge"),
         (.stickerConfirmation, "Confirm Before Sending Stickers"),
         (.showMessageDetailsInContextMenu, "Message Details in Message Menu"),
-        (.showAddFilterInContextMenu, "Add to Filters in Message Menu")
+        (.showAddFilterInContextMenu, "Add to Filters in Message Menu"),
+        (.showHideMessageInContextMenu, "Hide in Message Menu"),
+        (.gifConfirmation, "Confirm Before Sending GIFs"),
+        (.disableGreetingSticker, "No Greeting Sticker in Empty Chats")
     ]
     index = 0
     for (key, title) in otherToggles {

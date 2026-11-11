@@ -181,6 +181,10 @@ func chatHistoryEntriesForView(
         if pendingRemovedMessages.contains(message.id) {
             continue
         }
+        // AyuGram: messages hidden on this device
+        if AyuMessagesStore.shared.isHidden(message.id) {
+            continue
+        }
         // AyuGram: message filters
         if AyuFilters.shouldHide(text: message.text, isIncoming: message.flags.contains(.Incoming), isPrivateChat: message.id.peerId.namespace == Namespaces.Peer.CloudUser) {
             continue

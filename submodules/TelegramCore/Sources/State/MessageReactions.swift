@@ -22,6 +22,10 @@ public enum UpdateMessageReaction {
 }
 
 public func updateMessageReactionsInteractively(account: Account, messageIds: [MessageId], reactions: [UpdateMessageReaction], isLarge: Bool, storeAsRecentlyUsed: Bool, add: Bool = false) -> Signal<Never, NoError> {
+    // AyuGram: reacting counts as an action that marks the chat as read
+    if !AyuGramSettings.sendReadMessages && AyuGramSettings.bool(.markReadAfterAction), let ayuReadPeerId = messageIds.first?.peerId {
+        let _ = ayuSendReadReceiptNow(account: account, peerId: ayuReadPeerId).start()
+    }
     return account.postbox.transaction { transaction -> Void in
         guard let chatPeerId = messageIds.first?.peerId else {
             return
