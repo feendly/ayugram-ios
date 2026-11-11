@@ -261,7 +261,7 @@ public func stringForMessageTimestampStatus(
     
     // AyuGram: mark messages the server deleted.
     if AyuMessagesStore.shared.isDeleted(message.id) {
-        dateText = "\u{1F9F9} \(dateText)"
+        dateText = "\(AyuGramSettings.deletedMark) \(dateText)"
     }
     
     return dateText

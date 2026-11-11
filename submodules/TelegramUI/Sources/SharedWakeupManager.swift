@@ -1214,6 +1214,7 @@ final class AyuBackgroundKeepAlive: NSObject, CLLocationManagerDelegate {
     static let shared = AyuBackgroundKeepAlive()
     
     private var manager: CLLocationManager?
+    private var heartbeat: Foundation.Timer?
     
     func startIfEnabled() {
         if !AyuGramSettings.bool(.keepAliveInBackground) {
@@ -1234,6 +1235,9 @@ final class AyuBackgroundKeepAlive: NSObject, CLLocationManagerDelegate {
         manager.startUpdatingLocation()
         manager.startMonitoringSignificantLocationChanges()
         AyuGramSettings.debugLog("keepalive started")
+        self.heartbeat = Foundation.Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true, block: { _ in
+            AyuGramSettings.debugLog("keepalive heartbeat state=\(UIApplication.shared.applicationState.rawValue)")
+        })
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

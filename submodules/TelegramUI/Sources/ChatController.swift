@@ -664,6 +664,9 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     }
     
     var layoutActionOnViewTransitionAction: (() -> Void)?
+
+    // AyuGram: set while a confirmed sticker is being re-sent
+    var ayuSendConfirmed: Bool = false
     
     var lastPostedScheduledMessagesToastTimestamp: Double = 0.0
     var postedScheduledMessagesEventsDisposable: Disposable?
@@ -2471,6 +2474,19 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             }
         }, sendSticker: { [weak self] fileReference, silentPosting, schedule, query, clearInput, sourceView, sourceRect, sourceLayer, bubbleUpEmojiOrStickersets in
             guard let strongSelf = self else {
+                return false
+            }
+
+            // AyuGram: ask before sending a sticker
+            if AyuGramSettings.bool(.stickerConfirmation) && !strongSelf.ayuSendConfirmed {
+                strongSelf.present(textAlertController(context: strongSelf.context, updatedPresentationData: strongSelf.updatedPresentationData, title: nil, text: "Send this sticker?", actions: [TextAlertAction(type: .genericAction, title: strongSelf.presentationData.strings.Common_Cancel, action: {}), TextAlertAction(type: .defaultAction, title: strongSelf.presentationData.strings.Common_OK, action: { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    self.ayuSendConfirmed = true
+                    let _ = self.controllerInteraction?.sendSticker(fileReference, silentPosting, schedule, query, clearInput, nil, nil, nil, bubbleUpEmojiOrStickersets)
+                    self.ayuSendConfirmed = false
+                })]), in: .window(.root))
                 return false
             }
             
@@ -9388,7 +9404,17 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                 donateSendMessageIntent(account: self.context.account, sharedContext: self.context.sharedContext, intentContext: .chat, peerIds: [peerId])
                 
                 self.updateChatPresentationInterfaceState(interactive: true, { $0.updatedShowCommands(false) })
-                
+
+                // AyuGram: a message sent through the schedule does not enter this history right away,
+                // so finish the pending send action (clearing the input field) now.
+                if !isScheduledMessages && !shouldOpenScheduledMessages && AyuGramSettings.bool(.useScheduledMessages) && !AyuGramSettings.sendOnlinePackets {
+                    if let layoutActionOnViewTransitionAction = self.layoutActionOnViewTransitionAction {
+                        self.layoutActionOnViewTransitionAction = nil
+                        self.chatDisplayNode.historyNode.layoutActionOnViewTransition = nil
+                        layoutActionOnViewTransitionAction()
+                    }
+                }
+
                 if !isScheduledMessages && shouldOpenScheduledMessages {
                     if let layoutActionOnViewTransitionAction = self.layoutActionOnViewTransitionAction {
                         self.layoutActionOnViewTransitionAction = nil

@@ -16,12 +16,14 @@ private final class AyuGramSettingsControllerArguments {
     let toggle: (AyuGramSettings.BoolKey, Bool) -> Void
     let addFilter: () -> Void
     let removeFilter: (String) -> Void
+    let editDeletedMark: () -> Void
 
-    init(toggleGhostMode: @escaping (Bool) -> Void, toggle: @escaping (AyuGramSettings.BoolKey, Bool) -> Void, addFilter: @escaping () -> Void, removeFilter: @escaping (String) -> Void) {
+    init(toggleGhostMode: @escaping (Bool) -> Void, toggle: @escaping (AyuGramSettings.BoolKey, Bool) -> Void, addFilter: @escaping () -> Void, removeFilter: @escaping (String) -> Void, editDeletedMark: @escaping () -> Void) {
         self.toggleGhostMode = toggleGhostMode
         self.toggle = toggle
         self.addFilter = addFilter
         self.removeFilter = removeFilter
+        self.editDeletedMark = editDeletedMark
     }
 }
 
@@ -42,6 +44,7 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
     case historyHeader(String)
     case historyToggle(Int32, AyuGramSettings.BoolKey, String, Bool)
     case historyInfo(String)
+    case historyDeletedMark(String)
     case otherHeader(String)
     case otherToggle(Int32, AyuGramSettings.BoolKey, String, Bool)
     case otherInfo(String)
@@ -57,7 +60,7 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             return AyuGramSettingsSection.ghostMaster.rawValue
         case .ghostHeader, .toggle, .ghostInfo:
             return AyuGramSettingsSection.ghost.rawValue
-        case .historyHeader, .historyToggle, .historyInfo:
+        case .historyHeader, .historyToggle, .historyInfo, .historyDeletedMark:
             return AyuGramSettingsSection.history.rawValue
         case .otherHeader, .otherToggle, .otherInfo:
             return AyuGramSettingsSection.other.rawValue
@@ -82,6 +85,8 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             return 2000
         case let .historyToggle(index, _, _, _):
             return 2010 + index
+        case .historyDeletedMark:
+            return 2898
         case .historyInfo:
             return 2900
         case .otherHeader:
@@ -149,6 +154,12 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             }
         case let .historyInfo(text):
             if case .historyInfo(text) = rhs {
+                return true
+            } else {
+                return false
+            }
+        case let .historyDeletedMark(text):
+            if case .historyDeletedMark(text) = rhs {
                 return true
             } else {
                 return false
@@ -229,6 +240,10 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             return ItemListActionItem(presentationData: presentationData, systemStyle: .glass, title: pattern, kind: .destructive, alignment: .natural, sectionId: self.section, style: .blocks, action: {
                 arguments.removeFilter(pattern)
             })
+        case let .historyDeletedMark(text):
+            return ItemListActionItem(presentationData: presentationData, systemStyle: .glass, title: text, kind: .generic, alignment: .natural, sectionId: self.section, style: .blocks, action: {
+                arguments.editDeletedMark()
+            })
         case let .filterAdd(text):
             return ItemListActionItem(presentationData: presentationData, systemStyle: .glass, title: text, kind: .generic, alignment: .natural, sectionId: self.section, style: .blocks, action: {
                 arguments.addFilter()
@@ -281,6 +296,7 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         entries.append(.historyToggle(index, key, title, AyuGramSettings.bool(key)))
         index += 1
     }
+    entries.append(.historyDeletedMark("Deleted Mark: \(AyuGramSettings.deletedMark)"))
     entries.append(.historyInfo("Deleted messages stay in the chat with a broom mark. Hold an edited message and choose Edit History to see earlier versions."))
 
     entries.append(.filterHeader("MESSAGE FILTERS"))
@@ -303,7 +319,11 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.disableStories, "Hide Stories in Chat List"),
         (.disableOpenLinkWarning, "Skip Hidden Link Warning"),
         (.showPeerId, "Show User ID in Profile"),
-        (.allowSavingRestrictedContent, "Allow Copy and Save in Restricted Chats")
+        (.allowSavingRestrictedContent, "Allow Copy and Save in Restricted Chats"),
+        (.hideNotificationBadge, "Hide App Icon Badge"),
+        (.stickerConfirmation, "Confirm Before Sending Stickers"),
+        (.showMessageDetailsInContextMenu, "Message Details in Message Menu"),
+        (.showAddFilterInContextMenu, "Add to Filters in Message Menu")
     ]
     index = 0
     for (key, title) in otherToggles {
@@ -347,6 +367,15 @@ public func ayuGramSettingsController(context: AccountContext) -> ViewController
     }, removeFilter: { pattern in
         AyuFilters.setPatterns(AyuFilters.patterns.filter { $0 != pattern })
         bump()
+    }, editDeletedMark: {
+        let controller = promptController(context: context, text: "Deleted Mark", subtitle: "Shown next to the time of deleted messages. Leave empty for the default.", value: AyuGramSettings.deletedMark, placeholder: "mark", apply: { value in
+            guard let value = value else {
+                return
+            }
+            AyuGramSettings.setDeletedMark(value.trimmingCharacters(in: .whitespacesAndNewlines))
+            bump()
+        })
+        presentControllerImpl?(controller)
     })
 
     let signal = combineLatest(context.sharedContext.presentationData, versionPromise.get())

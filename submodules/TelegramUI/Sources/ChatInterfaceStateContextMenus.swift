@@ -1367,6 +1367,55 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
             })))
         }
         
+        // AyuGram: message details
+        if AyuGramSettings.bool(.showMessageDetailsInContextMenu) && message.id.namespace == Namespaces.Message.Cloud {
+            let ayuDetailsMessage = message
+            actions.append(.action(ContextMenuActionItem(text: "Message Details", icon: { theme in
+                return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Info"), color: theme.actionSheet.primaryTextColor)
+            }, action: { _, f in
+                f(.dismissWithoutContent)
+                let presentationData = context.sharedContext.currentPresentationData.with { $0 }
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                var lines: [String] = []
+                lines.append("Message ID: \(ayuDetailsMessage.id.id)")
+                lines.append("Chat ID: \(ayuDetailsMessage.id.peerId.id._internalGetInt64Value())")
+                if let author = ayuDetailsMessage.author {
+                    lines.append("Sender ID: \(author.id.id._internalGetInt64Value())")
+                }
+                lines.append("Date: \(formatter.string(from: Date(timeIntervalSince1970: Double(ayuDetailsMessage.timestamp))))")
+                for attribute in ayuDetailsMessage.attributes {
+                    if let attribute = attribute as? EditedMessageAttribute, !attribute.isHidden {
+                        lines.append("Edited: \(formatter.string(from: Date(timeIntervalSince1970: Double(attribute.date))))")
+                    } else if let attribute = attribute as? ViewCountMessageAttribute {
+                        lines.append("Views: \(attribute.count)")
+                    } else if let attribute = attribute as? ForwardCountMessageAttribute {
+                        lines.append("Forwards: \(attribute.count)")
+                    }
+                }
+                if AyuMessagesStore.shared.isDeleted(ayuDetailsMessage.id) {
+                    lines.append("Deleted on the server")
+                }
+                controllerInteraction.presentController(textAlertController(context: context, title: "Message Details", text: lines.joined(separator: "\n"), actions: [TextAlertAction(type: .defaultAction, title: presentationData.strings.Common_OK, action: {})]), nil)
+            })))
+        }
+
+        // AyuGram: add the message text to the filters
+        if AyuGramSettings.bool(.showAddFilterInContextMenu) && message.flags.contains(.Incoming) && !message.text.isEmpty {
+            let ayuFilterText = message.text
+            actions.append(.action(ContextMenuActionItem(text: "Add to Filters", icon: { theme in
+                return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/TagFilter"), color: theme.actionSheet.primaryTextColor)
+            }, action: { _, f in
+                f(.default)
+                var patterns = AyuFilters.patterns
+                let pattern = NSRegularExpression.escapedPattern(for: ayuFilterText)
+                if !patterns.contains(pattern) {
+                    patterns.append(pattern)
+                    AyuFilters.setPatterns(patterns)
+                }
+            })))
+        }
+
         // AyuGram: edit history
         let ayuEdits = AyuMessagesStore.shared.edits(message.id)
         if !ayuEdits.isEmpty {

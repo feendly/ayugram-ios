@@ -34,6 +34,10 @@ public final class AyuGramSettings {
         case allowSavingRestrictedContent
         case filtersEnabled
         case filtersEnabledInChats
+        case hideNotificationBadge
+        case stickerConfirmation
+        case showMessageDetailsInContextMenu
+        case showAddFilterInContextMenu
 
         public var defaultValue: Bool {
             switch self {
@@ -67,6 +71,10 @@ public final class AyuGramSettings {
                 return false
             case .filtersEnabled, .filtersEnabledInChats:
                 return false
+            case .hideNotificationBadge, .stickerConfirmation:
+                return false
+            case .showMessageDetailsInContextMenu, .showAddFilterInContextMenu:
+                return true
             }
         }
 
@@ -89,6 +97,18 @@ public final class AyuGramSettings {
 
     public static func setBool(_ key: BoolKey, _ value: Bool) {
         defaults.set(value, forKey: key.storageKey)
+    }
+
+    /// Text shown next to the time of a message the server deleted.
+    public static var deletedMark: String {
+        if let value = defaults.string(forKey: "ayu.deletedMark"), !value.isEmpty {
+            return value
+        }
+        return "\u{1F9F9}"
+    }
+
+    public static func setDeletedMark(_ value: String) {
+        defaults.set(value, forKey: "ayu.deletedMark")
     }
 
     // MARK: Test hooks

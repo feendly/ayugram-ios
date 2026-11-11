@@ -2030,7 +2030,8 @@ private func extractAccountManagerState(records: AccountRecordsView<TelegramAcco
                     //UIApplication.shared.applicationIconBadgeNumber = 1
                 }
             }
-            UIApplication.shared.applicationIconBadgeNumber = Int(count)
+            // AyuGram: optional hidden app icon badge
+            UIApplication.shared.applicationIconBadgeNumber = AyuGramSettings.bool(.hideNotificationBadge) ? 0 : Int(count)
         }))
     }
 
