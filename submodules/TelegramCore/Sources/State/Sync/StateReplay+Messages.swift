@@ -274,6 +274,16 @@ extension ReplayContext {
     }
     
     func applyDeleteMessagesWithGlobalIds(_ ids: [Int32]) {
+        // AyuGram: keep messages deleted by the other side.
+        if AyuGramSettings.bool(.saveDeletedMessages) {
+            let messageIds = transaction.messageIdsForGlobalIds(ids)
+            let idsToDelete = ayuKeepRemotelyDeletedMessages(transaction: transaction, ids: messageIds)
+            if !idsToDelete.isEmpty {
+                _internal_deleteMessages(transaction: transaction, mediaBox: mediaBox, ids: idsToDelete)
+            }
+            deletedMessageIds.append(contentsOf: ids.map { .global($0) })
+            return
+        }
         var resourceIds: [MediaResourceId] = []
         transaction.deleteMessagesWithGlobalIds(ids, forEachMedia: { media in
             addMessageMediaResourceIdsToRemove(media: media, resourceIds: &resourceIds)
@@ -285,10 +295,13 @@ extension ReplayContext {
     }
     
     func applyDeleteMessages(_ ids: [MessageId]) {
+        // AyuGram: keep messages deleted by the other side.
+        let originalIds = ids
+        let ids = ayuKeepRemotelyDeletedMessages(transaction: transaction, ids: originalIds)
         _internal_deleteMessages(transaction: transaction, mediaBox: mediaBox, ids: ids, manualAddMessageThreadStatsDifference: { id, add, remove in
             self.addMessageThreadStatsDifference(threadKey: id, remove: remove, addedMessagePeer: nil, addedMessageId: nil, isOutgoing: false)
         })
-        deletedMessageIds.append(contentsOf: ids.map { .messageId($0) })
+        deletedMessageIds.append(contentsOf: originalIds.map { .messageId($0) })
     }
     
     func applyUpdateMinAvailableMessage(_ id: MessageId) {
@@ -307,6 +320,10 @@ extension ReplayContext {
     func applyEditMessage(_ id: MessageId, _ message: StoreMessage) {
         var generatedEvent: (reactionAuthor: Peer, reaction: MessageReaction.Reaction, message: Message, timestamp: Int32)?
         transaction.updateMessage(id, update: { previousMessage in
+            // AyuGram: remember the previous text of an edited message.
+            if AyuGramSettings.bool(.saveMessagesHistory), !previousMessage.text.isEmpty, previousMessage.text != message.text {
+                AyuMessagesStore.shared.addEdit(id, previousText: previousMessage.text, timestamp: Int32(Date().timeIntervalSince1970))
+            }
             let peers: [PeerId:Peer] = previousMessage.peers.reduce([:], { current, value in
                 var current = current
                 current[value.0] = value.1

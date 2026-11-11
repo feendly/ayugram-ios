@@ -1356,6 +1356,19 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
             }
         }
         
+        // AyuGram: edit history
+        let ayuEdits = AyuMessagesStore.shared.edits(message.id)
+        if !ayuEdits.isEmpty {
+            actions.append(.action(ContextMenuActionItem(text: "Edit History", icon: { theme in
+                return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Copy"), color: theme.actionSheet.primaryTextColor)
+            }, action: { _, f in
+                f(.dismissWithoutContent)
+                let presentationData = context.sharedContext.currentPresentationData.with { $0 }
+                let text = ayuEdits.map { $0.text }.joined(separator: "\n\n")
+                controllerInteraction.presentController(textAlertController(context: context, title: "Edit History", text: text, actions: [TextAlertAction(type: .defaultAction, title: presentationData.strings.Common_OK, action: {})]), nil)
+            })))
+        }
+        
         let isCopyProtected = chatPresentationInterfaceState.copyProtectionEnabled || message.isCopyProtected()
         if !messageText.isEmpty || richMessageMarkdown != nil || (resourceAvailable && isImage) || diceEmoji != nil {
             if !isExpired {
