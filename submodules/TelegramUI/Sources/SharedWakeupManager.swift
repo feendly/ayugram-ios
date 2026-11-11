@@ -1226,10 +1226,12 @@ final class AyuBackgroundKeepAlive: NSObject, CLLocationManagerDelegate {
         let manager = CLLocationManager()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
-        manager.distanceFilter = 3000.0
+        manager.distanceFilter = kCLDistanceFilterNone
+        manager.activityType = .other
         manager.pausesLocationUpdatesAutomatically = false
         manager.allowsBackgroundLocationUpdates = true
-        manager.showsBackgroundLocationIndicator = false
+        // With "While Using" permission iOS only keeps delivering updates in the background when the indicator is shown.
+        manager.showsBackgroundLocationIndicator = true
         self.manager = manager
         manager.requestAlwaysAuthorization()
         manager.startUpdatingLocation()
