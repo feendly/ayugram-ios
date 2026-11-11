@@ -65,6 +65,13 @@ A feature counts as done only when its row says PASS.
 | 40 | Sticker confirmation | run 43012742764 | Override on; open a sticker pack preview, Send Sticker | Alert "Send this sticker?" | Alert shown; Cancel sent nothing. OK path not tried | PASS (Cancel path) |
 | 41 | GIF confirmation | run 43012742764 | Override on; tap a GIF in the GIF panel | Alert "Send this GIF?" | Alert shown; Cancel sent nothing. OK path not tried | PASS (Cancel path) |
 | 42 | Custom deleted and edited marks | run 43012742764 | Settings: Edited Mark "Chg", Deleted Mark broom plus "x"; open luki's chat with nash | Marks change on messages | Rows show the new values; "ghost 5 from nash v2" shows `Chg` and the broom with `x` before the time | PASS |
+| 43 | Deleted while the app is in the background, sent from another device | run 43012742764 | User sends messages between luki and nash from another device and deletes them (about 3:58 PM and 4:06 PM) | Messages kept with the deleted mark | Both kept. For the 4:06 PM one the log shows `keepalive heartbeat state=2` (background) 19 s before `deleted message kept`, for both accounts at once. Whether the screen was locked is not known | PASS |
+| 44 | Dim deleted messages | run 43084196247 | Override on; open the chat with the kept deletions | Deleted bubbles at half opacity | Both deleted messages dimmed, others normal | PASS |
+| 45 | Hide reactions bar and read row in message menu | run 43084196247 | Overrides off; long-press own read message "plain 7" | No reactions bar, no "read at" row | Neither shown; other items present | PASS |
+| 46 | Hide attach button | run 43084196247 | Override off; open a chat | No paperclip in the message field | Field starts at the left edge, no paperclip | PASS |
+| 47 | Hide unread counter on Chats tab | run 43084196247 | Override on | No badge on the Chats tab | Badge gone (it showed 1.2K before) | PASS |
+| 48 | Streamer mode | run 43084196247 | Override on; open Settings | Own phone number hidden | Header shows only the username. The "Is +1 ... still your number?" card still showed the number | PASS with gap (card fix coded, not built) |
+| 49 | Hide quick share, ignore per-chat backgrounds | run 43084196247 | - | - | No channel post or custom chat background in the test chat | NOT TESTED |
 
 ## Notes
 
