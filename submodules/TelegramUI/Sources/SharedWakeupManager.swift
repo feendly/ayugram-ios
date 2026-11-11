@@ -1,3 +1,4 @@
+import CoreLocation
 import Foundation
 import BackgroundTasks
 import AVFAudio
@@ -143,6 +144,8 @@ public final class SharedWakeupManager {
             self.enableBackgroundTasks = isEnabled
         })
         
+        AyuBackgroundKeepAlive.shared.startIfEnabled()
+        
         self.inForegroundDisposable = (inForeground
         |> deliverOnMainQueue).startStrict(next: { [weak self] value in
             guard let strongSelf = self else {
@@ -243,9 +246,11 @@ public final class SharedWakeupManager {
                 }
                 |> distinctUntilChanged
                 
+                // AyuGram: with background keep-alive on, every account keeps receiving updates,
+                // the same way an account that shares its live location does.
                 let hasActiveLiveLocationPolling = liveLocationPolling
                 |> map { id in
-                    return id == account.id
+                    return id == account.id || AyuGramSettings.bool(.keepAliveInBackground)
                 }
                 |> distinctUntilChanged
                 
@@ -1200,5 +1205,47 @@ public final class SharedWakeupManager {
             
             checkCompletionState(nil)
         }
+    }
+}
+
+// AyuGram: keeps the app process running in the background through the location
+// background mode, so deletions and edits are received while the app is not open.
+final class AyuBackgroundKeepAlive: NSObject, CLLocationManagerDelegate {
+    static let shared = AyuBackgroundKeepAlive()
+    
+    private var manager: CLLocationManager?
+    
+    func startIfEnabled() {
+        if !AyuGramSettings.bool(.keepAliveInBackground) {
+            return
+        }
+        if self.manager != nil {
+            return
+        }
+        let manager = CLLocationManager()
+        manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
+        manager.distanceFilter = 3000.0
+        manager.pausesLocationUpdatesAutomatically = false
+        manager.allowsBackgroundLocationUpdates = true
+        manager.showsBackgroundLocationIndicator = false
+        self.manager = manager
+        manager.requestAlwaysAuthorization()
+        manager.startUpdatingLocation()
+        manager.startMonitoringSignificantLocationChanges()
+        AyuGramSettings.debugLog("keepalive started")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        AyuGramSettings.debugLog("keepalive location update count=\(locations.count)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        AyuGramSettings.debugLog("keepalive location error")
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        AyuGramSettings.debugLog("keepalive authorization=\(manager.authorizationStatus.rawValue)")
+        manager.startUpdatingLocation()
     }
 }

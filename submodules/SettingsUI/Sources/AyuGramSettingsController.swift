@@ -223,14 +223,15 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
     let otherToggles: [(AyuGramSettings.BoolKey, String)] = [
         (.disableAds, "Hide Sponsored Messages"),
         (.showMessageSeconds, "Show Seconds in Message Time"),
-        (.localPremium, "Local Telegram Premium")
+        (.localPremium, "Local Telegram Premium"),
+        (.keepAliveInBackground, "Stay Connected in Background")
     ]
     index = 0
     for (key, title) in otherToggles {
         entries.append(.otherToggle(index, key, title, AyuGramSettings.bool(key)))
         index += 1
     }
-    entries.append(.otherInfo("Local Premium only unlocks features on this device and takes effect after restarting the app."))
+    entries.append(.otherInfo("Local Premium only unlocks features on this device and takes effect after restarting the app. Staying connected in the background uses location access to keep the app running so deleted messages are caught while it is closed; it also takes effect after a restart and uses more battery."))
 
     return entries
 }
