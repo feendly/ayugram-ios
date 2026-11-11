@@ -74,6 +74,10 @@ A feature counts as done only when its row says PASS.
 | 49 | Hide quick share, ignore per-chat backgrounds | run 43084196247 | - | - | No channel post or custom chat background in the test chat | NOT TESTED |
 | 50 | Filtered message hidden in chat list preview | run 43094601854 | Install; look at luki's row in nash's chat list (last message is filtered) | Preview does not show the message text | Row shows "Filtered message" (it showed the text "Lazy" on the previous build) | PASS |
 | 51 | Premium sticker sent as a copy | run 43094601854 | Open the sticker panel, tap a premium sticker | Sticker sent | Not reached: the iPad dropped off the network (15% battery warning seconds earlier) before a premium sticker was found in the panel | NOT TESTED |
+| 52 | Premium sticker sent as a copy | run 43113668579 | nash (no Premium): sticker panel, Trending Premium Stickers, Duck pack, press a star-badged sticker | Sticker is sent and arrives as a sticker | Log `sticker copy start mime=application/x-tgsticker`, `enqueue bytes=10465`. Sent at 8:11 PM; shows as an animated sticker for nash and for luki, whose chat list says "Sticker". Seen only in AyuGram, not in a stock Telegram client. Video (.webm) premium stickers not tried | PASS (animated stickers) |
+| 53 | Hide emoji button in message field | run 43113668579 | Override off, reopen chat | No emoji/sticker button in the field | Button gone | PASS |
+| 54 | Hide commands, auto-delete and gift buttons | run 43113668579 | - | - | The test chat shows none of these buttons to begin with | NOT TESTED |
+| 55 | Streamer mode hides the phone confirmation card | run 43113668579 | - | - | Checked on luki, which has no such card; not checked on nash | NOT TESTED |
 
 ## Notes
 
@@ -99,3 +103,4 @@ A feature counts as done only when its row says PASS.
 - The custom marks from row 42 (`Chg`, broom plus `x`) are still set on the device.
 - The two iPad reboots on 2026-11-11 (09:40 and 17:29 device time) were low-battery shutdowns: each has a LowBatteryLog at 1% capacity. The logs show the screen held on for hours, AyuGram in the foreground, and (second time) AyuGram's location keep-alive holding the system awake for 43 min. Not a crash or kernel panic.
 - Third shutdown, 19:02 device time, 90 s after installing run 43094601854: LowBatteryLog again, but at 16% reported charge with only 3367 mV (the earlier ones were at 1%). Five more LowBatteryLogs exist from 26 Sep to 4 Nov, before AyuGram was ever installed. Reading: a worn battery whose voltage collapses under load (install, app launch, screen on, VNC, location). No panic logs; the install itself is not the cause, the load spike at low charge is.
+- Over VNC, pressing a star-badged sticker in the pack preview sent it directly (no menu appeared); the press that sent it was a mouse click on a neighbouring cell, so the exact gesture is unclear.

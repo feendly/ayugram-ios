@@ -16,10 +16,10 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 31 |
+| TESTED | 34 |
 | LOG ONLY | 7 |
-| UNTESTED | 20 |
-| TODO | 40 |
+| UNTESTED | 23 |
+| TODO | 36 |
 | N/A | 10 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
@@ -75,6 +75,8 @@ Some rows group several related desktop settings, so the row count is lower than
 |---|---|---|---|
 | disableAds | on | UNTESTED | Needs a channel that shows ads |
 | localPremium | off | UNTESTED | Needs restart to apply |
+| premiumStickersAsCopy | on | TESTED | Not in AyuGram Desktop; added at the user's request. Re-uploads a premium sticker and sends the copy. Animated stickers tested; video stickers and stock-client rendering not checked |
+| Filtered/hidden messages in chat list preview | - | TESTED | Shows "Filtered message" |
 | disableStories | off | UNTESTED | Switch on; no stories were available to compare |
 | disableCustomBackgrounds | off | UNTESTED | run 43084196247 |
 | disableOpenLinkWarning | off | UNTESTED | Needs a message with a hidden link |
@@ -128,11 +130,11 @@ Some rows group several related desktop settings, so the row count is lower than
 | Setting | Desktop default | iOS status |
 |---|---|---|
 | showAttachButtonInMessageField | on | TESTED (run 43084196247) |
-| showCommandsButtonInMessageField | on | TODO |
-| showEmojiButtonInMessageField | on | TODO |
+| showCommandsButtonInMessageField | on | UNTESTED (run 43113668579) |
+| showEmojiButtonInMessageField | on | TESTED |
 | showMicrophoneButtonInMessageField | on | TODO |
-| showAutoDeleteButtonInMessageField | on | TODO |
-| showGiftButtonInMessageField | on | TODO |
+| showAutoDeleteButtonInMessageField | on | UNTESTED (run 43113668579) |
+| showGiftButtonInMessageField | on | UNTESTED (run 43113668579) |
 | showAiEditorButtonInMessageField | on | TODO |
 | showAttachPopup | on | N/A (hover popup) |
 | showEmojiPopup | on | N/A (hover popup) |
