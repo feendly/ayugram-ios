@@ -26,6 +26,11 @@ public final class AyuGramSettings {
         case localPremium
         case showMessageSeconds
         case keepAliveInBackground
+        case disableStories
+        case disableOpenLinkWarning
+        case showPeerId
+        case sendWithoutSoundAlways
+        case sendWithoutSoundInGhost
 
         public var defaultValue: Bool {
             switch self {
@@ -48,6 +53,12 @@ public final class AyuGramSettings {
             case .showMessageSeconds:
                 return false
             case .keepAliveInBackground:
+                return false
+            case .disableStories, .disableOpenLinkWarning:
+                return false
+            case .showPeerId:
+                return true
+            case .sendWithoutSoundAlways, .sendWithoutSoundInGhost:
                 return false
             }
         }

@@ -758,7 +758,31 @@ private func opportunisticallyTransformOutgoingMedia(network: Network, postbox: 
     return combineLatest(signals)
 }
 
+// AyuGram: ghost-mode send options (send silently, send through the schedule so the account does not appear online).
+private func ayuTransformOutgoingMessages(peerId: PeerId, messages: [EnqueueMessage]) -> [EnqueueMessage] {
+    let silent = AyuGramSettings.bool(.sendWithoutSoundAlways) || (AyuGramSettings.bool(.sendWithoutSoundInGhost) && AyuGramSettings.isGhostModeActive)
+    let isCloudPeer = peerId.namespace == Namespaces.Peer.CloudUser || peerId.namespace == Namespaces.Peer.CloudGroup || peerId.namespace == Namespaces.Peer.CloudChannel
+    let scheduled = AyuGramSettings.bool(.useScheduledMessages) && !AyuGramSettings.sendOnlinePackets && isCloudPeer
+    if !silent && !scheduled {
+        return messages
+    }
+    let scheduleTime = Int32(Date().timeIntervalSince1970) + 12
+    return messages.map { message -> EnqueueMessage in
+        return message.withUpdatedAttributes { attributes in
+            var attributes = attributes
+            if silent && !attributes.contains(where: { $0 is NotificationInfoMessageAttribute }) {
+                attributes.append(NotificationInfoMessageAttribute(flags: .muted))
+            }
+            if scheduled && !attributes.contains(where: { $0 is OutgoingScheduleInfoMessageAttribute }) {
+                attributes.append(OutgoingScheduleInfoMessageAttribute(scheduleTime: scheduleTime, repeatPeriod: nil))
+            }
+            return attributes
+        }
+    }
+}
+
 public func enqueueMessages(account: Account, peerId: PeerId, messages: [EnqueueMessage]) -> Signal<[MessageId?], NoError> {
+    let messages = ayuTransformOutgoingMessages(peerId: peerId, messages: messages)
     let signal: Signal<[(Bool, EnqueueMessage)], NoError>
     if let transformOutgoingMessageMedia = account.transformOutgoingMessageMedia {
         signal = opportunisticallyTransformOutgoingMedia(network: account.network, postbox: account.postbox, transformOutgoingMessageMedia: transformOutgoingMessageMedia, messages: messages, userInteractive: true)

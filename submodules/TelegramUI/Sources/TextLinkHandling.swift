@@ -151,6 +151,10 @@ func handleTextLinkActionImpl(context: AccountContext, peerId: EnginePeer.Id?, n
                         concealed = true
                     }
                     
+                    // AyuGram: optionally skip the hidden-link prompt (never for links with a login part).
+                    if concealed && AyuGramSettings.bool(.disableOpenLinkWarning) && loginPartUrl == nil {
+                        concealed = false
+                    }
                     if concealed {
                         // For a login part the prompt shows the host the link really opens. The external-URL opener
                         // asks about such a link as well, so accepting it here tells the opener it has been confirmed.

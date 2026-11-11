@@ -193,6 +193,15 @@ func infoItems(
                 interaction.requestLayout(animated)
             }))
         }
+        // AyuGram: show the user ID (Bot API form); tapping copies it.
+        if AyuGramSettings.bool(.showPeerId) {
+            let ayuIdText = "\(user.id.id._internalGetInt64Value())"
+            items[currentPeerInfoSection]!.append(PeerInfoScreenLabeledValueItem(id: 39001, label: "ID", text: ayuIdText, textColor: .primary, action: { _, _ in
+                UIPasteboard.general.string = ayuIdText
+            }, longTapAction: nil, contextAction: nil, requestLayout: { animated in
+                interaction.requestLayout(animated)
+            }))
+        }
         if let mainUsername = user.addressName {
             var additionalUsernames: String?
             let usernames = user.usernames.filter { $0.isActive && $0.username != mainUsername }

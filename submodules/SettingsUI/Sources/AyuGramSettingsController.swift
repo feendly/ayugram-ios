@@ -197,7 +197,10 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.sendReadStories, "Send Story Views"),
         (.sendOnlinePackets, "Send Online Status"),
         (.sendUploadProgress, "Send Typing Status"),
-        (.sendOfflinePacketAfterOnline, "Go Offline Immediately")
+        (.sendOfflinePacketAfterOnline, "Go Offline Immediately"),
+        (.useScheduledMessages, "Send via Schedule (No Online)"),
+        (.sendWithoutSoundInGhost, "Send Silently in Ghost Mode"),
+        (.sendWithoutSoundAlways, "Always Send Silently")
     ]
     var index: Int32 = 0
     for (key, title) in toggles {
@@ -224,7 +227,10 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.disableAds, "Hide Sponsored Messages"),
         (.showMessageSeconds, "Show Seconds in Message Time"),
         (.localPremium, "Local Telegram Premium"),
-        (.keepAliveInBackground, "Stay Connected in Background")
+        (.keepAliveInBackground, "Stay Connected in Background"),
+        (.disableStories, "Hide Stories in Chat List"),
+        (.disableOpenLinkWarning, "Skip Hidden Link Warning"),
+        (.showPeerId, "Show User ID in Profile")
     ]
     index = 0
     for (key, title) in otherToggles {

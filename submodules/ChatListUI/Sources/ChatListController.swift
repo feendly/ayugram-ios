@@ -2252,7 +2252,8 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController 
                 }
             })
             
-            if self.previewing {
+            // AyuGram: optionally hide stories in the chat list.
+            if self.previewing || AyuGramSettings.bool(.disableStories) {
                 self.storiesReady.set(.single(true))
             } else {
                 self.storySubscriptionsDisposable = (self.context.engine.messages.storySubscriptions(isHidden: self.location == .chatList(groupId: .archive))
