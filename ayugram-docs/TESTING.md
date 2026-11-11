@@ -60,6 +60,7 @@ A feature counts as done only when its row says PASS.
 | 35 | Keep-alive in the background (retest) | run 43012742764 | Same, 170 s in the background | Heartbeat every 30 s with state=2 | Heartbeats and location updates continued the whole time | PASS at log level; deletion from another device not yet tried |
 | 36 | Scheduled send clears the input (second retest) | run 43012742764 | As row 17 | Field empties at once | Field cleared immediately; message arrived about 15 s later | PASS |
 | 37 | Repeat in message menu | run 43012742764 | Override on, long-press a text message | Repeat item | Item shown; sending not tried | PARTIAL |
+| 38 | Deleted while locked, sent from another device | run 43012742764 | User sends luki a message as nash from another device and deletes it while the iPad is locked | Log `deleted message kept` | Invalid run: the iPad had rebooted about 50 s after the last heartbeat of the previous test (uptime 5 h 52 min at check time), so AyuGram was not running for the whole window. No kept deletion logged. iOS relaunched the app in the background (state=2) once the jailbreak was back | NOT TESTED (repeat needed) |
 
 ## Notes
 
@@ -80,3 +81,4 @@ A feature counts as done only when its row says PASS.
 - During testing one of nash's group chats (Quang Blue IOS) was opened by a
   mis-timed tap and closed again. Read receipts were off at the time.
 - Row 36 was run by mistake while nash was the active account, so the test message 's12' went to nash's Saved Messages. It was deleted there right after.
+- A device reboot ends keep-alive until the app is opened again (or iOS relaunches it); deletions during that gap are not captured.
