@@ -43,9 +43,12 @@ private final class AccountPresenceManagerImpl {
     }
     
     private func updatePresence(_ isOnline: Bool) {
-        let request: Signal<Api.Bool, MTRpcError>
+        // AyuGram: ghost mode. Never report online; optionally keep reporting offline.
+        let ayuSuppressOnline = isOnline && !AyuGramSettings.sendOnlinePackets
+        let ayuSendOffline = isOnline && AyuGramSettings.sendOfflinePacketAfterOnline
+        var request: Signal<Api.Bool, MTRpcError>
         if isOnline {
-            let timer = SignalKitTimer(timeout: 30.0, repeat: false, completion: { [weak self] in
+            let timer = SignalKitTimer(timeout: ayuSendOffline ? 5.0 : 30.0, repeat: false, completion: { [weak self] in
                 guard let strongSelf = self else {
                     return
                 }
@@ -58,6 +61,11 @@ private final class AccountPresenceManagerImpl {
             self.onlineTimer?.invalidate()
             self.onlineTimer = nil
             request = self.network.request(Api.functions.account.updateStatus(offline: .boolTrue))
+        }
+        if ayuSendOffline {
+            request = self.network.request(Api.functions.account.updateStatus(offline: .boolTrue))
+        } else if ayuSuppressOnline {
+            return
         }
         self.isPerformingUpdate.set(true)
         self.currentRequestDisposable.set((request

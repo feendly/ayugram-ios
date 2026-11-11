@@ -279,6 +279,8 @@ extension PeerInfoScreenNode {
             self.headerNode.invokeDisplayPremiumIntro()
         case .profileColor:
             self.interaction.editingOpenNameColorSetup()
+        case .ayuGram:
+            push(ayuGramSettingsController(context: self.context))
         case .powerSaving:
             push(energySavingSettingsScreen(context: self.context))
         case .businessSetup:

@@ -212,6 +212,11 @@ private func validatePeerReadState(network: Network, postbox: Postbox, stateMana
                         case let .idBased(localMaxIncomingReadId, _, _, _, _):
                             if case let .idBased(updatedMaxIncomingReadId, _, _, updatedCount, updatedMarkedUnread) = readState {
                                 if localReadMarkIsAheadOfServer(localMaxIncomingReadId: localMaxIncomingReadId, serverMaxIncomingReadId: updatedMaxIncomingReadId, serverCount: updatedCount, serverMarkedUnread: updatedMarkedUnread) {
+                                    // AyuGram: ghost mode. The local mark is ahead on purpose; keep it and stop retrying.
+                                    if !AyuGramSettings.sendReadMessages {
+                                        transaction.confirmSynchronizedIncomingReadState(peerId)
+                                        return nil
+                                    }
                                     return .retry
                                 }
                             }
@@ -252,6 +257,10 @@ private func validatePeerReadState(network: Network, postbox: Postbox, stateMana
 }
 
 private func pushPeerReadState(network: Network, postbox: Postbox, stateManager: AccountStateManager, peerId: PeerId, readState: PeerReadState) -> Signal<PeerReadState, PeerReadStateValidationError> {
+    // AyuGram: ghost mode. Keep the chat read locally without telling the server.
+    if !AyuGramSettings.sendReadMessages && !AyuGramSettings.consumeForcedRead(peerId: peerId.toInt64()) {
+        return .single(readState)
+    }
     if peerId.namespace == Namespaces.Peer.SecretChat {
         // Decide whether a request is needed before looking the peer up: inputSecretChat goes
         // through loadedPeerWithId, which never emits when the peer row is missing and fails
