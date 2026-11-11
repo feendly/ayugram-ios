@@ -181,6 +181,10 @@ func chatHistoryEntriesForView(
         if pendingRemovedMessages.contains(message.id) {
             continue
         }
+        // AyuGram: message filters
+        if AyuFilters.shouldHide(text: message.text, isIncoming: message.flags.contains(.Incoming), isPrivateChat: message.id.peerId.namespace == Namespaces.Peer.CloudUser) {
+            continue
+        }
         
         if case let .replyThread(replyThreadMessage) = location, replyThreadMessage.isForumPost {
             if isUndisplayedForumTopicRoot(message, location: location, additionalData: view.additionalData) {

@@ -9,14 +9,19 @@ import TelegramPresentationData
 import ItemListUI
 import PresentationDataUtils
 import AccountContext
+import PromptUI
 
 private final class AyuGramSettingsControllerArguments {
     let toggleGhostMode: (Bool) -> Void
     let toggle: (AyuGramSettings.BoolKey, Bool) -> Void
+    let addFilter: () -> Void
+    let removeFilter: (String) -> Void
 
-    init(toggleGhostMode: @escaping (Bool) -> Void, toggle: @escaping (AyuGramSettings.BoolKey, Bool) -> Void) {
+    init(toggleGhostMode: @escaping (Bool) -> Void, toggle: @escaping (AyuGramSettings.BoolKey, Bool) -> Void, addFilter: @escaping () -> Void, removeFilter: @escaping (String) -> Void) {
         self.toggleGhostMode = toggleGhostMode
         self.toggle = toggle
+        self.addFilter = addFilter
+        self.removeFilter = removeFilter
     }
 }
 
@@ -24,6 +29,7 @@ private enum AyuGramSettingsSection: Int32 {
     case ghostMaster
     case ghost
     case history
+    case filters
     case other
 }
 
@@ -39,6 +45,11 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
     case otherHeader(String)
     case otherToggle(Int32, AyuGramSettings.BoolKey, String, Bool)
     case otherInfo(String)
+    case filterHeader(String)
+    case filterToggle(Int32, AyuGramSettings.BoolKey, String, Bool)
+    case filterPattern(Int32, String)
+    case filterAdd(String)
+    case filterInfo(String)
 
     var section: ItemListSectionId {
         switch self {
@@ -50,6 +61,8 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             return AyuGramSettingsSection.history.rawValue
         case .otherHeader, .otherToggle, .otherInfo:
             return AyuGramSettingsSection.other.rawValue
+        case .filterHeader, .filterToggle, .filterPattern, .filterAdd, .filterInfo:
+            return AyuGramSettingsSection.filters.rawValue
         }
     }
 
@@ -77,6 +90,16 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             return 3010 + index
         case .otherInfo:
             return 3900
+        case .filterHeader:
+            return 2950
+        case let .filterToggle(index, _, _, _):
+            return 2951 + index
+        case let .filterPattern(index, _):
+            return 2960 + index
+        case .filterAdd:
+            return 2998
+        case .filterInfo:
+            return 2999
         }
     }
 
@@ -148,6 +171,36 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             } else {
                 return false
             }
+        case let .filterHeader(text):
+            if case .filterHeader(text) = rhs {
+                return true
+            } else {
+                return false
+            }
+        case let .filterToggle(index, key, title, value):
+            if case .filterToggle(index, key, title, value) = rhs {
+                return true
+            } else {
+                return false
+            }
+        case let .filterPattern(index, pattern):
+            if case .filterPattern(index, pattern) = rhs {
+                return true
+            } else {
+                return false
+            }
+        case let .filterAdd(text):
+            if case .filterAdd(text) = rhs {
+                return true
+            } else {
+                return false
+            }
+        case let .filterInfo(text):
+            if case .filterInfo(text) = rhs {
+                return true
+            } else {
+                return false
+            }
         }
     }
 
@@ -172,13 +225,21 @@ private enum AyuGramSettingsEntry: ItemListNodeEntry {
             })
         case let .ghostInfo(text):
             return ItemListTextItem(presentationData: presentationData, text: .plain(text), sectionId: self.section)
-        case let .historyHeader(text), let .otherHeader(text):
+        case let .filterPattern(_, pattern):
+            return ItemListActionItem(presentationData: presentationData, systemStyle: .glass, title: pattern, kind: .destructive, alignment: .natural, sectionId: self.section, style: .blocks, action: {
+                arguments.removeFilter(pattern)
+            })
+        case let .filterAdd(text):
+            return ItemListActionItem(presentationData: presentationData, systemStyle: .glass, title: text, kind: .generic, alignment: .natural, sectionId: self.section, style: .blocks, action: {
+                arguments.addFilter()
+            })
+        case let .historyHeader(text), let .otherHeader(text), let .filterHeader(text):
             return ItemListSectionHeaderItem(presentationData: presentationData, text: text, sectionId: self.section)
-        case let .historyToggle(_, key, title, value), let .otherToggle(_, key, title, value):
+        case let .historyToggle(_, key, title, value), let .otherToggle(_, key, title, value), let .filterToggle(_, key, title, value):
             return ItemListSwitchItem(presentationData: presentationData, systemStyle: .glass, title: title, value: value, sectionId: self.section, style: .blocks, updated: { value in
                 arguments.toggle(key, value)
             })
-        case let .historyInfo(text), let .otherInfo(text):
+        case let .historyInfo(text), let .otherInfo(text), let .filterInfo(text):
             return ItemListTextItem(presentationData: presentationData, text: .plain(text), sectionId: self.section)
         }
     }
@@ -222,6 +283,17 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
     }
     entries.append(.historyInfo("Deleted messages stay in the chat with a broom mark. Hold an edited message and choose Edit History to see earlier versions."))
 
+    entries.append(.filterHeader("MESSAGE FILTERS"))
+    entries.append(.filterToggle(0, .filtersEnabled, "Enable Filters", AyuGramSettings.bool(.filtersEnabled)))
+    entries.append(.filterToggle(1, .filtersEnabledInChats, "Also in Private Chats", AyuGramSettings.bool(.filtersEnabledInChats)))
+    var filterIndex: Int32 = 0
+    for pattern in AyuFilters.patterns.prefix(30) {
+        entries.append(.filterPattern(filterIndex, pattern))
+        filterIndex += 1
+    }
+    entries.append(.filterAdd("Add Filter"))
+    entries.append(.filterInfo("Incoming messages matching any filter (regular expression, case-insensitive) are hidden. Tap a filter to remove it."))
+
     entries.append(.otherHeader("OTHER"))
     let otherToggles: [(AyuGramSettings.BoolKey, String)] = [
         (.disableAds, "Hide Sponsored Messages"),
@@ -251,11 +323,29 @@ public func ayuGramSettingsController(context: AccountContext) -> ViewController
         versionPromise.set(version.modify { $0 + 1 })
     }
 
+    var presentControllerImpl: ((ViewController) -> Void)?
+
     let arguments = AyuGramSettingsControllerArguments(toggleGhostMode: { value in
         AyuGramSettings.setGhostModeActive(value)
         bump()
     }, toggle: { key, value in
         AyuGramSettings.setBool(key, value)
+        bump()
+    }, addFilter: {
+        let controller = promptController(context: context, text: "Add Filter", subtitle: "Regular expression. Matching incoming messages are hidden.", value: nil, placeholder: "word or regex", apply: { value in
+            guard let value = value?.trimmingCharacters(in: .whitespacesAndNewlines), !value.isEmpty else {
+                return
+            }
+            var patterns = AyuFilters.patterns
+            if !patterns.contains(value) {
+                patterns.append(value)
+            }
+            AyuFilters.setPatterns(patterns)
+            bump()
+        })
+        presentControllerImpl?(controller)
+    }, removeFilter: { pattern in
+        AyuFilters.setPatterns(AyuFilters.patterns.filter { $0 != pattern })
         bump()
     })
 
@@ -269,5 +359,8 @@ public func ayuGramSettingsController(context: AccountContext) -> ViewController
     }
 
     let controller = ItemListController(context: context, state: signal)
+    presentControllerImpl = { [weak controller] c in
+        controller?.present(c, in: .window(.root))
+    }
     return controller
 }

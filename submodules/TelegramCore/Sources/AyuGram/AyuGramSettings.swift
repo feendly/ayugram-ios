@@ -32,6 +32,8 @@ public final class AyuGramSettings {
         case sendWithoutSoundAlways
         case sendWithoutSoundInGhost
         case allowSavingRestrictedContent
+        case filtersEnabled
+        case filtersEnabledInChats
 
         public var defaultValue: Bool {
             switch self {
@@ -62,6 +64,8 @@ public final class AyuGramSettings {
             case .sendWithoutSoundAlways, .sendWithoutSoundInGhost:
                 return false
             case .allowSavingRestrictedContent:
+                return false
+            case .filtersEnabled, .filtersEnabledInChats:
                 return false
             }
         }
@@ -168,5 +172,117 @@ public final class AyuGramSettings {
             forcedReadLock.unlock()
         }
         return forcedReadPeerIds.remove(peerId) != nil
+    }
+}
+
+// AyuGram: message filters. Incoming messages whose text matches any pattern are hidden.
+public final class AyuFilters {
+    private static let lock = NSLock()
+    private static var cachedPatterns: [String]?
+    private static var cachedRegexes: [NSRegularExpression] = []
+    private static let storageKey = "ayu.filters"
+
+    public static var patterns: [String] {
+        return (UserDefaults.standard.array(forKey: storageKey) as? [String]) ?? []
+    }
+
+    public static func setPatterns(_ patterns: [String]) {
+        UserDefaults.standard.set(patterns, forKey: storageKey)
+        lock.lock()
+        cachedPatterns = nil
+        lock.unlock()
+    }
+
+    public static func matches(_ text: String) -> Bool {
+        if text.isEmpty {
+            return false
+        }
+        lock.lock()
+        if cachedPatterns == nil {
+            let current = self.patterns
+            cachedPatterns = current
+            var regexes: [NSRegularExpression] = []
+            for pattern in current {
+                if let regex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) {
+                    regexes.append(regex)
+                }
+            }
+            cachedRegexes = regexes
+        }
+        let regexes = cachedRegexes
+        lock.unlock()
+        let range = NSRange(text.startIndex..., in: text)
+        for regex in regexes {
+            if regex.firstMatch(in: text, options: [], range: range) != nil {
+                return true
+            }
+        }
+        return false
+    }
+
+    public static func shouldHide(text: String, isIncoming: Bool, isPrivateChat: Bool) -> Bool {
+        if !isIncoming || !AyuGramSettings.bool(.filtersEnabled) {
+            return false
+        }
+        if isPrivateChat && !AyuGramSettings.bool(.filtersEnabledInChats) {
+            return false
+        }
+        return matches(text)
+    }
+}
+
+// AyuGram: message filters. Incoming messages whose text matches any pattern are hidden.
+public final class AyuFilters {
+    private static let lock = NSLock()
+    private static var cachedPatterns: [String]?
+    private static var cachedRegexes: [NSRegularExpression] = []
+    private static let storageKey = "ayu.filters"
+
+    public static var patterns: [String] {
+        return (UserDefaults.standard.array(forKey: storageKey) as? [String]) ?? []
+    }
+
+    public static func setPatterns(_ patterns: [String]) {
+        UserDefaults.standard.set(patterns, forKey: storageKey)
+        lock.lock()
+        cachedPatterns = nil
+        lock.unlock()
+    }
+
+    public static func matches(_ text: String) -> Bool {
+        if text.isEmpty {
+            return false
+        }
+        lock.lock()
+        if cachedPatterns == nil {
+            let current = self.patterns
+            cachedPatterns = current
+            var regexes: [NSRegularExpression] = []
+            for pattern in current {
+                if let regex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) {
+                    regexes.append(regex)
+                }
+            }
+            cachedRegexes = regexes
+        }
+        let regexes = cachedRegexes
+        lock.unlock()
+        let range = NSRange(text.startIndex..., in: text)
+        for regex in regexes {
+            if regex.firstMatch(in: text, options: [], range: range) != nil {
+                return true
+            }
+        }
+        return false
+    }
+
+    public static func shouldHide(text: String, isIncoming: Bool, isPrivateChat: Bool) -> Bool {
+        if !isIncoming || !AyuGramSettings.bool(.filtersEnabled) {
+            return false
+        }
+        if isPrivateChat && !AyuGramSettings.bool(.filtersEnabledInChats) {
+            return false
+        }
+        return matches(text)
     }
 }

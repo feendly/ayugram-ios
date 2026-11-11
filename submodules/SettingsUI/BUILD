@@ -33,6 +33,7 @@ swift_library(
         "//submodules/GalleryUI:GalleryUI",
         "//submodules/Geocoding:Geocoding",
         "//submodules/ItemListUI:ItemListUI",
+        "//submodules/PromptUI:PromptUI",
         "//submodules/ItemListStickerPackItem:ItemListStickerPackItem",
         "//submodules/ItemListPeerItem:ItemListPeerItem",
         "//submodules/ItemListPeerActionItem:ItemListPeerActionItem",
