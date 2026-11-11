@@ -470,3 +470,13 @@ func synchronizePeerReadState(network: Network, postbox: Postbox, stateManager: 
         return signal
     }
 }
+
+/// AyuGram: sends one read receipt for this chat even while read receipts are suppressed.
+public func ayuSendReadReceiptNow(account: Account, peerId: PeerId) -> Signal<Never, NoError> {
+    AyuGramSettings.forceReadOnce(peerId: peerId.toInt64())
+    AyuGramSettings.debugLog("read forced peer=\(peerId.toInt64())")
+    return pushPeerReadState(network: account.network, postbox: account.postbox, stateManager: account.stateManager, peerId: peerId, willValidate: false)
+    |> `catch` { _ -> Signal<Never, NoError> in
+        return .complete()
+    }
+}
