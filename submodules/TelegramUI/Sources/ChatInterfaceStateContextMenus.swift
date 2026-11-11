@@ -1356,6 +1356,17 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
             }
         }
         
+        // AyuGram: explicit read receipt while read receipts are suppressed
+        if !AyuGramSettings.sendReadMessages && message.id.namespace == Namespaces.Message.Cloud {
+            let ayuReadPeerId = message.id.peerId
+            actions.append(.action(ContextMenuActionItem(text: "Send Read Receipt", icon: { theme in
+                return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Read"), color: theme.actionSheet.primaryTextColor)
+            }, action: { _, f in
+                f(.default)
+                let _ = ayuSendReadReceiptNow(account: context.account, peerId: ayuReadPeerId).startStandalone()
+            })))
+        }
+        
         // AyuGram: edit history
         let ayuEdits = AyuMessagesStore.shared.edits(message.id)
         if !ayuEdits.isEmpty {

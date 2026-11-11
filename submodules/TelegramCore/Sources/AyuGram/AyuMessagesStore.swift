@@ -5,6 +5,7 @@
 
 import Foundation
 import Postbox
+import SwiftSignalKit
 
 public final class AyuMessagesStore {
     public struct Edit {
@@ -144,4 +145,13 @@ func ayuKeepRemotelyDeletedMessages(transaction: Transaction, ids: [MessageId]) 
         })
     }
     return idsToDelete
+}
+
+/// Sends one read receipt for this chat even while read receipts are suppressed.
+public func ayuSendReadReceiptNow(account: Account, peerId: PeerId) -> Signal<Never, NoError> {
+    AyuGramSettings.forceReadOnce(peerId: peerId.toInt64())
+    return account.postbox.transaction { transaction -> Void in
+        transaction.setNeedsIncomingReadStateSynchronization(peerId)
+    }
+    |> ignoreValues
 }
