@@ -18,8 +18,8 @@ Status values:
 |---|---|
 | TESTED | 20 |
 | LOG ONLY | 7 |
-| UNTESTED | 23 |
-| TODO | 48 |
+| UNTESTED | 31 |
+| TODO | 40 |
 | N/A | 10 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
@@ -51,7 +51,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | saveForBots | off | UNTESTED | |
 | deletedMark | broom | TESTED | Broom shown. Custom mark: prompt opens with the current value; saving not confirmed over VNC (UNTESTED) |
 | editedMark | "edited" | UNTESTED | Custom text, run 43002933120 |
-| semiTransparentDeletedMessages | off | TODO | |
+| semiTransparentDeletedMessages | off | UNTESTED | Bubble messages only (run 43084196247) |
 | Deleted messages while app is closed | - | UNTESTED | App now stays running in the background (see Stay Connected). Needs a deletion sent from another device while the iPad is on the home screen or locked |
 | Deleted messages in groups and channels | - | LOG ONLY | Log shows a channel deletion kept; not looked at in the chat |
 | Self-destructing media, cleared history, deleted chats | - | TODO | |
@@ -76,7 +76,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | disableAds | on | UNTESTED | Needs a channel that shows ads |
 | localPremium | off | UNTESTED | Needs restart to apply |
 | disableStories | off | UNTESTED | Switch on; no stories were available to compare |
-| disableCustomBackgrounds | off | TODO | |
+| disableCustomBackgrounds | off | UNTESTED | run 43084196247 |
 | disableOpenLinkWarning | off | UNTESTED | Needs a message with a hidden link |
 | disableNotificationsDelay | off | TODO | |
 | disableGreetingSticker | off | UNTESTED | Run 43002933120 |
@@ -112,12 +112,12 @@ Some rows group several related desktop settings, so the row count is lower than
 | replaceBottomInfoWithIcons | on | TODO | |
 | adaptiveCoverColor | on | TODO | |
 | improveLinkPreviews | off | TODO | |
-| hideFastShare | off | TODO | |
+| hideFastShare | off | UNTESTED | run 43084196247 |
 | showChannelReactions | on | UNTESTED | Run 43002933120 |
 | showGroupReactions | on | UNTESTED | Run 43002933120 |
 | showPrivateChatReactions | on | TESTED | Reaction hidden with the switch off |
 | wideMultiplier | 1.0 | N/A | Desktop window layout |
-| hideNotificationCounters | off | TODO | |
+| hideNotificationCounters | off | UNTESTED | Chats tab counter only (run 43084196247) |
 | hideNotificationBadge | off | UNTESTED | Run 43002933120 |
 | hideAllChatsFolder | off | TODO | |
 | channelBottomButton | Discuss | TODO | |
@@ -127,7 +127,7 @@ Some rows group several related desktop settings, so the row count is lower than
 
 | Setting | Desktop default | iOS status |
 |---|---|---|
-| showAttachButtonInMessageField | on | TODO |
+| showAttachButtonInMessageField | on | UNTESTED (run 43084196247) |
 | showCommandsButtonInMessageField | on | TODO |
 | showEmojiButtonInMessageField | on | TODO |
 | showMicrophoneButtonInMessageField | on | TODO |
@@ -141,8 +141,8 @@ Some rows group several related desktop settings, so the row count is lower than
 
 | Setting | Desktop default | iOS status |
 |---|---|---|
-| showReactionsPanelInContextMenu | Visible | TODO |
-| showViewsPanelInContextMenu | Visible | TODO |
+| showReactionsPanelInContextMenu | Visible | UNTESTED (on/off only, run 43084196247) |
+| showViewsPanelInContextMenu | Visible | UNTESTED (on/off only, run 43084196247) |
 | showHideMessageInContextMenu | Hidden | TESTED (Message disappears on this device and stays hidden after reopening) |
 | showUserMessagesInContextMenu | With modifier | TODO |
 | showMessageDetailsInContextMenu | With modifier | TESTED (Alert with message, chat and sender IDs and date) |
@@ -164,7 +164,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | Feature | iOS status | Notes |
 |---|---|---|
 | AyuGram settings screen | TESTED | Ghost, history, filters and other sections; Add Filter prompt works |
-| Streamer mode | TODO | |
+| Streamer mode | UNTESTED | Hides own phone number in Settings only (run 43084196247) |
 | Message shot (messages as image) | TODO | 7 options |
 | Forward without author / from restricted chats / repeat message | TODO | Copy and save in restricted chats is implemented (UNTESTED, no restricted chat at hand) |
 | Translator providers (Telegram, Google, Yandex, native) | TODO | |
