@@ -14,13 +14,15 @@ Status values:
 
 ## Summary
 
-| Status | Count |
+| Status | Rows |
 |---|---|
 | TESTED | 6 |
 | LOG ONLY | 2 |
-| UNTESTED | 9 |
-| TODO | 70 |
-| N/A | 11 |
+| UNTESTED | 11 |
+| TODO | 76 |
+| N/A | 8 |
+
+Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
 
 ## Ghost mode
 
