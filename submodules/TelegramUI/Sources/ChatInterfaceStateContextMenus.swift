@@ -1400,6 +1400,20 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
             })))
         }
 
+        // AyuGram: send the same text again
+        if AyuGramSettings.bool(.showRepeatMessageInContextMenu) && message.id.namespace == Namespaces.Message.Cloud && !message.text.isEmpty && message.media.isEmpty {
+            let ayuRepeatText = message.text
+            let ayuRepeatPeerId = message.id.peerId
+            let ayuRepeatThreadId = message.threadId
+            let ayuRepeatAttributes = message.attributes.filter { $0 is TextEntitiesMessageAttribute }
+            actions.append(.action(ContextMenuActionItem(text: "Repeat", icon: { theme in
+                return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Resend"), color: theme.actionSheet.primaryTextColor)
+            }, action: { _, f in
+                f(.dismissWithoutContent)
+                let _ = enqueueMessages(account: context.account, peerId: ayuRepeatPeerId, messages: [.message(text: ayuRepeatText, attributes: ayuRepeatAttributes, inlineStickers: [:], mediaReference: nil, threadId: ayuRepeatThreadId, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])]).startStandalone()
+            })))
+        }
+
         // AyuGram: hide the message on this device
         if AyuGramSettings.bool(.showHideMessageInContextMenu) && message.id.namespace == Namespaces.Message.Cloud {
             let ayuHideId = message.id

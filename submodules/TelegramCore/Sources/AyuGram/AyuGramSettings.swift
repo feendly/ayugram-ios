@@ -47,6 +47,8 @@ public final class AyuGramSettings {
         case showChannelReactions
         case showGroupReactions
         case showPrivateChatReactions
+        case filterZalgo
+        case showRepeatMessageInContextMenu
 
         public var defaultValue: Bool {
             switch self {
@@ -88,6 +90,8 @@ public final class AyuGramSettings {
                 return false
             case .showChannelReactions, .showGroupReactions, .showPrivateChatReactions:
                 return true
+            case .filterZalgo, .showRepeatMessageInContextMenu:
+                return false
             case .showMessageDetailsInContextMenu, .showAddFilterInContextMenu:
                 return true
             }
@@ -267,12 +271,29 @@ public final class AyuFilters {
         return false
     }
 
+    /// True when the text stacks many combining marks on its characters ("zalgo" text).
+    public static func isZalgo(_ text: String) -> Bool {
+        var combining = 0
+        var total = 0
+        for scalar in text.unicodeScalars {
+            total += 1
+            let value = scalar.value
+            if (value >= 0x0300 && value <= 0x036F) || (value >= 0x1AB0 && value <= 0x1AFF) || (value >= 0x1DC0 && value <= 0x1DFF) || (value >= 0x20D0 && value <= 0x20FF) || (value >= 0xFE20 && value <= 0xFE2F) {
+                combining += 1
+            }
+        }
+        return combining >= 12 && combining * 3 >= total
+    }
+
     public static func shouldHide(text: String, isIncoming: Bool, isPrivateChat: Bool) -> Bool {
         if !isIncoming || !AyuGramSettings.bool(.filtersEnabled) {
             return false
         }
         if isPrivateChat && !AyuGramSettings.bool(.filtersEnabledInChats) {
             return false
+        }
+        if AyuGramSettings.bool(.filterZalgo) && isZalgo(text) {
+            return true
         }
         return matches(text)
     }
