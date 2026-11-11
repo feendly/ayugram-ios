@@ -270,6 +270,22 @@ func inputTextPanelStateForChatPresentationInterfaceState(_ chatPresentationInte
                     accessoryItems.append(.botInput(isEnabled: true, inputMode: .bot))
                 }
                 
+                // AyuGram: message-field buttons can be hidden
+                accessoryItems = accessoryItems.filter { item in
+                    switch item {
+                    case .gift:
+                        return AyuGramSettings.bool(.showGiftButtonInMessageField)
+                    case .commands:
+                        return AyuGramSettings.bool(.showCommandsButtonInMessageField)
+                    case .messageAutoremoveTimeout:
+                        return AyuGramSettings.bool(.showAutoDeleteButtonInMessageField)
+                    case .input:
+                        return AyuGramSettings.bool(.showEmojiButtonInMessageField)
+                    default:
+                        return true
+                    }
+                }
+                
                 return ChatTextInputPanelState(accessoryItems: accessoryItems, contextPlaceholder: contextPlaceholder, mediaRecordingState: chatPresentationInterfaceState.inputTextPanelState.mediaRecordingState)
             }
     }

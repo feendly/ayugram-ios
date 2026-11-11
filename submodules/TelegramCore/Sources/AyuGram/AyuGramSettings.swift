@@ -57,6 +57,10 @@ public final class AyuGramSettings {
         case showAttachButtonInMessageField
         case streamerMode
         case premiumStickersAsCopy
+        case showCommandsButtonInMessageField
+        case showEmojiButtonInMessageField
+        case showAutoDeleteButtonInMessageField
+        case showGiftButtonInMessageField
         case hideNotificationCounters
 
         public var defaultValue: Bool {
@@ -106,6 +110,8 @@ public final class AyuGramSettings {
             case .streamerMode, .hideNotificationCounters:
                 return false
             case .premiumStickersAsCopy:
+                return true
+            case .showCommandsButtonInMessageField, .showEmojiButtonInMessageField, .showAutoDeleteButtonInMessageField, .showGiftButtonInMessageField:
                 return true
             case .showReactionsPanelInContextMenu, .showViewsPanelInContextMenu, .showAttachButtonInMessageField:
                 return true
