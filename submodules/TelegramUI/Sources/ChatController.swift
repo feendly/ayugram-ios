@@ -7053,7 +7053,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                         presentationData = presentationData.withUpdated(theme: bubblelessPresentationTheme(presentationData.theme))
                     }
                     presentationData = presentationData.withUpdated(chatWallpaper: bubblelessChatWallpaper(theme: presentationData.theme))
-                } else if let chatWallpaper {
+                } else if let chatWallpaper, !AyuGramSettings.bool(.disableCustomBackgrounds) {
                     presentationData = presentationData.withUpdated(chatWallpaper: chatWallpaper)
                 }
                 

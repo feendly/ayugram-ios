@@ -49,6 +49,12 @@ public final class AyuGramSettings {
         case showPrivateChatReactions
         case filterZalgo
         case showRepeatMessageInContextMenu
+        case hideFastShare
+        case disableCustomBackgrounds
+        case semiTransparentDeletedMessages
+        case showReactionsPanelInContextMenu
+        case showViewsPanelInContextMenu
+        case showAttachButtonInMessageField
 
         public var defaultValue: Bool {
             switch self {
@@ -92,6 +98,10 @@ public final class AyuGramSettings {
                 return true
             case .filterZalgo, .showRepeatMessageInContextMenu:
                 return false
+            case .hideFastShare, .disableCustomBackgrounds, .semiTransparentDeletedMessages:
+                return false
+            case .showReactionsPanelInContextMenu, .showViewsPanelInContextMenu, .showAttachButtonInMessageField:
+                return true
             case .showMessageDetailsInContextMenu, .showAddFilterInContextMenu:
                 return true
             }

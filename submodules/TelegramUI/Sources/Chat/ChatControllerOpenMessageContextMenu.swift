@@ -146,6 +146,11 @@ extension ChatControllerImpl {
                         actions.alwaysAllowPremiumReactions = true
                     }
                     
+                    // AyuGram: no reactions bar above the message menu
+                    if !AyuGramSettings.bool(.showReactionsPanelInContextMenu) {
+                        actions.reactionItems = []
+                    }
+
                     if !actions.reactionItems.isEmpty {
                         let reactionItems: [EmojiComponentReactionItem] = actions.reactionItems.compactMap { item -> EmojiComponentReactionItem? in
                             switch item {

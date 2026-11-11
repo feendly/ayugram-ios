@@ -1917,6 +1917,10 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
                 displayMediaButton = false
             }
         }
+        // AyuGram: attach button can be hidden
+        if !AyuGramSettings.bool(.showAttachButtonInMessageField) {
+            displayMediaButton = false
+        }
         
         let attachmentButtonAlpha: CGFloat
         if displayMediaButton {

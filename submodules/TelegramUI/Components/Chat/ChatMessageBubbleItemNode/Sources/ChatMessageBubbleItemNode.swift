@@ -2165,6 +2165,10 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
             needsShareButton = false
             needsSummarizeButton = false
         }
+        // AyuGram: no quick share button next to messages
+        if AyuGramSettings.bool(.hideFastShare) {
+            needsShareButton = false
+        }
         let isAd = item.content.firstMessage.adAttribute != nil
         if isAd {
             needsShareButton = true
@@ -4422,6 +4426,9 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
         strongSelf.mainContextSourceNode.contentNode.frame = CGRect(origin: CGPoint(), size: layout.contentSize)
         strongSelf.contentContainersWrapperNode.frame = CGRect(origin: CGPoint(), size: layout.contentSize)
         
+        // AyuGram: dim messages that were deleted on the server
+        strongSelf.mainContainerNode.alpha = (AyuGramSettings.bool(.semiTransparentDeletedMessages) && AyuMessagesStore.shared.isDeleted(item.content.firstMessage.id)) ? 0.5 : 1.0
+
         strongSelf.appliedItem = item
         strongSelf.appliedForwardInfo = ChatMessageAppliedForwardInfo(messageId: item.content.firstMessage.id, source: forwardSource, authorSignature: forwardAuthorSignature)
         strongSelf.updateAccessibilityData(accessibilityData)

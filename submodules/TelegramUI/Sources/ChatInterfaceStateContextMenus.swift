@@ -2333,7 +2333,7 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
                 reactionCount = 0
             }
 
-            if hasReadReports || reactionCount != 0 {
+            if (hasReadReports || reactionCount != 0) && AyuGramSettings.bool(.showViewsPanelInContextMenu) {
                 if !actions.isEmpty {
                     actions.insert(.separator, at: 0)
                 }
