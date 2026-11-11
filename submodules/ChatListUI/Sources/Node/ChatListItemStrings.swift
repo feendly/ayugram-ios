@@ -88,6 +88,10 @@ public func chatListItemStrings(strings: PresentationStrings, nameDisplayOrder: 
     if let restrictionReason = chatPeer.chatMainPeer?.restrictionText(platform: "ios", contentSettings: contentSettings) {
         return (nil, false, restrictionReason, [], nil, nil, nil)
     }
+    // AyuGram: filtered or locally hidden messages do not show in the chat list preview
+    if let ayuMessage = message, AyuMessagesStore.shared.isHidden(ayuMessage.id) || AyuFilters.shouldHide(text: ayuMessage.text, isIncoming: ayuMessage.flags.contains(.Incoming), isPrivateChat: ayuMessage.id.peerId.namespace == Namespaces.Peer.CloudUser) {
+        return (nil, false, "Filtered message", [], nil, nil, nil)
+    }
     
     var hideAuthor = false
     var messageText: String
