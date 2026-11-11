@@ -44,6 +44,18 @@ A feature counts as done only when its row says PASS.
 | 20 | Deletion kept in a channel or group | run 42990218595 | (happened during testing) | Log line for a channel peer | `deleted message kept 2:Id(...)` | PASS at log level; not looked at in the chat |
 | 20b | Master Ghost Mode switch | run 42990218595 | Tap Ghost Mode on, then off | All five ghost switches follow | Receipts, story views, online, typing went off and Go Offline on; all reversed on the second tap | PASS |
 | 21 | Hide stories, skip link warning, copy in restricted chats, local Premium, silent sending | run 42990218595 | Switches on | - | No test material at hand (no stories, hidden links or restricted chats in the test accounts); silent sending is not visible to the sender | NOT TESTED |
+| 22 | Send Read Receipt action (retest) | run 43002933120 | Receipts off; luki long-presses "rr10", taps Send Read Receipt; check as nash | Log `read push SENT`; two ticks for nash | Log `read forced`, `read push SENT`, `readHistory done ok=true`; nash shows two ticks on "rr10" | PASS |
+| 23 | `tg://ayusettings` link | run 43002933120 | `uiopen --url tg://ayusettings` | AyuGram settings open | Opened | PASS |
+| 24 | Message Details | run 43002933120 | Long-press a message, Message Details | Alert with IDs and date | Message ID 6999, chat and sender ID 6700664454, date with seconds | PASS |
+| 25 | Hide message locally | run 43002933120 | Switch on; long-press "sche", Hide | Message disappears and stays hidden | Gone, still hidden after reopening the chat; nash still sees it | PASS |
+| 26 | Add to Filters | run 43002933120 | Long-press "sch", Add to Filters; reopen chat; remove the filter in settings | "sch" and "sch x" hide, return after removal | As expected (the filter is a substring match) | PASS |
+| 27 | Read receipt after reacting | run 43002933120 | Receipts off; luki reacts to "rr10" | Log `read forced` | Logged with `read push SENT` | PASS at log level |
+| 28 | Hide reactions in private chats | run 43002933120 | Override `showPrivateChatReactions` off, reopen chat | Reaction not shown | Heart hidden; shown again with the switch on | PASS |
+| 29 | Quick ghost toggle | run 43002933120 | Long-press the Settings tab | Item toggles ghost mode | "Turn Ghost Mode On", then "Off" after tapping; turned off again | PASS |
+| 30 | Scheduled send clears the input (retest) | run 43002933120 | As row 17, luki sends "s11" | Field empties at once | Field kept "s11"; the fix was in the wrong send path | FAIL (second fix coded) |
+| 31 | Sticker confirmation | run 43002933120 | Override on, open sticker panel, tap a sticker | Alert | Taps on stickers did not register over VNC; nothing sent, no alert | NOT TESTED |
+| 32 | Custom deleted mark | run 43002933120 | Settings, Deleted Mark, type text, Done | Mark changes | Prompt opens with the broom; Done did not respond while a keyboard accent popup was open, prompt closed with Escape, value not saved | NOT TESTED |
+| 33 | Keep-alive heartbeat | run 43002933120 | Watch the log | `keepalive heartbeat` every 30 s | Logged in the foreground; background not yet checked | PARTIAL |
 
 ## Notes
 

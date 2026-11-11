@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-11 (after testing run 42990218595; run 43002933120 building).
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-11 (after testing run 42990218595; run 43002933120 installed and partly tested).
 
 Status values:
 
@@ -16,9 +16,9 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 13 |
-| LOG ONLY | 5 |
-| UNTESTED | 30 |
+| TESTED | 20 |
+| LOG ONLY | 6 |
+| UNTESTED | 22 |
 | TODO | 50 |
 | N/A | 10 |
 
@@ -34,13 +34,13 @@ Some rows group several related desktop settings, so the row count is lower than
 | sendUploadProgress (typing) | on | LOG ONLY | |
 | sendOfflinePacketAfterOnline | off | LOG ONLY | Log shows an offline status sent every 5 s while enabled |
 | ghostModeActive (master switch) | off | TESTED | Flips the five switches both ways |
-| markReadAfterAction | on | UNTESTED | Reacting sends one read receipt (run 43002933120); sending a message already marks read server-side |
-| useScheduledMessages | off | TESTED | Only with online status off, as on desktop. Message arrives about 12 s later. Input field was not cleared after sending (fix in run 43002933120, untested) |
+| markReadAfterAction | on | LOG ONLY | Reacting sends one read receipt (log `read forced`, `read push SENT`) |
+| useScheduledMessages | off | TESTED | Only with online status off, as on desktop. Message arrives about 12 s later. Input field still not cleared in run 43002933120; second fix coded, untested |
 | sendWithoutSound | Never | UNTESTED | Two switches: always, or only in ghost mode. Not observable from the sender's side |
 | suggestGhostModeBeforeViewingStory | on | TODO | |
 | Per-setting "locked" flags (5) | off | TODO | |
 | useGlobalGhostMode (per-account ghost) | on | TODO | iOS build is global only |
-| "Read message" context action | - | UNTESTED | "Send Read Receipt" in the long-press menu. First version FAILED on device (queued a check instead of a push); fix in run 43002933120 |
+| "Read message" context action | - | TESTED | "Send Read Receipt" in the long-press menu; nash saw two ticks (run 43002933120) |
 
 ## Message history
 
@@ -49,7 +49,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | saveDeletedMessages | on | TESTED | Live deletion in a private chat |
 | saveMessagesHistory (edits) | on | TESTED | "Edit History" in the long-press menu |
 | saveForBots | off | UNTESTED | |
-| deletedMark | broom | TESTED | Broom shown. Custom mark setting added in run 43002933120 (UNTESTED) |
+| deletedMark | broom | TESTED | Broom shown. Custom mark: prompt opens with the current value; saving not confirmed over VNC (UNTESTED) |
 | editedMark | "edited" | UNTESTED | Custom text, run 43002933120 |
 | semiTransparentDeletedMessages | off | TODO | |
 | Deleted messages while app is closed | - | UNTESTED | Keep-alive runs (location permission granted, process alive after 200 s in background). Needs a deletion sent from another device while the iPad is on the home screen |
@@ -90,7 +90,7 @@ Some rows group several related desktop settings, so the row count is lower than
 
 | Setting | Desktop default | iOS status |
 |---|---|---|
-| stickerConfirmation | off | UNTESTED (run 43002933120) |
+| stickerConfirmation | off | UNTESTED (could not tap stickers in the panel over VNC) |
 | gifConfirmation | off | UNTESTED (run 43002933120) |
 | voiceConfirmation | off | UNTESTED (run 43002933120; covers recordings sent from the preview, not hold-and-release) |
 | roundConfirmation | off | UNTESTED (same switch as voice) |
@@ -115,7 +115,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | hideFastShare | off | TODO | |
 | showChannelReactions | on | UNTESTED | Run 43002933120 |
 | showGroupReactions | on | UNTESTED | Run 43002933120 |
-| showPrivateChatReactions | on | UNTESTED | Run 43002933120 |
+| showPrivateChatReactions | on | TESTED | Reaction hidden with the switch off |
 | wideMultiplier | 1.0 | N/A | Desktop window layout |
 | hideNotificationCounters | off | TODO | |
 | hideNotificationBadge | off | UNTESTED | Run 43002933120 |
@@ -143,11 +143,11 @@ Some rows group several related desktop settings, so the row count is lower than
 |---|---|---|
 | showReactionsPanelInContextMenu | Visible | TODO |
 | showViewsPanelInContextMenu | Visible | TODO |
-| showHideMessageInContextMenu | Hidden | UNTESTED (run 43002933120; hides the message on this device) |
+| showHideMessageInContextMenu | Hidden | TESTED (Message disappears on this device and stays hidden after reopening) |
 | showUserMessagesInContextMenu | With modifier | TODO |
-| showMessageDetailsInContextMenu | With modifier | UNTESTED (run 43002933120; on/off) |
+| showMessageDetailsInContextMenu | With modifier | TESTED (Alert with message, chat and sender IDs and date) |
 | showRepeatMessageInContextMenu | Hidden | TODO |
-| showAddFilterInContextMenu | Visible | UNTESTED (run 43002933120; on/off) |
+| showAddFilterInContextMenu | Visible | TESTED (Adds the text as a filter; matching messages hide; tap the filter in settings to remove) |
 
 ## Side drawer and tray (desktop navigation)
 
@@ -155,7 +155,7 @@ Some rows group several related desktop settings, so the row count is lower than
 |---|---|---|
 | showMyProfileInDrawer, showBotsInDrawer, showNewGroupInDrawer, showNewChannelInDrawer, showContactsInDrawer, showCallsInDrawer, showSavedMessagesInDrawer, showNightModeToggleInDrawer | N/A | iOS has no drawer |
 | showLReadToggleInDrawer / showSReadToggleInDrawer | TODO | As quick actions |
-| showGhostToggleInDrawer | UNTESTED | Long-press the Settings tab: Turn Ghost Mode On/Off (run 43002933120) |
+| showGhostToggleInDrawer | TESTED | Long-press the Settings tab: Turn Ghost Mode On/Off |
 | showStreamerToggleInDrawer | TODO | With streamer mode |
 | showGhostToggleInTray / showStreamerToggleInTray | N/A | Could map to home-screen quick actions |
 
@@ -169,7 +169,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | Forward without author / from restricted chats / repeat message | TODO | Copy and save in restricted chats is implemented (UNTESTED, no restricted chat at hand) |
 | Translator providers (Telegram, Google, Yandex, native) | TODO | |
 | Webview options (spoof Android, larger size) | TODO | 3 options |
-| `tg://ayu` settings links | UNTESTED | `tg://ayusettings` and `tg://settings/ayu` open the AyuGram screen (run 43002933120) |
+| `tg://ayu` settings links | TESTED | `tg://ayusettings` opens the AyuGram screen |
 | Saved music, cover search | TODO | Low priority |
 | Crash reporting to AyuGram | N/A | Deliberately not ported |
 | Donate / plugin info boxes | N/A | Desktop project specific |
@@ -178,6 +178,6 @@ Some rows group several related desktop settings, so the row count is lower than
 
 | Feature | Status | Notes |
 |---|---|---|
-| Stay Connected in Background | UNTESTED | Starts after restart, location permission granted on the iPad; end-to-end deletion test still open |
+| Stay Connected in Background | UNTESTED | Starts after restart; heartbeat logged every 30 s in the foreground; background and end-to-end deletion test still open |
 | All accounts receive updates at once | UNTESTED | Part of keep-alive |
 | Debug log and test override files | TESTED | Test aids; to be removed or hidden before release |

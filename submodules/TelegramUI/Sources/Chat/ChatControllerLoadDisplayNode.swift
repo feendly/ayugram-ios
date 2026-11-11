@@ -1131,9 +1131,15 @@ extension ChatControllerImpl {
                         } else {
                             strongSelf.chatDisplayNode.historyNode.scrollToEndOfHistory()
                             
-                            if shouldOpenScheduledMessages {
+                            // AyuGram: a message sent through the schedule does not enter this history right away,
+                            // so finish the pending send action (clearing the input field) now.
+                            let ayuScheduledSend = AyuGramSettings.bool(.useScheduledMessages) && !AyuGramSettings.sendOnlinePackets
+                            if shouldOpenScheduledMessages || ayuScheduledSend {
                                 if let layoutActionOnViewTransitionAction = strongSelf.layoutActionOnViewTransitionAction {
                                     strongSelf.layoutActionOnViewTransitionAction = nil
+                                    if ayuScheduledSend && !shouldOpenScheduledMessages {
+                                        strongSelf.chatDisplayNode.historyNode.layoutActionOnViewTransition = nil
+                                    }
                                     layoutActionOnViewTransitionAction()
                                 }
                             }
