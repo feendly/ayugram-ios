@@ -61,6 +61,10 @@ A feature counts as done only when its row says PASS.
 | 36 | Scheduled send clears the input (second retest) | run 43012742764 | As row 17 | Field empties at once | Field cleared immediately; message arrived about 15 s later | PASS |
 | 37 | Repeat in message menu | run 43012742764 | Override on, long-press a text message | Repeat item | Item shown; sending not tried | PARTIAL |
 | 38 | Deleted while locked, sent from another device | run 43012742764 | User sends luki a message as nash from another device and deletes it while the iPad is locked | Log `deleted message kept` | Invalid run: the iPad had rebooted about 50 s after the last heartbeat of the previous test (uptime 5 h 52 min at check time), so AyuGram was not running for the whole window. No kept deletion logged. iOS relaunched the app in the background (state=2) once the jailbreak was back | NOT TESTED (repeat needed) |
+| 39 | Repeat in message menu (send) | run 43012742764 | Override on; nash long-presses "plain 7", taps Repeat | Same text sent again | New "plain 7" sent at 3:41 PM and received by luki | PASS |
+| 40 | Sticker confirmation | run 43012742764 | Override on; open a sticker pack preview, Send Sticker | Alert "Send this sticker?" | Alert shown; Cancel sent nothing. OK path not tried | PASS (Cancel path) |
+| 41 | GIF confirmation | run 43012742764 | Override on; tap a GIF in the GIF panel | Alert "Send this GIF?" | Alert shown; Cancel sent nothing. OK path not tried | PASS (Cancel path) |
+| 42 | Custom deleted and edited marks | run 43012742764 | Settings: Edited Mark "Chg", Deleted Mark broom plus "x"; open luki's chat with nash | Marks change on messages | Rows show the new values; "ghost 5 from nash v2" shows `Chg` and the broom with `x` before the time | PASS |
 
 ## Notes
 
@@ -82,3 +86,5 @@ A feature counts as done only when its row says PASS.
   mis-timed tap and closed again. Read receipts were off at the time.
 - Row 36 was run by mistake while nash was the active account, so the test message 's12' went to nash's Saved Messages. It was deleted there right after.
 - A device reboot ends keep-alive until the app is opened again (or iOS relaunches it); deletions during that gap are not captured.
+- Over VNC a scripted press of about 60 ms taps sticker and GIF grid cells; a normal click acts as a long press there.
+- The custom marks from row 42 (`Chg`, broom plus `x`) are still set on the device.

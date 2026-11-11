@@ -16,9 +16,9 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 20 |
+| TESTED | 24 |
 | LOG ONLY | 7 |
-| UNTESTED | 31 |
+| UNTESTED | 27 |
 | TODO | 40 |
 | N/A | 10 |
 
@@ -49,8 +49,8 @@ Some rows group several related desktop settings, so the row count is lower than
 | saveDeletedMessages | on | TESTED | Live deletion in a private chat |
 | saveMessagesHistory (edits) | on | TESTED | "Edit History" in the long-press menu |
 | saveForBots | off | UNTESTED | |
-| deletedMark | broom | TESTED | Broom shown. Custom mark: prompt opens with the current value; saving not confirmed over VNC (UNTESTED) |
-| editedMark | "edited" | UNTESTED | Custom text, run 43002933120 |
+| deletedMark | broom | TESTED | Broom shown. Custom mark: prompt opens with the current value; custom mark saved and shown (row 42) |
+| editedMark | "edited" | TESTED | Custom text, run 43002933120 |
 | semiTransparentDeletedMessages | off | UNTESTED | Bubble messages only (run 43084196247) |
 | Deleted messages while app is closed | - | UNTESTED | App now stays running in the background (see Stay Connected). Needs a deletion sent from another device while the iPad is on the home screen or locked |
 | Deleted messages in groups and channels | - | LOG ONLY | Log shows a channel deletion kept; not looked at in the chat |
@@ -90,8 +90,8 @@ Some rows group several related desktop settings, so the row count is lower than
 
 | Setting | Desktop default | iOS status |
 |---|---|---|
-| stickerConfirmation | off | UNTESTED (could not tap stickers in the panel over VNC) |
-| gifConfirmation | off | UNTESTED (run 43002933120) |
+| stickerConfirmation | off | TESTED (alert and Cancel; OK path not tried) |
+| gifConfirmation | off | TESTED (alert and Cancel; OK path not tried) |
 | voiceConfirmation | off | UNTESTED (run 43002933120; covers recordings sent from the preview, not hold-and-release) |
 | roundConfirmation | off | UNTESTED (same switch as voice) |
 
@@ -146,7 +146,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | showHideMessageInContextMenu | Hidden | TESTED (Message disappears on this device and stays hidden after reopening) |
 | showUserMessagesInContextMenu | With modifier | TODO |
 | showMessageDetailsInContextMenu | With modifier | TESTED (Alert with message, chat and sender IDs and date) |
-| showRepeatMessageInContextMenu | Hidden | UNTESTED (run 43012742764; item appears in the menu, sending not tried; text messages only) |
+| showRepeatMessageInContextMenu | Hidden | TESTED (text messages only) |
 | showAddFilterInContextMenu | Visible | TESTED (Adds the text as a filter; matching messages hide; tap the filter in settings to remove) |
 
 ## Side drawer and tray (desktop navigation)
