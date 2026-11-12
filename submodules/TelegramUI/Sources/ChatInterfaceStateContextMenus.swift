@@ -1467,8 +1467,28 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
             }, action: { _, f in
                 f(.dismissWithoutContent)
                 let presentationData = context.sharedContext.currentPresentationData.with { $0 }
-                let text = ayuEdits.map { $0.text }.joined(separator: "\n\n")
-                controllerInteraction.presentController(textAlertController(context: context, title: "Edit History", text: text, actions: [TextAlertAction(type: .defaultAction, title: presentationData.strings.Common_OK, action: {})]), nil)
+                // A sheet listing every saved version with the time it was replaced; each can be copied.
+                let ayuSheet = ActionSheetController(presentationData: presentationData)
+                let ayuDateFormatter = DateFormatter()
+                ayuDateFormatter.dateStyle = .medium
+                ayuDateFormatter.timeStyle = .medium
+                var ayuItems: [ActionSheetItem] = []
+                ayuItems.append(ActionSheetTextItem(title: "Edit History (\(ayuEdits.count) earlier version\(ayuEdits.count == 1 ? "" : "s"))"))
+                for (ayuIndex, ayuEdit) in ayuEdits.enumerated() {
+                    let ayuDate = ayuEdit.timestamp == 0 ? "" : ayuDateFormatter.string(from: Date(timeIntervalSince1970: Double(ayuEdit.timestamp)))
+                    let ayuVersionText = ayuEdit.text
+                    ayuItems.append(ActionSheetTextItem(title: ayuDate.isEmpty ? ayuVersionText : "\(ayuDate)\n\(ayuVersionText)"))
+                    ayuItems.append(ActionSheetButtonItem(title: "Copy Version \(ayuIndex + 1)", color: .accent, action: { [weak ayuSheet] in
+                        UIPasteboard.general.string = ayuVersionText
+                        ayuSheet?.dismissAnimated()
+                    }))
+                }
+                ayuSheet.setItemGroups([ActionSheetItemGroup(items: ayuItems), ActionSheetItemGroup(items: [
+                    ActionSheetButtonItem(title: presentationData.strings.Common_Cancel, color: .accent, font: .bold, action: { [weak ayuSheet] in
+                        ayuSheet?.dismissAnimated()
+                    })
+                ])])
+                controllerInteraction.presentController(ayuSheet, nil)
             })))
         }
         
