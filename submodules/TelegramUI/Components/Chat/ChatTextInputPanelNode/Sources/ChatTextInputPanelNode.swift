@@ -3786,6 +3786,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
         // AyuGram: the microphone button can be hidden
         self.mediaActionButtons.micButton.isHidden = additionalSideInsets.right > 0.0 || !AyuGramSettings.bool(.showMicrophoneButtonInMessageField)
         self.mediaActionButtons.micButtonTintMaskView.isHidden = self.mediaActionButtons.micButton.isHidden
+        self.mediaActionButtons.micButtonBackgroundView.isHidden = !AyuGramSettings.bool(.showMicrophoneButtonInMessageField)
 
         let clearButtonFrame = CGRect(origin: CGPoint(x: textInputContainerBackgroundFrame.width - searchLayoutClearButtonSize.width, y: textInputFrame.maxY - 40.0 + floor((40.0 - searchLayoutClearButtonSize.height) * 0.5)), size: searchLayoutClearButtonSize)
         transition.updateFrame(layer: self.searchLayoutClearButton.layer, frame: clearButtonFrame)
