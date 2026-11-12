@@ -2836,6 +2836,18 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             guard let strongSelf = self else {
                 return false
             }
+            // AyuGram: ask before sending a GIF from trending or search
+            if AyuGramSettings.bool(.gifConfirmation) && !strongSelf.ayuSendConfirmed {
+                strongSelf.present(textAlertController(context: strongSelf.context, updatedPresentationData: strongSelf.updatedPresentationData, title: nil, text: "Send this GIF?", actions: [TextAlertAction(type: .genericAction, title: strongSelf.presentationData.strings.Common_Cancel, action: {}), TextAlertAction(type: .defaultAction, title: strongSelf.presentationData.strings.Common_OK, action: { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    self.ayuSendConfirmed = true
+                    let _ = self.controllerInteraction?.sendBotContextResultAsGif(collection, result, sourceView, sourceRect, silentPosting, resetTextInputState)
+                    self.ayuSendConfirmed = false
+                })]), in: .window(.root))
+                return false
+            }
             if case .pinnedMessages = strongSelf.presentationInterfaceState.subject {
                 return false
             }
