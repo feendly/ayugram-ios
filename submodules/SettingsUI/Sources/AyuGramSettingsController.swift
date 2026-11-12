@@ -325,7 +325,7 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         filterIndex += 1
     }
     entries.append(.filterAdd("Add Filter"))
-    entries.append(.filterInfo("Incoming messages matching any filter (regular expression, case-insensitive) are hidden. Tap a filter to remove it."))
+    entries.append(.filterInfo("Incoming messages matching any filter (regular expression, case-insensitive) are hidden. Entries like user:123 are shadow bans (added from the message menu in groups): that user's messages are hidden in groups. Tap an entry to remove it."))
 
     entries.append(.otherHeader("OTHER"))
     let otherToggles: [(AyuGramSettings.BoolKey, String)] = [

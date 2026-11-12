@@ -1441,6 +1441,21 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
             })))
         }
 
+        // AyuGram: shadow ban the author (their messages are hidden in groups on this device)
+        if AyuGramSettings.bool(.showAddFilterInContextMenu) && message.flags.contains(.Incoming) && message.id.peerId.namespace != Namespaces.Peer.CloudUser, let ayuBanAuthor = message.author, ayuBanAuthor.id.namespace == Namespaces.Peer.CloudUser {
+            let ayuBanEntry = AyuFilters.userPrefix + String(ayuBanAuthor.id.id._internalGetInt64Value())
+            actions.append(.action(ContextMenuActionItem(text: "Shadow Ban", icon: { theme in
+                return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Ban"), color: theme.actionSheet.primaryTextColor)
+            }, action: { _, f in
+                f(.default)
+                var patterns = AyuFilters.patterns
+                if !patterns.contains(ayuBanEntry) {
+                    patterns.append(ayuBanEntry)
+                    AyuFilters.setPatterns(patterns)
+                }
+            })))
+        }
+
         // AyuGram: edit history
         let ayuEdits = AyuMessagesStore.shared.edits(message.id)
         if !ayuEdits.isEmpty {

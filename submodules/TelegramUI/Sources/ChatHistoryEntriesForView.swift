@@ -208,6 +208,10 @@ func chatHistoryEntriesForView(
         if AyuFilters.shouldHide(text: message.text, isIncoming: message.flags.contains(.Incoming), isPrivateChat: message.id.peerId.namespace == Namespaces.Peer.CloudUser) {
             continue
         }
+        // AyuGram: shadow-banned users are hidden in groups and channels
+        if message.id.peerId.namespace != Namespaces.Peer.CloudUser, message.flags.contains(.Incoming), let ayuAuthorId = message.author?.id, AyuFilters.isShadowBanned(ayuAuthorId.id._internalGetInt64Value()) {
+            continue
+        }
         
         if case let .replyThread(replyThreadMessage) = location, replyThreadMessage.isForumPost {
             if isUndisplayedForumTopicRoot(message, location: location, additionalData: view.additionalData) {

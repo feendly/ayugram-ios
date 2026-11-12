@@ -254,7 +254,44 @@ public final class AyuFilters {
     private static let lock = NSLock()
     private static var cachedPatterns: [String]?
     private static var cachedRegexes: [NSRegularExpression] = []
+    private static var cachedUserIds = Set<Int64>()
     private static let storageKey = "ayu.filters"
+
+    /// Entries of the form "user:<id>" are shadow bans, not text patterns.
+    public static let userPrefix = "user:"
+
+    // Call with the lock held.
+    private static func rebuildCacheIfNeeded() {
+        if cachedPatterns != nil {
+            return
+        }
+        let current = self.patterns
+        cachedPatterns = current
+        var regexes: [NSRegularExpression] = []
+        var userIds = Set<Int64>()
+        for pattern in current {
+            if pattern.hasPrefix(userPrefix) {
+                if let id = Int64(pattern.dropFirst(userPrefix.count)) {
+                    userIds.insert(id)
+                }
+                continue
+            }
+            if let regex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) {
+                regexes.append(regex)
+            }
+        }
+        cachedRegexes = regexes
+        cachedUserIds = userIds
+    }
+
+    /// Shadow ban: messages from these users are hidden in groups and channels.
+    public static func isShadowBanned(_ userId: Int64) -> Bool {
+        lock.lock()
+        rebuildCacheIfNeeded()
+        let result = cachedUserIds.contains(userId)
+        lock.unlock()
+        return result
+    }
 
     public static var patterns: [String] {
         return (UserDefaults.standard.array(forKey: storageKey) as? [String]) ?? []
@@ -272,17 +309,7 @@ public final class AyuFilters {
             return false
         }
         lock.lock()
-        if cachedPatterns == nil {
-            let current = self.patterns
-            cachedPatterns = current
-            var regexes: [NSRegularExpression] = []
-            for pattern in current {
-                if let regex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) {
-                    regexes.append(regex)
-                }
-            }
-            cachedRegexes = regexes
-        }
+        rebuildCacheIfNeeded()
         let regexes = cachedRegexes
         lock.unlock()
         let range = NSRange(text.startIndex..., in: text)
