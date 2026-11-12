@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43309816217 installed; run 43322077655 building).
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43322077655 installed; run 43330220187 building).
 
 Status values:
 
@@ -16,9 +16,9 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 53 |
+| TESTED | 57 |
 | LOG ONLY | 5 |
-| UNTESTED | 20 |
+| UNTESTED | 16 |
 | TODO | 24 |
 | N/A | 10 |
 
@@ -130,7 +130,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | Setting | Desktop default | iOS status |
 |---|---|---|
 | showAttachButtonInMessageField | on | TESTED (run 43084196247) |
-| showCommandsButtonInMessageField | on | UNTESTED (on run 43169707215 a bot's "Open" menu button stayed; fixed in 2b9d870d, not built) |
+| showCommandsButtonInMessageField | on | TESTED (a bot's "Open" menu button disappears; a bot with the "/" commands button was not at hand) |
 | showEmojiButtonInMessageField | on | TESTED |
 | showMicrophoneButtonInMessageField | on | TESTED |
 | showAutoDeleteButtonInMessageField | on | TESTED (the "1mo" timer button disappears) |
@@ -156,7 +156,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | Setting | iOS status | Notes |
 |---|---|---|
 | showMyProfileInDrawer, showBotsInDrawer, showNewGroupInDrawer, showNewChannelInDrawer, showContactsInDrawer, showCallsInDrawer, showSavedMessagesInDrawer, showNightModeToggleInDrawer | N/A | iOS has no drawer |
-| showLReadToggleInDrawer / showSReadToggleInDrawer | UNTESTED | Both items appear in the Settings tab long-press menu. Bug on run 43169707215: the Read on Server confirmation did not appear on iPad (fixed in a00126e6, not built). Neither action has been run, since it would mark every chat of the account as read |
+| showLReadToggleInDrawer / showSReadToggleInDrawer | TESTED | Both items appear in the Settings tab long-press menu and Read on Server asks for confirmation (run 43322077655). The actions themselves were not run: they mark every chat of the account as read |
 | showGhostToggleInDrawer | TESTED | Long-press the Settings tab: Turn Ghost Mode On/Off |
 | showStreamerToggleInDrawer | TESTED | "Turn Streamer Mode On/Off" in the Settings tab long-press menu; the label flips after each tap |
 | showGhostToggleInTray / showStreamerToggleInTray | N/A | Could map to home-screen quick actions |
@@ -183,5 +183,5 @@ Some rows group several related desktop settings, so the row count is lower than
 | Stay Connected in Background | TESTED | Kept a deletion sent from another device while the app was in the background (TESTING row 43). Shows the system location indicator |
 | All accounts receive updates at once | UNTESTED | Part of keep-alive |
 | Debug log and test override files | TESTED | Test aids; to be removed or hidden before release |
-| Link cleaner for outgoing messages | UNTESTED | Requested by the user 2026-11-12. "Remove Tracking from Links I Send" drops known tracking parameters; "Strict Link Cleaning" drops every parameter a site does not need, after Link Cleaner (corbindavenport/link-cleaner-js, MIT). Only text the system link detector recognises as a web link is changed, bare domains included; Telegram links and code are left alone. Edited messages are not covered |
-| Edit Sticker on premium stickers | UNTESTED | Requested by the user 2026-11-12. Offered when Send Premium Stickers as a Copy is on; the edited sticker is a new upload |
+| Link cleaner for outgoing messages | TESTED | Requested by the user 2026-11-12. "Remove Tracking from Links I Send" drops known tracking parameters; "Strict Link Cleaning" drops every parameter a site does not need and the fragment, after Link Cleaner (corbindavenport/link-cleaner-js, MIT). Only text the system link detector recognises as a web link is changed, bare domains included; Telegram links and code are left alone. Edited messages are not covered |
+| Edit Sticker on premium stickers | TESTED | Requested by the user 2026-11-12. Offered when Send Premium Stickers as a Copy is on; the edited sticker is a new upload and is delivered. The editor produces a still image, so the animation is lost. Checked from the sticker panel menu, not from the message menu |

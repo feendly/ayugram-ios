@@ -112,6 +112,11 @@ A feature counts as done only when its row says PASS.
 | 87 | Deleted message kept in a group | run 43169707215 | nash sends "gdel1" in the Test group; luki's account receives it; nash deletes it for everyone; luki opens the group | Message stays with the deleted mark | "gdel1" shown with the broom mark; log `deleted message kept` | PASS |
 | 88 | User Messages in message menu | run 43309816217 | luki long-presses nash's "g1" in the Test group, User Messages | Search limited to that member | Search bar with a "nash" chip, "1 of 2" | PASS |
 | 89 | Hide messages from blocked users | run 43309816217 | luki blocks nash from the profile; override on; reopen the Test group | nash's messages hidden | Both messages and "nash joined" gone; only "luki created the group" left. Chat list preview still shows "nash: gdel1". nash unblocked afterwards | PASS with gap (chat list preview) |
+| 90 | Read on Server confirmation (fixed) | run 43322077655 | Long-press the Settings tab, Read on Server | Confirmation alert | "Mark every chat as read on the server? Senders will see their messages as read." with Cancel and Read; Cancel pressed | PASS (action not run) |
+| 91 | Link cleaner, normal | run 43322077655 | Override `cleanLinks` on; luki sends "check https://example.com/page?utm_source=tg&id=5&fbclid=abc#top and example.org/a?gclid=1&x=2 plain.words t.me/durov?start=utm_source" | Trackers removed from the two web links only | Sent as "check https://example.com/page?id=5#top and example.org/a?x=2 plain.words t.me/durov?start=utm_source"; link highlighting lines up; log `links cleaned strict=false before=134 after=101` | PASS |
+| 92 | Link cleaner, strict | run 43322077655 | Override `cleanLinksStrict` on; send "strict https://www.youtube.com/watch?v=abc123&list=PL1&si=zzz&t=42 and example.com/p?id=5&x=1#frag" | YouTube keeps v and t; the other link loses everything | Sent as "strict https://www.youtube.com/watch?v=abc123&t=42 and example.com/p" | PASS |
+| 93 | Edit Sticker on a premium sticker | run 43322077655 | Hold a Bird of Paradise sticker in the sticker panel (3 s press over VNC), Edit Sticker, tick, Send Sticker | Editor opens; edited sticker is sent | Menu shows Edit Sticker; editor opened; sticker delivered at 8:10 PM as a still image | PASS |
+| 94 | Bot menu button (fixed) | run 43322077655 | nash opens VIRUS GAME BOT with the override off | No "Open" button | Button gone; message field starts at the attach button | PASS |
 
 ## Notes
 
@@ -150,3 +155,5 @@ A feature counts as done only when its row says PASS.
 - Read on Local and Read on Server act on every chat of the active account, so they are only checked for presence and the confirmation; running them needs the user's go-ahead.
 - Row 86 opened nash's VIRUS GAME BOT chat with read receipts overridden off, so it stays unread on the server; on this device a few of its messages now count as read.
 - Mouse-wheel scrolling does nothing over VNC; lists are scrolled with a scripted drag.
+- 2026-11-12 evening, luki-nash chat: a duck sticker (7:41 PM), the two link-cleaner test messages (8:08 PM) and the edited bird sticker (8:10 PM) are from these tests. The user was also sending stickers there at the time.
+- Over VNC the sticker preview menu in the panel needs a press of about 3 s.
