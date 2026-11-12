@@ -80,6 +80,9 @@ A feature counts as done only when its row says PASS.
 | 55 | Streamer mode hides the phone confirmation card | run 43113668579 | - | - | Checked on luki, which has no such card; not checked on nash | NOT TESTED |
 | 56 | Hide reactions in groups | run 43113668579 | In the Test group nash sends "g1" and reacts with a heart; override `showGroupReactions` off; reopen the group | Reaction not shown | Heart shown before, hidden after | PASS |
 | 57 | Shadow ban | run 43125223413 | As luki in the Test group: long-press nash's "g1", Shadow Ban; reopen the group; remove `user:6700664454` in the filter list; reopen | nash's messages hidden, then back | "g1" and nash's join notice hidden; entry listed in settings; both back after removal. The open chat has to be closed and reopened to refresh. The chat list preview still showed nash's message (fix coded, not built) | PASS with gap |
+| 58 | Rounded-square avatars | run 43133651759 | Override on before launch; open the chat list and a chat | Avatars are rounded squares | Chat list, archive icon and chat header avatars are rounded squares; the account avatar in the tab bar stays round | PASS |
+| 59 | No tail on message bubbles | run 43133651759 | Override on; open the nash chat | Bubbles without tails | Incoming and outgoing bubbles have no tail | PASS |
+| 60 | Shadow-banned user hidden in chat list preview | run 43133651759 | - | - | Not re-run after the fix | NOT TESTED |
 
 ## Notes
 

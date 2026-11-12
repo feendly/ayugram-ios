@@ -16,10 +16,10 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 36 |
+| TESTED | 38 |
 | LOG ONLY | 7 |
 | UNTESTED | 22 |
-| TODO | 35 |
+| TODO | 33 |
 | N/A | 10 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
@@ -106,8 +106,8 @@ Some rows group several related desktop settings, so the row count is lower than
 | appIcon | default | TODO | |
 | monoFont / main font | system | TODO | |
 | messageBubbleRadius | 16 | N/A | Stock setting exists: Appearance, Message Corners |
-| removeMessageTail | off | TODO | |
-| avatarCorners | 23 | TODO | |
+| removeMessageTail | off | TESTED | |
+| avatarCorners | 23 | TESTED | On/off switch for rounded squares, not a radius slider; restart to apply |
 | singleCornerRadius | off | TODO | |
 | materialSwitches | on | N/A | iOS uses system switches |
 | simpleQuotesAndReplies | off | TODO | |
