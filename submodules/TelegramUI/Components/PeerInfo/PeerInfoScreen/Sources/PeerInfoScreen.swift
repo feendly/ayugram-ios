@@ -7420,15 +7420,13 @@ public final class PeerInfoScreenImpl: ViewController, PeerInfoScreen, KeyShortc
             let ayuCancelTitle = strings.Common_Cancel
             items.append(.action(ContextMenuActionItem(text: "Read on Server", icon: { theme in
                 return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/MarkAsRead"), color: theme.contextMenu.primaryColor)
-            }, action: { [weak self] _, f in
+            }, action: { _, f in
                 f(.default)
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.present(textAlertController(context: ayuContext, title: nil, text: "Mark every chat as read on the server? Senders will see their messages as read.", actions: [TextAlertAction(type: .genericAction, title: ayuCancelTitle, action: {}), TextAlertAction(type: .defaultAction, title: "Read", action: {
+                // Presented on the main window: on iPad this controller is not on screen while another tab is open.
+                ayuContext.sharedContext.mainWindow?.present(textAlertController(context: ayuContext, title: nil, text: "Mark every chat as read on the server? Senders will see their messages as read.", actions: [TextAlertAction(type: .genericAction, title: ayuCancelTitle, action: {}), TextAlertAction(type: .defaultAction, title: "Read", action: {
                     AyuGramSettings.overrideSendReadMessages(true, seconds: 120.0)
                     let _ = ayuContext.engine.messages.markAllChatsAsReadInteractively(items: [(groupId: .root, filterPredicate: nil), (groupId: .archive, filterPredicate: nil)]).startStandalone()
-                })]), in: .window(.root))
+                })]), on: .root)
             })))
         }
         items.append(.action(ContextMenuActionItem(text: strings.Settings_AddAccount, icon: { theme in
