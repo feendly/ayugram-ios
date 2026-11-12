@@ -95,6 +95,13 @@ A feature counts as done only when its row says PASS.
 | 70 | Sticker copy rule: Local Premium on, copy on | run 43161070387 | Overrides on; tap a star-badged sticker | Sent as a copy | Log `sticker copy start` / `enqueue bytes=34398`; delivered at 2:39 AM | PASS |
 | 71 | Sticker copy rule: Local Premium on, copy off | run 43161070387 | Copy override off; tap a star-badged sticker | Sent normally (server refuses it) | No copy log line; message at 2:40 AM shows the failed mark | PASS (behaves as specified) |
 | 72 | Hide microphone button (fixed) | run 43161070387 | Override off, open a chat | No mic button or background | Field shows no mic and no empty circle | PASS |
+| 73 | Hide quick share button | run 43161070387 | Override on; reopen the LuckyClumsy channel | No share arrow next to posts | Arrow shown before, gone after | PASS |
+| 74 | Hide reactions in channels | run 43161070387 | Override `showChannelReactions` off; reopen the channel | No reaction row under posts | Reaction row shown before, gone after | PASS |
+| 75 | Zalgo filter | run 43161070387 | nash sends "zalgo" with 20 combining marks to luki; luki has filters on, private chats on, then `filterZalgo` on | Message hidden only with the zalgo switch on | Shown with the switch off; with it on the chat list says "Filtered message" and the chat does not show it | PASS |
+| 76 | Hide auto-delete button | run 43161070387 | Set a 1 month auto-delete timer in the luki-nash chat; override off; reopen the chat | No timer button in the message field | "1mo" button shown before, gone after; back when the override is removed. Timer disabled again afterwards | PASS |
+| 77 | Hide gift button in message field | run 43161070387 | Override off; open a channel | - | The message field of the chats at hand has no gift button; the channel's bottom-bar gift button stayed (different control) | NOT TESTED |
+| 78 | Hide app icon badge | run 43161070387 | Override on | No badge on the home screen icon | The home screen could not be reached over VNC | NOT TESTED |
+| 79 | Skip hidden link warning | run 43161070387 | Tap the hidden link in a channel post | - | The only hidden link at hand points to a Telegram bot, which never shows the warning | NOT TESTED |
 
 ## Notes
 
@@ -126,3 +133,6 @@ A feature counts as done only when its row says PASS.
 - With Local Premium on, every account logged in on the device shows as Premium inside the app (nash shows a star when viewed from luki).
 - Premium sticker copy rule (user's decision, 2026-11-12): it applies to premium stickers only. Copy switch on: sent as a copy when the account has no real Premium, including with Local Premium on. Copy switch off: sent normally, which the server refuses for an account without real Premium (three such failed sends from the user at 12:48 AM are in the luki-nash chat). Run 43154802111 briefly forced the copy whenever Local Premium was on; that was reverted.
 - The build PC's C: drive is full (83 MB free on 2026-11-12); artifact downloads now use F:\ayugram-ios\tmp for temp files.
+- 2026-11-12: the luki-nash chat has two service messages from row 76 (auto-delete set to 1 month, then disabled) and nash's "zalgo test" message from row 75. The LuckyFiles bot chat was opened once by the link in row 79 and closed without pressing Start.
+- `tg://msg?text=...` opened from SSH with `uiopen` puts text into the share picker of the active account; used to send text that cannot be typed over VNC.
+- The home screen cannot be reached over VNC (the swipe from the bottom edge is not passed on).

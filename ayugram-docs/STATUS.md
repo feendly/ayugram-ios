@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-11 (after testing run 42990218595; run 43012742764 installed).
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43161070387 installed; run 43169707215 building).
 
 Status values:
 
@@ -16,10 +16,10 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 41 |
+| TESTED | 45 |
 | LOG ONLY | 7 |
-| UNTESTED | 21 |
-| TODO | 31 |
+| UNTESTED | 22 |
+| TODO | 26 |
 | N/A | 10 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
@@ -38,7 +38,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | useScheduledMessages | off | TESTED | Only with online status off, as on desktop. Message arrives about 12 s later; input field clears at once (run 43012742764) |
 | sendWithoutSound | Never | UNTESTED | Two switches: always, or only in ghost mode. Not observable from the sender's side |
 | suggestGhostModeBeforeViewingStory | on | TODO | |
-| Per-setting "locked" flags (5) | off | TODO | |
+| Per-setting "locked" flags (5) | off | UNTESTED | Five Lock switches; a locked setting keeps its value when Ghost Mode is switched (run 43169707215) |
 | useGlobalGhostMode (per-account ghost) | on | TODO | iOS build is global only |
 | "Read message" context action | - | TESTED | "Send Read Receipt" in the long-press menu; nash saw two ticks (run 43002933120) |
 
@@ -66,7 +66,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | filtersEnabledInChats | off | TESTED |
 | hideFromBlocked | off | TODO |
 | shadowBanIds | empty | TESTED (via message menu, shown in the filter list as user:<id>) |
-| filterZalgo | off | UNTESTED (run 43012742764) |
+| filterZalgo | off | TESTED (nash's zalgo message hidden for luki, "Filtered message" in the chat list) |
 | Per-chat filters, import/export | - | TODO |
 
 ## Premium, ads and clutter
@@ -85,8 +85,8 @@ Some rows group several related desktop settings, so the row count is lower than
 | hidePremiumStatuses | off | UNTESTED | Chat list only (run 43002933120) |
 | collapseSimilarChannels | on | TODO | |
 | hideSimilarChannels | off | UNTESTED | Run 43002933120 |
-| showOnlyAddedEmojisAndStickers | off | TODO | |
-| unlimitedRecentStickers | off | TODO | |
+| showOnlyAddedEmojisAndStickers | off | UNTESTED | Sticker panel only: no trending strip or suggested packs. Emoji panel not covered (run 43169707215) |
+| unlimitedRecentStickers | off | UNTESTED | Keeps up to 200 recent stickers on the device instead of 20 (run 43169707215) |
 
 ## Send confirmations
 
@@ -114,13 +114,13 @@ Some rows group several related desktop settings, so the row count is lower than
 | replaceBottomInfoWithIcons | on | TODO | |
 | adaptiveCoverColor | on | TODO | |
 | improveLinkPreviews | off | TODO | |
-| hideFastShare | off | UNTESTED | run 43084196247 |
-| showChannelReactions | on | UNTESTED | Run 43002933120 |
+| hideFastShare | off | TESTED | Share arrow next to channel posts gone |
+| showChannelReactions | on | TESTED | Reaction row under a channel post hidden with the switch off |
 | showGroupReactions | on | TESTED | Run 43002933120 |
 | showPrivateChatReactions | on | TESTED | Reaction hidden with the switch off |
 | wideMultiplier | 1.0 | N/A | Desktop window layout |
 | hideNotificationCounters | off | TESTED | Chats tab counter only (run 43084196247) |
-| hideNotificationBadge | off | UNTESTED | Run 43002933120 |
+| hideNotificationBadge | off | UNTESTED | The home screen cannot be reached over VNC; needs a look at the app icon on the iPad itself |
 | hideAllChatsFolder | off | TODO | |
 | channelBottomButton | Discuss | TODO | |
 | quickAdminShortcuts | on | TODO | |
@@ -133,8 +133,8 @@ Some rows group several related desktop settings, so the row count is lower than
 | showCommandsButtonInMessageField | on | UNTESTED (run 43113668579) |
 | showEmojiButtonInMessageField | on | TESTED |
 | showMicrophoneButtonInMessageField | on | TESTED |
-| showAutoDeleteButtonInMessageField | on | UNTESTED (run 43113668579) |
-| showGiftButtonInMessageField | on | UNTESTED (run 43113668579) |
+| showAutoDeleteButtonInMessageField | on | TESTED (the "1mo" timer button disappears) |
+| showGiftButtonInMessageField | on | UNTESTED (no chat at hand shows the button in the message field; the gift button in a channel's bottom bar is a different control and is not hidden) |
 | showAiEditorButtonInMessageField | on | TODO |
 | showAttachPopup | on | N/A (hover popup) |
 | showEmojiPopup | on | N/A (hover popup) |
@@ -156,9 +156,9 @@ Some rows group several related desktop settings, so the row count is lower than
 | Setting | iOS status | Notes |
 |---|---|---|
 | showMyProfileInDrawer, showBotsInDrawer, showNewGroupInDrawer, showNewChannelInDrawer, showContactsInDrawer, showCallsInDrawer, showSavedMessagesInDrawer, showNightModeToggleInDrawer | N/A | iOS has no drawer |
-| showLReadToggleInDrawer / showSReadToggleInDrawer | TODO | As quick actions |
+| showLReadToggleInDrawer / showSReadToggleInDrawer | UNTESTED | "Read on Local" and "Read on Server" (with confirmation) in the Settings tab long-press menu (run 43169707215) |
 | showGhostToggleInDrawer | TESTED | Long-press the Settings tab: Turn Ghost Mode On/Off |
-| showStreamerToggleInDrawer | TODO | With streamer mode |
+| showStreamerToggleInDrawer | UNTESTED | "Turn Streamer Mode On/Off" in the Settings tab long-press menu (run 43169707215) |
 | showGhostToggleInTray / showStreamerToggleInTray | N/A | Could map to home-screen quick actions |
 
 ## Larger features
