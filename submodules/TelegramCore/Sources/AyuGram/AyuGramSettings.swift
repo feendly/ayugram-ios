@@ -237,6 +237,23 @@ public final class AyuGramSettings {
     private static let forcedReadLock = NSLock()
     private static var forcedReadPeerIds = Set<Int64>()
 
+    // Local Premium: the logged-in accounts are treated as Premium by the client.
+    private static let ownAccountLock = NSLock()
+    private static var ownAccountIds = Set<Int64>()
+
+    public static func registerOwnAccount(_ peerId: Int64) {
+        ownAccountLock.lock()
+        ownAccountIds.insert(peerId)
+        ownAccountLock.unlock()
+    }
+
+    public static func isLocalPremiumAccount(_ peerId: Int64) -> Bool {
+        ownAccountLock.lock()
+        let isOwn = ownAccountIds.contains(peerId)
+        ownAccountLock.unlock()
+        return isOwn && bool(.localPremium)
+    }
+
     /// Allows the next read receipt for this peer to be sent even while read receipts are suppressed.
     public static func forceReadOnce(peerId: Int64) {
         forcedReadLock.lock()

@@ -245,7 +245,8 @@ public extension Peer {
     var isPremium: Bool {
         switch self {
         case let user as TelegramUser:
-            return user.flags.contains(.isPremium)
+            // AyuGram: local Premium for the logged-in accounts
+            return user.flags.contains(.isPremium) || AyuGramSettings.isLocalPremiumAccount(user.id.toInt64())
         default:
             return false
         }

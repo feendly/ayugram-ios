@@ -140,6 +140,14 @@ private func ayuTouchMessage(transaction: Transaction, id: MessageId) {
     })
 }
 
+/// Makes the chat showing this message rebuild its list, so new filters apply at once.
+public func ayuRefreshMessage(account: Account, id: MessageId) -> Signal<Never, NoError> {
+    return account.postbox.transaction { transaction -> Void in
+        ayuTouchMessage(transaction: transaction, id: id)
+    }
+    |> ignoreValues
+}
+
 /// Hides a message on this device only. The message stays on the server and for everyone else.
 public func ayuHideMessageLocally(account: Account, id: MessageId) -> Signal<Never, NoError> {
     AyuMessagesStore.shared.markHidden(id)

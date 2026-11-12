@@ -1425,6 +1425,7 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
             })))
         }
 
+        let ayuMenuMessageId = message.id
         // AyuGram: add the message text to the filters
         if AyuGramSettings.bool(.showAddFilterInContextMenu) && message.flags.contains(.Incoming) && !message.text.isEmpty {
             let ayuFilterText = message.text
@@ -1437,6 +1438,7 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
                 if !patterns.contains(pattern) {
                     patterns.append(pattern)
                     AyuFilters.setPatterns(patterns)
+                    let _ = ayuRefreshMessage(account: context.account, id: ayuMenuMessageId).startStandalone()
                 }
             })))
         }
@@ -1452,6 +1454,7 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
                 if !patterns.contains(ayuBanEntry) {
                     patterns.append(ayuBanEntry)
                     AyuFilters.setPatterns(patterns)
+                    let _ = ayuRefreshMessage(account: context.account, id: ayuMenuMessageId).startStandalone()
                 }
             })))
         }
