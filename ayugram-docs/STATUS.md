@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43161070387 installed; run 43169707215 building).
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43169707215 installed; run 43309816217 building).
 
 Status values:
 
@@ -16,10 +16,10 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 45 |
+| TESTED | 48 |
 | LOG ONLY | 7 |
-| UNTESTED | 22 |
-| TODO | 26 |
+| UNTESTED | 21 |
+| TODO | 24 |
 | N/A | 10 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
@@ -38,7 +38,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | useScheduledMessages | off | TESTED | Only with online status off, as on desktop. Message arrives about 12 s later; input field clears at once (run 43012742764) |
 | sendWithoutSound | Never | UNTESTED | Two switches: always, or only in ghost mode. Not observable from the sender's side |
 | suggestGhostModeBeforeViewingStory | on | TODO | |
-| Per-setting "locked" flags (5) | off | UNTESTED | Five Lock switches; a locked setting keeps its value when Ghost Mode is switched (run 43169707215) |
+| Per-setting "locked" flags (5) | off | TESTED | Five Lock switches. With Read Receipts locked, switching Ghost Mode on and off left it alone and changed the other four |
 | useGlobalGhostMode (per-account ghost) | on | TODO | iOS build is global only |
 | "Read message" context action | - | TESTED | "Send Read Receipt" in the long-press menu; nash saw two ticks (run 43002933120) |
 
@@ -64,7 +64,7 @@ Some rows group several related desktop settings, so the row count is lower than
 |---|---|---|
 | filtersEnabled (regex filters) | off | TESTED (filter "blockme" hid nash's message for luki) |
 | filtersEnabledInChats | off | TESTED |
-| hideFromBlocked | off | TODO |
+| hideFromBlocked | off | UNTESTED (run 43309816217; groups only, and only for users whose blocked state the app has loaded or changed since this version) |
 | shadowBanIds | empty | TESTED (via message menu, shown in the filter list as user:<id>) |
 | filterZalgo | off | TESTED (nash's zalgo message hidden for luki, "Filtered message" in the chat list) |
 | Per-chat filters, import/export | - | TODO |
@@ -85,8 +85,8 @@ Some rows group several related desktop settings, so the row count is lower than
 | hidePremiumStatuses | off | UNTESTED | Chat list only (run 43002933120) |
 | collapseSimilarChannels | on | TODO | |
 | hideSimilarChannels | off | UNTESTED | Run 43002933120 |
-| showOnlyAddedEmojisAndStickers | off | UNTESTED | Sticker panel only: no trending strip or suggested packs. Emoji panel not covered (run 43169707215) |
-| unlimitedRecentStickers | off | UNTESTED | Keeps up to 200 recent stickers on the device instead of 20 (run 43169707215) |
+| showOnlyAddedEmojisAndStickers | off | TESTED | Sticker panel only: trending strip and suggested packs gone after reopening the chat. Emoji panel not covered |
+| unlimitedRecentStickers | off | UNTESTED | Keeps up to 200 recent stickers on the device instead of 20. Needs more than 20 different stickers sent to check |
 
 ## Send confirmations
 
@@ -146,7 +146,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | showReactionsPanelInContextMenu | Visible | TESTED (on/off only, run 43084196247) |
 | showViewsPanelInContextMenu | Visible | TESTED (on/off only, run 43084196247) |
 | showHideMessageInContextMenu | Hidden | TESTED (Message disappears on this device and stays hidden after reopening) |
-| showUserMessagesInContextMenu | With modifier | TODO |
+| showUserMessagesInContextMenu | With modifier | UNTESTED (run 43309816217; "User Messages" in groups searches that member's messages) |
 | showMessageDetailsInContextMenu | With modifier | TESTED (Alert with message, chat and sender IDs and date) |
 | showRepeatMessageInContextMenu | Hidden | TESTED (text messages only) |
 | showAddFilterInContextMenu | Visible | TESTED (Adds the text as a filter; matching messages hide; tap the filter in settings to remove) |
@@ -156,9 +156,9 @@ Some rows group several related desktop settings, so the row count is lower than
 | Setting | iOS status | Notes |
 |---|---|---|
 | showMyProfileInDrawer, showBotsInDrawer, showNewGroupInDrawer, showNewChannelInDrawer, showContactsInDrawer, showCallsInDrawer, showSavedMessagesInDrawer, showNightModeToggleInDrawer | N/A | iOS has no drawer |
-| showLReadToggleInDrawer / showSReadToggleInDrawer | UNTESTED | "Read on Local" and "Read on Server" (with confirmation) in the Settings tab long-press menu (run 43169707215) |
+| showLReadToggleInDrawer / showSReadToggleInDrawer | UNTESTED | Both items appear in the Settings tab long-press menu. Bug on run 43169707215: the Read on Server confirmation did not appear on iPad (fixed in a00126e6, not built). Neither action has been run, since it would mark every chat of the account as read |
 | showGhostToggleInDrawer | TESTED | Long-press the Settings tab: Turn Ghost Mode On/Off |
-| showStreamerToggleInDrawer | UNTESTED | "Turn Streamer Mode On/Off" in the Settings tab long-press menu (run 43169707215) |
+| showStreamerToggleInDrawer | TESTED | "Turn Streamer Mode On/Off" in the Settings tab long-press menu; the label flips after each tap |
 | showGhostToggleInTray / showStreamerToggleInTray | N/A | Could map to home-screen quick actions |
 
 ## Larger features

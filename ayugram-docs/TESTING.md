@@ -102,6 +102,10 @@ A feature counts as done only when its row says PASS.
 | 77 | Hide gift button in message field | run 43161070387 | Override off; open a channel | - | The message field of the chats at hand has no gift button; the channel's bottom-bar gift button stayed (different control) | NOT TESTED |
 | 78 | Hide app icon badge | run 43161070387 | Override on | No badge on the home screen icon | The home screen could not be reached over VNC | NOT TESTED |
 | 79 | Skip hidden link warning | run 43161070387 | Tap the hidden link in a channel post | - | The only hidden link at hand points to a Telegram bot, which never shows the warning | NOT TESTED |
+| 80 | Ghost setting locks | run 43169707215 | Lock Read Receipts on; Ghost Mode on, then off | Read receipts unchanged, the other four follow the switch | On: story views, online, typing off and go-offline on, read receipts still on, Ghost Mode switch shows on. Off: all four back, read receipts still on | PASS |
+| 81 | Streamer Mode in Settings tab menu | run 43169707215 | Override on; long-press the Settings tab, tap the streamer item twice | Item present; label flips | "Turn Streamer Mode Off", then "On", then "Off" again | PASS |
+| 82 | Read on Local / Read on Server in Settings tab menu | run 43169707215 | Overrides on; long-press the Settings tab; tap Read on Server | Both items; confirmation before Read on Server | Both items shown. Tapping Read on Server closed the menu and no confirmation appeared (nothing was marked read). The alert was presented from a screen that is not visible on iPad | FAIL (fix a00126e6, not built). Actions themselves not run |
+| 83 | Only added sticker packs | run 43169707215 | Open the sticker panel; override on; reopen the chat and panel | No trending strip, only added packs | "Trending Premium Stickers" strip and the suggested packs in the top row gone; Recently Used and own packs remain | PASS |
 
 ## Notes
 
@@ -136,3 +140,5 @@ A feature counts as done only when its row says PASS.
 - 2026-11-12: the luki-nash chat has two service messages from row 76 (auto-delete set to 1 month, then disabled) and nash's "zalgo test" message from row 75. The LuckyFiles bot chat was opened once by the link in row 79 and closed without pressing Start.
 - `tg://msg?text=...` opened from SSH with `uiopen` puts text into the share picker of the active account; used to send text that cannot be typed over VNC.
 - The home screen cannot be reached over VNC (the swipe from the bottom edge is not passed on).
+- 2026-11-12 evening: the VNC server on the iPad had restarted; after the user reconnected, the screen is in portrait. Row 80 changed luki's online and typing switches and they were set back to off afterwards.
+- Read on Local and Read on Server act on every chat of the active account, so they are only checked for presence and the confirmation; running them needs the user's go-ahead.
