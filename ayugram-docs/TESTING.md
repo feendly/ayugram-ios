@@ -110,6 +110,8 @@ A feature counts as done only when its row says PASS.
 | 85 | Hide sponsored messages | run 43169707215 | Override off; open LuckyClumsy (32K subscribers) and look below the last post | A sponsored message to compare against | No sponsored message shown even with the switch off, so nothing to compare | NOT TESTED |
 | 86 | Bot commands button | run 43169707215 | nash opens VIRUS GAME BOT; override off; reopen | No bot button in the message field | The bot's "Open" menu button stayed. The switch only covered the "/" commands button | FAIL (fix 2b9d870d, not built) |
 | 87 | Deleted message kept in a group | run 43169707215 | nash sends "gdel1" in the Test group; luki's account receives it; nash deletes it for everyone; luki opens the group | Message stays with the deleted mark | "gdel1" shown with the broom mark; log `deleted message kept` | PASS |
+| 88 | User Messages in message menu | run 43309816217 | luki long-presses nash's "g1" in the Test group, User Messages | Search limited to that member | Search bar with a "nash" chip, "1 of 2" | PASS |
+| 89 | Hide messages from blocked users | run 43309816217 | luki blocks nash from the profile; override on; reopen the Test group | nash's messages hidden | Both messages and "nash joined" gone; only "luki created the group" left. Chat list preview still shows "nash: gdel1". nash unblocked afterwards | PASS with gap (chat list preview) |
 
 ## Notes
 

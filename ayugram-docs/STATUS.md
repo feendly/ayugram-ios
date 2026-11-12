@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43169707215 installed; run 43309816217 building).
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43309816217 installed; run 43322077655 building).
 
 Status values:
 
@@ -16,9 +16,9 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 51 |
+| TESTED | 53 |
 | LOG ONLY | 5 |
-| UNTESTED | 22 |
+| UNTESTED | 20 |
 | TODO | 24 |
 | N/A | 10 |
 
@@ -64,7 +64,7 @@ Some rows group several related desktop settings, so the row count is lower than
 |---|---|---|
 | filtersEnabled (regex filters) | off | TESTED (filter "blockme" hid nash's message for luki) |
 | filtersEnabledInChats | off | TESTED |
-| hideFromBlocked | off | UNTESTED (run 43309816217; groups only, and only for users whose blocked state the app has loaded or changed since this version) |
+| hideFromBlocked | off | TESTED (groups only: after luki blocked nash, nash's messages and join notice disappeared from the Test group. Only for users whose blocked state the app has loaded or changed since this version. The chat list preview still shows the hidden message) |
 | shadowBanIds | empty | TESTED (via message menu, shown in the filter list as user:<id>) |
 | filterZalgo | off | TESTED (nash's zalgo message hidden for luki, "Filtered message" in the chat list) |
 | Per-chat filters, import/export | - | TODO |
@@ -146,7 +146,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | showReactionsPanelInContextMenu | Visible | TESTED (on/off only, run 43084196247) |
 | showViewsPanelInContextMenu | Visible | TESTED (on/off only, run 43084196247) |
 | showHideMessageInContextMenu | Hidden | TESTED (Message disappears on this device and stays hidden after reopening) |
-| showUserMessagesInContextMenu | With modifier | UNTESTED (run 43309816217; "User Messages" in groups searches that member's messages) |
+| showUserMessagesInContextMenu | With modifier | TESTED ("User Messages" in a group opens the search filtered to that member) |
 | showMessageDetailsInContextMenu | With modifier | TESTED (Alert with message, chat and sender IDs and date) |
 | showRepeatMessageInContextMenu | Hidden | TESTED (text messages only) |
 | showAddFilterInContextMenu | Visible | TESTED (Adds the text as a filter; matching messages hide; tap the filter in settings to remove) |
