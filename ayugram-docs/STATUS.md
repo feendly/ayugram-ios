@@ -75,7 +75,7 @@ Some rows group several related desktop settings, so the row count is lower than
 |---|---|---|---|
 | disableAds | on | UNTESTED | Needs a channel that shows ads |
 | localPremium | off | UNTESTED | Needs restart to apply |
-| premiumStickersAsCopy | on | TESTED | Not in AyuGram Desktop; added at the user's request. Re-uploads a premium sticker and sends the copy. Animated stickers tested; video stickers and stock-client rendering not checked |
+| premiumStickersAsCopy | on | TESTED | Not in AyuGram Desktop; added at the user's request. Re-uploads a premium sticker and sends the copy. Animated stickers tested; user confirmed it shows as a sticker on another device; video stickers not checked |
 | Filtered/hidden messages in chat list preview | - | TESTED | Shows "Filtered message" |
 | disableStories | off | UNTESTED | Switch on; no stories were available to compare |
 | disableCustomBackgrounds | off | UNTESTED | run 43084196247 |
