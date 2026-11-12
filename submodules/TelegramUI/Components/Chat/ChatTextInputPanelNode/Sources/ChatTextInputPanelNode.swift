@@ -1967,6 +1967,10 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
         } else if case .webView = interfaceState.botMenuButton {
             shouldDisplayMenuButton = true
         }
+        // AyuGram: the bot menu / commands button can be hidden
+        if !AyuGramSettings.bool(.showCommandsButtonInMessageField) {
+            shouldDisplayMenuButton = false
+        }
         
         var displaySendAsAvatarButton = false
         let mediaRecordingState = interfaceState.inputTextPanelState.mediaRecordingState
