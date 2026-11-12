@@ -336,6 +336,8 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
     entries.append(.otherHeader("OTHER"))
     let otherToggles: [(AyuGramSettings.BoolKey, String)] = [
         (.disableAds, "Hide Sponsored Messages"),
+        (.cleanLinks, "Remove Tracking from Links I Send"),
+        (.cleanLinksStrict, "Strict Link Cleaning (Remove All Parameters)"),
         (.showMessageSeconds, "Show Seconds in Message Time"),
         (.localPremium, "Local Telegram Premium"),
         (.keepAliveInBackground, "Stay Connected in Background"),
@@ -387,7 +389,7 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         entries.append(.otherToggle(index, key, title, AyuGramSettings.bool(key)))
         index += 1
     }
-    entries.append(.otherInfo("Local Premium only unlocks features on this device and takes effect after restarting the app. Staying connected in the background uses location access to keep the app running so deleted messages are caught while it is closed; it also takes effect after a restart and uses more battery."))
+    entries.append(.otherInfo("Link cleaning only changes text that Telegram recognises as a web link, including links without https, and never Telegram links or code. Strict cleaning follows Link Cleaner and can break links on sites that need their parameters. Local Premium only unlocks features on this device and takes effect after restarting the app. Staying connected in the background uses location access to keep the app running so deleted messages are caught while it is closed; it also takes effect after a restart and uses more battery."))
 
     return entries
 }

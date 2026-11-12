@@ -759,7 +759,38 @@ private func opportunisticallyTransformOutgoingMedia(network: Network, postbox: 
 }
 
 // AyuGram: ghost-mode send options (send silently, send through the schedule so the account does not appear online).
+private func ayuCleanOutgoingLinks(_ messages: [EnqueueMessage]) -> [EnqueueMessage] {
+    if !AyuGramSettings.bool(.cleanLinks) {
+        return messages
+    }
+    let strict = AyuGramSettings.bool(.cleanLinksStrict)
+    return messages.map { message -> EnqueueMessage in
+        guard case let .message(text, attributes, inlineStickers, mediaReference, threadId, replyToMessageId, replyToStoryId, localGroupingKey, correlationId, bubbleUpEmojiOrStickersets) = message else {
+            return message
+        }
+        if text.isEmpty {
+            return message
+        }
+        var currentEntities: [MessageTextEntity] = []
+        for attribute in attributes {
+            if let attribute = attribute as? TextEntitiesMessageAttribute {
+                currentEntities = attribute.entities
+            }
+        }
+        guard let cleaned = AyuLinkCleaner.cleanMessage(text: text, entities: currentEntities, strict: strict) else {
+            return message
+        }
+        var updatedAttributes = attributes.filter { !($0 is TextEntitiesMessageAttribute) }
+        if !cleaned.entities.isEmpty {
+            updatedAttributes.append(TextEntitiesMessageAttribute(entities: cleaned.entities))
+        }
+        AyuGramSettings.debugLog("links cleaned strict=\(strict) before=\(text.count) after=\(cleaned.text.count)")
+        return .message(text: cleaned.text, attributes: updatedAttributes, inlineStickers: inlineStickers, mediaReference: mediaReference, threadId: threadId, replyToMessageId: replyToMessageId, replyToStoryId: replyToStoryId, localGroupingKey: localGroupingKey, correlationId: correlationId, bubbleUpEmojiOrStickersets: bubbleUpEmojiOrStickersets)
+    }
+}
+
 private func ayuTransformOutgoingMessages(peerId: PeerId, messages: [EnqueueMessage]) -> [EnqueueMessage] {
+    let messages = ayuCleanOutgoingLinks(messages)
     let silent = AyuGramSettings.bool(.sendWithoutSoundAlways) || (AyuGramSettings.bool(.sendWithoutSoundInGhost) && AyuGramSettings.isGhostModeActive)
     let isCloudPeer = peerId.namespace == Namespaces.Peer.CloudUser || peerId.namespace == Namespaces.Peer.CloudGroup || peerId.namespace == Namespaces.Peer.CloudChannel
     let scheduled = AyuGramSettings.bool(.useScheduledMessages) && !AyuGramSettings.sendOnlinePackets && isCloudPeer

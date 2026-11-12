@@ -79,6 +79,8 @@ public final class AyuGramSettings {
         case showOnlyAddedEmojisAndStickers
         case showUserMessagesInContextMenu
         case hideFromBlocked
+        case cleanLinks
+        case cleanLinksStrict
 
         public var defaultValue: Bool {
             switch self {
@@ -144,7 +146,7 @@ public final class AyuGramSettings {
                 return false
             case .showSReadToggleInDrawer, .showGhostToggleInDrawer:
                 return true
-            case .unlimitedRecentStickers, .showOnlyAddedEmojisAndStickers, .hideFromBlocked:
+            case .unlimitedRecentStickers, .showOnlyAddedEmojisAndStickers, .hideFromBlocked, .cleanLinks, .cleanLinksStrict:
                 return false
             }
         }
