@@ -16,9 +16,9 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 35 |
+| TESTED | 36 |
 | LOG ONLY | 7 |
-| UNTESTED | 23 |
+| UNTESTED | 22 |
 | TODO | 35 |
 | N/A | 10 |
 
@@ -65,7 +65,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | filtersEnabled (regex filters) | off | TESTED (filter "blockme" hid nash's message for luki) |
 | filtersEnabledInChats | off | TESTED |
 | hideFromBlocked | off | TODO |
-| shadowBanIds | empty | UNTESTED (run 43125223413; via message menu, shown in the filter list as user:<id>) |
+| shadowBanIds | empty | TESTED (via message menu, shown in the filter list as user:<id>) |
 | filterZalgo | off | UNTESTED (run 43012742764) |
 | Per-chat filters, import/export | - | TODO |
 

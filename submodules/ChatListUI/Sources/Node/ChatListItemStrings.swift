@@ -92,6 +92,10 @@ public func chatListItemStrings(strings: PresentationStrings, nameDisplayOrder: 
     if let ayuMessage = message, AyuMessagesStore.shared.isHidden(ayuMessage.id) || AyuFilters.shouldHide(text: ayuMessage.text, isIncoming: ayuMessage.flags.contains(.Incoming), isPrivateChat: ayuMessage.id.peerId.namespace == Namespaces.Peer.CloudUser) {
         return (nil, false, "Filtered message", [], nil, nil, nil)
     }
+    // AyuGram: shadow-banned users do not show in the chat list preview either
+    if let ayuMessage = message, ayuMessage.id.peerId.namespace != Namespaces.Peer.CloudUser, ayuMessage.flags.contains(.Incoming), let ayuAuthorId = ayuMessage.author?.id, AyuFilters.isShadowBanned(ayuAuthorId.id._internalGetInt64Value()) {
+        return (nil, false, "Filtered message", [], nil, nil, nil)
+    }
     
     var hideAuthor = false
     var messageText: String

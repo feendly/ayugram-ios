@@ -79,6 +79,7 @@ A feature counts as done only when its row says PASS.
 | 54 | Hide commands, auto-delete and gift buttons | run 43113668579 | - | - | The test chat shows none of these buttons to begin with | NOT TESTED |
 | 55 | Streamer mode hides the phone confirmation card | run 43113668579 | - | - | Checked on luki, which has no such card; not checked on nash | NOT TESTED |
 | 56 | Hide reactions in groups | run 43113668579 | In the Test group nash sends "g1" and reacts with a heart; override `showGroupReactions` off; reopen the group | Reaction not shown | Heart shown before, hidden after | PASS |
+| 57 | Shadow ban | run 43125223413 | As luki in the Test group: long-press nash's "g1", Shadow Ban; reopen the group; remove `user:6700664454` in the filter list; reopen | nash's messages hidden, then back | "g1" and nash's join notice hidden; entry listed in settings; both back after removal. The open chat has to be closed and reopened to refresh. The chat list preview still showed nash's message (fix coded, not built) | PASS with gap |
 
 ## Notes
 
