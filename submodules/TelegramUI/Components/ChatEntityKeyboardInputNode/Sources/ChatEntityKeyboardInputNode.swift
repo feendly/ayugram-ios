@@ -3036,7 +3036,8 @@ public final class EmojiContentPeekBehaviorImpl: EmojiContentPeekBehavior {
                                 }))
                             )
 
-                            if !file.isPremiumSticker {
+                            // AyuGram: premium stickers can be edited too; the edited result is a new upload
+                            if !file.isPremiumSticker || AyuGramSettings.bool(.premiumStickersAsCopy) {
                                 menuItems.append(.action(ContextMenuActionItem(text: presentationData.strings.Stickers_EditSticker, icon: { theme in generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Draw"), color: theme.contextMenu.primaryColor) }, action: { [weak self] _, f in
                                     f(.default)
 

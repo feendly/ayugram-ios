@@ -2085,7 +2085,8 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
         
         var editStickerFile: TelegramMediaFile?
         for media in messages[0].media {
-            if let file = media as? TelegramMediaFile, file.isSticker && !file.isPremiumSticker {
+            // AyuGram: premium stickers can be edited too; the edited result is a new upload
+            if let file = media as? TelegramMediaFile, file.isSticker && (!file.isPremiumSticker || AyuGramSettings.bool(.premiumStickersAsCopy)) {
                 editStickerFile = file
                 break
             }
