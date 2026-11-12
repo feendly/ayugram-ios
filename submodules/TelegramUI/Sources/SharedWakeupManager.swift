@@ -1215,12 +1215,35 @@ final class AyuBackgroundKeepAlive: NSObject, CLLocationManagerDelegate {
     
     private var manager: CLLocationManager?
     private var heartbeat: Foundation.Timer?
+    private var pausedForBattery = false
+    
+    // Stops the location session below 15% when not charging, and starts it again once that no longer holds.
+    private func checkBattery() {
+        guard let manager = self.manager else {
+            return
+        }
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        let level = UIDevice.current.batteryLevel
+        let isLow = AyuGramSettings.bool(.pauseKeepAliveOnLowBattery) && level >= 0.0 && level < 0.15 && UIDevice.current.batteryState == .unplugged
+        if isLow && !self.pausedForBattery {
+            self.pausedForBattery = true
+            manager.stopUpdatingLocation()
+            manager.stopMonitoringSignificantLocationChanges()
+            AyuGramSettings.debugLog("keepalive paused battery=\(level)")
+        } else if !isLow && self.pausedForBattery {
+            self.pausedForBattery = false
+            manager.startUpdatingLocation()
+            manager.startMonitoringSignificantLocationChanges()
+            AyuGramSettings.debugLog("keepalive resumed battery=\(level)")
+        }
+    }
     
     func startIfEnabled() {
         if !AyuGramSettings.bool(.keepAliveInBackground) {
             return
         }
         if self.manager != nil {
+            self.checkBattery()
             return
         }
         let manager = CLLocationManager()
@@ -1237,8 +1260,9 @@ final class AyuBackgroundKeepAlive: NSObject, CLLocationManagerDelegate {
         manager.startUpdatingLocation()
         manager.startMonitoringSignificantLocationChanges()
         AyuGramSettings.debugLog("keepalive started")
-        self.heartbeat = Foundation.Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true, block: { _ in
+        self.heartbeat = Foundation.Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true, block: { [weak self] _ in
             AyuGramSettings.debugLog("keepalive heartbeat state=\(UIApplication.shared.applicationState.rawValue)")
+            self?.checkBattery()
         })
     }
     
@@ -1252,6 +1276,8 @@ final class AyuBackgroundKeepAlive: NSObject, CLLocationManagerDelegate {
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         AyuGramSettings.debugLog("keepalive authorization=\(manager.authorizationStatus.rawValue)")
-        manager.startUpdatingLocation()
+        if !self.pausedForBattery {
+            manager.startUpdatingLocation()
+        }
     }
 }

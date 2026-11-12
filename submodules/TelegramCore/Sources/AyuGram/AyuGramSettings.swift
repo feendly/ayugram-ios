@@ -59,6 +59,8 @@ public final class AyuGramSettings {
         case premiumStickersAsCopy
         case squareAvatars
         case removeMessageTail
+        case showMicrophoneButtonInMessageField
+        case pauseKeepAliveOnLowBattery
         case showCommandsButtonInMessageField
         case showEmojiButtonInMessageField
         case showAutoDeleteButtonInMessageField
@@ -115,6 +117,8 @@ public final class AyuGramSettings {
                 return true
             case .squareAvatars, .removeMessageTail:
                 return false
+            case .showMicrophoneButtonInMessageField, .pauseKeepAliveOnLowBattery:
+                return true
             case .showCommandsButtonInMessageField, .showEmojiButtonInMessageField, .showAutoDeleteButtonInMessageField, .showGiftButtonInMessageField:
                 return true
             case .showReactionsPanelInContextMenu, .showViewsPanelInContextMenu, .showAttachButtonInMessageField:

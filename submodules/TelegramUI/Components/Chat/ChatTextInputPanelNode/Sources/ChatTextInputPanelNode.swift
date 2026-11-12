@@ -3783,7 +3783,8 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
         }
         
         let searchLayoutClearButtonSize = CGSize(width: 46.0, height: 40.0)
-        self.mediaActionButtons.micButton.isHidden = additionalSideInsets.right > 0.0
+        // AyuGram: the microphone button can be hidden
+        self.mediaActionButtons.micButton.isHidden = additionalSideInsets.right > 0.0 || !AyuGramSettings.bool(.showMicrophoneButtonInMessageField)
         self.mediaActionButtons.micButtonTintMaskView.isHidden = self.mediaActionButtons.micButton.isHidden
 
         let clearButtonFrame = CGRect(origin: CGPoint(x: textInputContainerBackgroundFrame.width - searchLayoutClearButtonSize.width, y: textInputFrame.maxY - 40.0 + floor((40.0 - searchLayoutClearButtonSize.height) * 0.5)), size: searchLayoutClearButtonSize)
