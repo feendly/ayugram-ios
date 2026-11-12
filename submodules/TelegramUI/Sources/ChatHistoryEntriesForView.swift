@@ -212,6 +212,10 @@ func chatHistoryEntriesForView(
         if message.id.peerId.namespace != Namespaces.Peer.CloudUser, message.flags.contains(.Incoming), let ayuAuthorId = message.author?.id, AyuFilters.isShadowBanned(ayuAuthorId.id._internalGetInt64Value()) {
             continue
         }
+        // AyuGram: messages from blocked users are hidden in groups
+        if AyuGramSettings.bool(.hideFromBlocked), message.id.peerId.namespace != Namespaces.Peer.CloudUser, message.flags.contains(.Incoming), let ayuBlockedAuthorId = message.author?.id, AyuFilters.isBlocked(ayuBlockedAuthorId.toInt64()) {
+            continue
+        }
         
         if case let .replyThread(replyThreadMessage) = location, replyThreadMessage.isForumPost {
             if isUndisplayedForumTopicRoot(message, location: location, additionalData: view.additionalData) {

@@ -77,6 +77,8 @@ public final class AyuGramSettings {
         case showStreamerToggleInDrawer
         case unlimitedRecentStickers
         case showOnlyAddedEmojisAndStickers
+        case showUserMessagesInContextMenu
+        case hideFromBlocked
 
         public var defaultValue: Bool {
             switch self {
@@ -134,7 +136,7 @@ public final class AyuGramSettings {
                 return true
             case .showReactionsPanelInContextMenu, .showViewsPanelInContextMenu, .showAttachButtonInMessageField:
                 return true
-            case .showMessageDetailsInContextMenu, .showAddFilterInContextMenu:
+            case .showMessageDetailsInContextMenu, .showAddFilterInContextMenu, .showUserMessagesInContextMenu:
                 return true
             case .lockSendReadMessages, .lockSendReadStories, .lockSendOnlinePackets, .lockSendUploadProgress, .lockSendOfflinePacketAfterOnline:
                 return false
@@ -142,7 +144,7 @@ public final class AyuGramSettings {
                 return false
             case .showSReadToggleInDrawer, .showGhostToggleInDrawer:
                 return true
-            case .unlimitedRecentStickers, .showOnlyAddedEmojisAndStickers:
+            case .unlimitedRecentStickers, .showOnlyAddedEmojisAndStickers, .hideFromBlocked:
                 return false
             }
         }
@@ -382,6 +384,45 @@ public final class AyuFilters {
         lock.lock()
         rebuildCacheIfNeeded()
         let result = cachedUserIds.contains(userId)
+        lock.unlock()
+        return result
+    }
+
+    // Blocked users, mirrored from the account's data as it is loaded or changed,
+    // so the chat can hide their messages without a database lookup.
+    private static let blockedKey = "ayu.blockedPeerIds"
+    private static var cachedBlocked: Set<Int64>?
+
+    // Call with the lock held.
+    private static func loadedBlocked() -> Set<Int64> {
+        if let cachedBlocked = cachedBlocked {
+            return cachedBlocked
+        }
+        let stored = (UserDefaults.standard.array(forKey: blockedKey) as? [NSNumber]) ?? []
+        let loaded = Set(stored.map { $0.int64Value })
+        cachedBlocked = loaded
+        return loaded
+    }
+
+    public static func setBlocked(_ peerId: Int64, _ blocked: Bool) {
+        lock.lock()
+        var current = loadedBlocked()
+        var changed = false
+        if blocked {
+            changed = current.insert(peerId).inserted
+        } else {
+            changed = current.remove(peerId) != nil
+        }
+        cachedBlocked = current
+        lock.unlock()
+        if changed {
+            UserDefaults.standard.set(current.map { NSNumber(value: $0) }, forKey: blockedKey)
+        }
+    }
+
+    public static func isBlocked(_ peerId: Int64) -> Bool {
+        lock.lock()
+        let result = loadedBlocked().contains(peerId)
         lock.unlock()
         return result
     }

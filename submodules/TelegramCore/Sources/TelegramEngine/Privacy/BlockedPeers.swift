@@ -30,6 +30,8 @@ func _internal_requestUpdatePeerIsBlocked(account: Account, peerId: PeerId, isBl
                                 }
                                 return previous.withUpdatedIsBlocked(isBlocked)
                             })
+                            // AyuGram: keep the blocked list for "hide messages from blocked users"
+                            AyuFilters.setBlocked(peerId.toInt64(), isBlocked)
                         }
                     }
                 }

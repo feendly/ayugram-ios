@@ -1459,6 +1459,16 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
             })))
         }
 
+        // AyuGram: search this chat for messages from the same user
+        if AyuGramSettings.bool(.showUserMessagesInContextMenu) && message.id.namespace == Namespaces.Message.Cloud && message.id.peerId.namespace != Namespaces.Peer.CloudUser, let ayuSearchAuthor = message.author, ayuSearchAuthor.id.namespace == Namespaces.Peer.CloudUser {
+            actions.append(.action(ContextMenuActionItem(text: "User Messages", icon: { theme in
+                return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Search"), color: theme.actionSheet.primaryTextColor)
+            }, action: { _, f in
+                f(.dismissWithoutContent)
+                interfaceInteraction.beginMessageSearch(.member(ayuSearchAuthor), "")
+            })))
+        }
+
         // AyuGram: edit history
         let ayuEdits = AyuMessagesStore.shared.edits(message.id)
         if !ayuEdits.isEmpty {

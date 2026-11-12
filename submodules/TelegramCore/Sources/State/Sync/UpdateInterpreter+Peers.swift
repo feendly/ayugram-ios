@@ -130,6 +130,8 @@ extension UpdateInterpreter {
     
     mutating func applyPeerBlocked(_ updatePeerBlockedData: Api.Update.Cons_updatePeerBlocked) {
         let userPeerId = updatePeerBlockedData.peerId.peerId
+        // AyuGram: keep the blocked list for "hide messages from blocked users"
+        AyuFilters.setBlocked(userPeerId.toInt64(), (updatePeerBlockedData.flags & (1 << 0)) != 0)
         updatedState.updateCachedPeerData(userPeerId, { current in
             let previous: CachedUserData
             if let current = current as? CachedUserData {

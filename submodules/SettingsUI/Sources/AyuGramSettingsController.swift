@@ -324,6 +324,7 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
     entries.append(.filterToggle(0, .filtersEnabled, "Enable Filters", AyuGramSettings.bool(.filtersEnabled)))
     entries.append(.filterToggle(1, .filtersEnabledInChats, "Also in Private Chats", AyuGramSettings.bool(.filtersEnabledInChats)))
     entries.append(.filterToggle(2, .filterZalgo, "Hide Zalgo Text", AyuGramSettings.bool(.filterZalgo)))
+    entries.append(.filterToggle(3, .hideFromBlocked, "Hide Messages from Blocked Users in Groups", AyuGramSettings.bool(.hideFromBlocked)))
     var filterIndex: Int32 = 0
     for pattern in AyuFilters.patterns.prefix(30) {
         entries.append(.filterPattern(filterIndex, pattern))
@@ -349,6 +350,7 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.showAddFilterInContextMenu, "Add to Filters in Message Menu"),
         (.showHideMessageInContextMenu, "Hide in Message Menu"),
         (.showRepeatMessageInContextMenu, "Repeat in Message Menu"),
+        (.showUserMessagesInContextMenu, "User Messages in Message Menu (Groups)"),
         (.showReactionsPanelInContextMenu, "Reactions Bar in Message Menu"),
         (.showViewsPanelInContextMenu, "Read and Reactions Row in Message Menu"),
         (.showAttachButtonInMessageField, "Attach Button in Message Field"),
