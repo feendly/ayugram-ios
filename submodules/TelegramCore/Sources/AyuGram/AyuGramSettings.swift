@@ -66,6 +66,17 @@ public final class AyuGramSettings {
         case showAutoDeleteButtonInMessageField
         case showGiftButtonInMessageField
         case hideNotificationCounters
+        case lockSendReadMessages
+        case lockSendReadStories
+        case lockSendOnlinePackets
+        case lockSendUploadProgress
+        case lockSendOfflinePacketAfterOnline
+        case showLReadToggleInDrawer
+        case showSReadToggleInDrawer
+        case showGhostToggleInDrawer
+        case showStreamerToggleInDrawer
+        case unlimitedRecentStickers
+        case showOnlyAddedEmojisAndStickers
 
         public var defaultValue: Bool {
             switch self {
@@ -125,6 +136,14 @@ public final class AyuGramSettings {
                 return true
             case .showMessageDetailsInContextMenu, .showAddFilterInContextMenu:
                 return true
+            case .lockSendReadMessages, .lockSendReadStories, .lockSendOnlinePackets, .lockSendUploadProgress, .lockSendOfflinePacketAfterOnline:
+                return false
+            case .showLReadToggleInDrawer, .showStreamerToggleInDrawer:
+                return false
+            case .showSReadToggleInDrawer, .showGhostToggleInDrawer:
+                return true
+            case .unlimitedRecentStickers, .showOnlyAddedEmojisAndStickers:
+                return false
             }
         }
 
@@ -217,23 +236,72 @@ public final class AyuGramSettings {
 
     // MARK: Ghost mode
 
-    public static var sendReadMessages: Bool { return bool(.sendReadMessages) }
+    public static var sendReadMessages: Bool {
+        readOverrideLock.lock()
+        let overrideActive = CFAbsoluteTimeGetCurrent() < readOverrideUntil
+        let overrideValue = readOverrideValue
+        readOverrideLock.unlock()
+        if overrideActive {
+            return overrideValue
+        }
+        return bool(.sendReadMessages)
+    }
+
+    // "Read on Local" / "Read on Server": for a short time read receipts are forced off or on,
+    // whatever the stored setting says, while every chat is marked as read.
+    private static let readOverrideLock = NSLock()
+    private static var readOverrideValue: Bool = true
+    private static var readOverrideUntil: Double = 0.0
+
+    public static func overrideSendReadMessages(_ value: Bool, seconds: Double) {
+        readOverrideLock.lock()
+        readOverrideValue = value
+        readOverrideUntil = CFAbsoluteTimeGetCurrent() + seconds
+        readOverrideLock.unlock()
+        debugLog("read override value=\(value) seconds=\(seconds)")
+    }
+
+    /// Recent stickers kept on the device (the stock client keeps 20).
+    public static var recentStickersLimit: Int {
+        return bool(.unlimitedRecentStickers) ? 200 : 20
+    }
     public static var sendReadStories: Bool { return bool(.sendReadStories) }
     public static var sendOnlinePackets: Bool { return bool(.sendOnlinePackets) }
     public static var sendUploadProgress: Bool { return bool(.sendUploadProgress) }
     public static var sendOfflinePacketAfterOnline: Bool { return bool(.sendOfflinePacketAfterOnline) }
 
     /// Ghost mode counts as active when every packet type is suppressed, as on desktop.
+    // Each ghost setting, the value it has while ghost mode is on, and its lock.
+    // A locked setting is left alone by the ghost mode switch, as on desktop.
+    private static let ghostKeys: [(key: BoolKey, ghostValue: Bool, lock: BoolKey)] = [
+        (key: .sendReadMessages, ghostValue: false, lock: .lockSendReadMessages),
+        (key: .sendReadStories, ghostValue: false, lock: .lockSendReadStories),
+        (key: .sendOnlinePackets, ghostValue: false, lock: .lockSendOnlinePackets),
+        (key: .sendUploadProgress, ghostValue: false, lock: .lockSendUploadProgress),
+        (key: .sendOfflinePacketAfterOnline, ghostValue: true, lock: .lockSendOfflinePacketAfterOnline)
+    ]
+
     public static var isGhostModeActive: Bool {
-        return !sendReadMessages && !sendReadStories && !sendOnlinePackets && !sendUploadProgress && sendOfflinePacketAfterOnline
+        var unlockedCount = 0
+        for entry in ghostKeys {
+            if bool(entry.lock) {
+                continue
+            }
+            unlockedCount += 1
+            if bool(entry.key) != entry.ghostValue {
+                return false
+            }
+        }
+        return unlockedCount != 0
     }
 
     public static func setGhostModeActive(_ active: Bool) {
-        setBool(.sendReadMessages, !active)
-        setBool(.sendReadStories, !active)
-        setBool(.sendOnlinePackets, !active)
-        setBool(.sendUploadProgress, !active)
-        setBool(.sendOfflinePacketAfterOnline, active)
+        for entry in ghostKeys {
+            if bool(entry.lock) {
+                continue
+            }
+            setBool(entry.key, active ? entry.ghostValue : !entry.ghostValue)
+        }
     }
 
     // MARK: One-shot read override

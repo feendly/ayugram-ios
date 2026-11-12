@@ -291,14 +291,19 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.sendOfflinePacketAfterOnline, "Go Offline Immediately"),
         (.useScheduledMessages, "Send via Schedule (No Online)"),
         (.sendWithoutSoundInGhost, "Send Silently in Ghost Mode"),
-        (.sendWithoutSoundAlways, "Always Send Silently")
+        (.sendWithoutSoundAlways, "Always Send Silently"),
+        (.lockSendReadMessages, "Lock Read Receipts"),
+        (.lockSendReadStories, "Lock Story Views"),
+        (.lockSendOnlinePackets, "Lock Online Status"),
+        (.lockSendUploadProgress, "Lock Typing Status"),
+        (.lockSendOfflinePacketAfterOnline, "Lock Go Offline Immediately")
     ]
     var index: Int32 = 0
     for (key, title) in toggles {
         entries.append(.toggle(index, key, title, AyuGramSettings.bool(key)))
         index += 1
     }
-    entries.append(.ghostInfo("With read receipts off, chats are marked as read on this device only. Sending a message still marks the chat as read on the server."))
+    entries.append(.ghostInfo("With read receipts off, chats are marked as read on this device only. Sending a message still marks the chat as read on the server. A locked setting keeps its value when Ghost Mode is switched. Hold the Settings tab for the quick menu."))
 
     entries.append(.historyHeader("MESSAGE HISTORY"))
     let historyToggles: [(AyuGramSettings.BoolKey, String)] = [
@@ -367,7 +372,13 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.hidePremiumStatuses, "Hide Premium Badges in Chat List"),
         (.showChannelReactions, "Show Reactions in Channels"),
         (.showGroupReactions, "Show Reactions in Groups"),
-        (.showPrivateChatReactions, "Show Reactions in Private Chats")
+        (.showPrivateChatReactions, "Show Reactions in Private Chats"),
+        (.unlimitedRecentStickers, "Keep Up to 200 Recent Stickers"),
+        (.showOnlyAddedEmojisAndStickers, "Only Added Sticker Packs in Sticker Panel"),
+        (.showGhostToggleInDrawer, "Ghost Mode in Settings Tab Menu"),
+        (.showStreamerToggleInDrawer, "Streamer Mode in Settings Tab Menu"),
+        (.showLReadToggleInDrawer, "Read on Local in Settings Tab Menu"),
+        (.showSReadToggleInDrawer, "Read on Server in Settings Tab Menu")
     ]
     index = 0
     for (key, title) in otherToggles {

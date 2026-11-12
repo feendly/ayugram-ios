@@ -1732,7 +1732,9 @@ public extension EmojiPagerContentComponent {
             peerSpecificPack,
             searchCategories
         )
-        |> map { view, hasPremium, featuredStickerPacks, featuredStickersConfiguration, dismissedTrendingStickerPacks, peerSpecificPack, searchCategories -> EmojiPagerContentComponent in
+        |> map { view, hasPremium, allFeaturedStickerPacks, featuredStickersConfiguration, dismissedTrendingStickerPacks, peerSpecificPack, searchCategories -> EmojiPagerContentComponent in
+            // AyuGram: only show sticker packs the user has added
+            let featuredStickerPacks = AyuGramSettings.bool(.showOnlyAddedEmojisAndStickers) ? [] : allFeaturedStickerPacks
             let hasPremium = forceHasPremium || hasPremium
             struct ItemGroup {
                 var supergroupId: AnyHashable
