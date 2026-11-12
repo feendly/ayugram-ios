@@ -83,6 +83,13 @@ A feature counts as done only when its row says PASS.
 | 58 | Rounded-square avatars | run 43133651759 | Override on before launch; open the chat list and a chat | Avatars are rounded squares | Chat list, archive icon and chat header avatars are rounded squares; the account avatar in the tab bar stays round | PASS |
 | 59 | No tail on message bubbles | run 43133651759 | Override on; open the nash chat | Bubbles without tails | Incoming and outgoing bubbles have no tail | PASS |
 | 60 | Shadow-banned user hidden in chat list preview | run 43133651759 | - | - | Not re-run after the fix | NOT TESTED |
+| 61 | Local Premium (fixed) | run 43147318173 | Override on before launch; open Settings | Accounts treated as Premium by the app | Premium star next to luki and nash; "Set Emoji Status" and "Change Profile Color" rows appear. Client-side only: server features were not tried and are expected to be refused | PASS (client side) |
+| 62 | GIF confirmation, OK path | run 43147318173 | Override on; tap a recent GIF, OK | GIF sent after OK | Alert, then GIF sent at 12:29 AM | PASS |
+| 63 | GIF confirmation for search and trending GIFs (fixed) | run 43147318173 | Search "cat" in the GIF panel, tap a result, OK | Alert, then sent | Alert shown; GIF sent at 12:30 AM after OK | PASS |
+| 64 | Sticker confirmation, OK path | run 43147318173 | - | - | The sticker cell tap did not register over VNC this time | NOT TESTED |
+| 65 | Edit history sheet | run 43147318173 | Long-press "ghost 5 from nash v2", Edit History | Sheet with earlier versions, time and copy | "Edit History (1 earlier version)", "Nov 11, 2026 at 3:55:58 AM", the old text, Copy Version 1, Cancel. Copy itself not checked | PASS |
+| 66 | Filter applies to the open chat at once (fixed) | run 43147318173 | Long-press "sch", Add to Filters, without leaving the chat | Matching messages vanish immediately | "sch" and "sch x" disappeared at once | PASS |
+| 67 | Shadow ban applies at once; hidden in chat list preview | run 43147318173 | - | - | Not re-run; same refresh call as the filter case | NOT TESTED |
 
 ## Notes
 
@@ -111,3 +118,4 @@ A feature counts as done only when its row says PASS.
 - Over VNC, pressing a star-badged sticker in the pack preview sent it directly (no menu appeared); the press that sent it was a mouse click on a neighbouring cell, so the exact gesture is unclear.
 - A test group named "Test" (nash and luki only) exists for group features since 2026-11-11.
 - 2026-11-11 late: with luki active, tapping a trending GIF sent it to nash without the confirmation alert. Trending and search GIFs use a separate send path (bot results) that the confirmation did not cover; row 41's pass was for saved GIFs only. Fix in run 43147318173.
+- With Local Premium on, every account logged in on the device shows as Premium inside the app (nash shows a star when viewed from luki).

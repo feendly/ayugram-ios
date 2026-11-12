@@ -16,10 +16,10 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 38 |
+| TESTED | 40 |
 | LOG ONLY | 7 |
-| UNTESTED | 22 |
-| TODO | 33 |
+| UNTESTED | 21 |
+| TODO | 32 |
 | N/A | 10 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
@@ -56,7 +56,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | Deleted messages in groups and channels | - | LOG ONLY | Log shows a channel deletion kept; not looked at in the chat |
 | Self-destructing media, cleared history, deleted chats | - | TODO | |
 | Proper database instead of a plist file | - | TODO | |
-| Full-screen edit history viewer | - | TODO | Currently an alert listing old texts |
+| Edit history viewer | - | TESTED | Sheet listing each earlier version with its time and a copy button |
 
 ## Filters
 
@@ -74,7 +74,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | Setting | Desktop default | iOS status | Notes |
 |---|---|---|---|
 | disableAds | on | UNTESTED | Needs a channel that shows ads |
-| localPremium | off | UNTESTED | Needs restart to apply |
+| localPremium | off | TESTED | Client side: premium flag for the logged-in accounts (star, premium-only rows). Server-enforced features stay locked. Restart to apply |
 | premiumStickersAsCopy | on | TESTED | Not in AyuGram Desktop; added at the user's request. Re-uploads a premium sticker and sends the copy. Animated stickers tested; user confirmed it shows as a sticker on another device; video stickers not checked |
 | Filtered/hidden messages in chat list preview | - | TESTED | Shows "Filtered message" |
 | disableStories | off | UNTESTED | Switch on; no stories were available to compare |
@@ -93,7 +93,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | Setting | Desktop default | iOS status |
 |---|---|---|
 | stickerConfirmation | off | TESTED (alert and Cancel; OK path not tried) |
-| gifConfirmation | off | TESTED (alert and Cancel; OK path not tried) |
+| gifConfirmation | off | TESTED (saved, recent, search and trending GIFs; Cancel and OK) |
 | voiceConfirmation | off | UNTESTED (run 43002933120; covers recordings sent from the preview, not hold-and-release) |
 | roundConfirmation | off | UNTESTED (same switch as voice) |
 
