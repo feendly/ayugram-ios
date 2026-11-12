@@ -591,7 +591,7 @@ private final class StickerPackContainer: ASDisplayNode {
                                     })))
                                 }
                             }
-                            return (itemNode.view, itemNode.bounds, StickerPreviewPeekContent(context: strongSelf.context, theme: strongSelf.presentationData.theme, strings: strongSelf.presentationData.strings, item: .pack(item.file._parse()), isLocked: item.file.isPremiumSticker && !hasPremium && !AyuGramSettings.bool(.premiumStickersAsCopy), menu: menuItems, openPremiumIntro: { [weak self] in
+                            return (itemNode.view, itemNode.bounds, StickerPreviewPeekContent(context: strongSelf.context, theme: strongSelf.presentationData.theme, strings: strongSelf.presentationData.strings, item: .pack(item.file._parse()), isLocked: item.file.isPremiumSticker && !hasPremium && !AyuGramSettings.bool(.premiumStickersAsCopy) && !AyuGramSettings.bool(.localPremium), menu: menuItems, openPremiumIntro: { [weak self] in
                                 guard let strongSelf = self else {
                                     return
                                 }
