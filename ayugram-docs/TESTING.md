@@ -106,6 +106,10 @@ A feature counts as done only when its row says PASS.
 | 81 | Streamer Mode in Settings tab menu | run 43169707215 | Override on; long-press the Settings tab, tap the streamer item twice | Item present; label flips | "Turn Streamer Mode Off", then "On", then "Off" again | PASS |
 | 82 | Read on Local / Read on Server in Settings tab menu | run 43169707215 | Overrides on; long-press the Settings tab; tap Read on Server | Both items; confirmation before Read on Server | Both items shown. Tapping Read on Server closed the menu and no confirmation appeared (nothing was marked read). The alert was presented from a screen that is not visible on iPad | FAIL (fix a00126e6, not built). Actions themselves not run |
 | 83 | Only added sticker packs | run 43169707215 | Open the sticker panel; override on; reopen the chat and panel | No trending strip, only added packs | "Trending Premium Stickers" strip and the suggested packs in the top row gone; Recently Used and own packs remain | PASS |
+| 84 | Hide premium badges in chat list | run 43169707215 | Find a contact with a status icon next to the name (Zhenya); override on; scroll the row off and back | Icon gone | Icon shown before, gone after | PASS |
+| 85 | Hide sponsored messages | run 43169707215 | Override off; open LuckyClumsy (32K subscribers) and look below the last post | A sponsored message to compare against | No sponsored message shown even with the switch off, so nothing to compare | NOT TESTED |
+| 86 | Bot commands button | run 43169707215 | nash opens VIRUS GAME BOT; override off; reopen | No bot button in the message field | The bot's "Open" menu button stayed. The switch only covered the "/" commands button | FAIL (fix 2b9d870d, not built) |
+| 87 | Deleted message kept in a group | run 43169707215 | nash sends "gdel1" in the Test group; luki's account receives it; nash deletes it for everyone; luki opens the group | Message stays with the deleted mark | "gdel1" shown with the broom mark; log `deleted message kept` | PASS |
 
 ## Notes
 
@@ -142,3 +146,5 @@ A feature counts as done only when its row says PASS.
 - The home screen cannot be reached over VNC (the swipe from the bottom edge is not passed on).
 - 2026-11-12 evening: the VNC server on the iPad had restarted; after the user reconnected, the screen is in portrait. Row 80 changed luki's online and typing switches and they were set back to off afterwards.
 - Read on Local and Read on Server act on every chat of the active account, so they are only checked for presence and the confirmation; running them needs the user's go-ahead.
+- Row 86 opened nash's VIRUS GAME BOT chat with read receipts overridden off, so it stays unread on the server; on this device a few of its messages now count as read.
+- Mouse-wheel scrolling does nothing over VNC; lists are scrolled with a scripted drag.

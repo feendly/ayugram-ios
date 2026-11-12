@@ -16,9 +16,9 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 48 |
-| LOG ONLY | 7 |
-| UNTESTED | 21 |
+| TESTED | 51 |
+| LOG ONLY | 5 |
+| UNTESTED | 22 |
 | TODO | 24 |
 | N/A | 10 |
 
@@ -53,7 +53,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | editedMark | "edited" | TESTED | Custom text, run 43002933120 |
 | semiTransparentDeletedMessages | off | TESTED | Bubble messages only (run 43084196247) |
 | Deleted messages while app is closed | - | TESTED | App now stays running in the background (see Stay Connected). Kept a deletion sent from another device while the app was in the background (TESTING row 43). Not captured after a device reboot until the app runs again |
-| Deleted messages in groups and channels | - | LOG ONLY | Log shows a channel deletion kept; not looked at in the chat |
+| Deleted messages in groups and channels | - | TESTED | Group: nash's message deleted for everyone stays visible for luki with the deleted mark. Channel: log only |
 | Self-destructing media, cleared history, deleted chats | - | TODO | |
 | Proper database instead of a plist file | - | TODO | |
 | Edit history viewer | - | TESTED | Sheet listing each earlier version with its time and a copy button |
@@ -73,7 +73,7 @@ Some rows group several related desktop settings, so the row count is lower than
 
 | Setting | Desktop default | iOS status | Notes |
 |---|---|---|---|
-| disableAds | on | UNTESTED | Needs a channel that shows ads |
+| disableAds | on | UNTESTED | Needs a channel that shows ads; the one checked (32K subscribers) showed none even with the switch off |
 | localPremium | off | TESTED | Client side: premium flag for the logged-in accounts (star, premium-only rows). Server-enforced features stay locked. Restart to apply |
 | premiumStickersAsCopy | on | TESTED | Not in AyuGram Desktop; added at the user's request. Re-uploads a premium sticker and sends the copy. Animated stickers tested; user confirmed it shows as a sticker on another device; video stickers not checked |
 | Filtered/hidden messages in chat list preview | - | TESTED | Shows "Filtered message" |
@@ -82,7 +82,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | disableOpenLinkWarning | off | UNTESTED | Needs a message with a hidden link |
 | disableNotificationsDelay | off | TODO | |
 | disableGreetingSticker | off | UNTESTED | Run 43002933120 |
-| hidePremiumStatuses | off | UNTESTED | Chat list only (run 43002933120) |
+| hidePremiumStatuses | off | TESTED | Chat list only: the status icon next to a contact's name disappears |
 | collapseSimilarChannels | on | TODO | |
 | hideSimilarChannels | off | UNTESTED | Run 43002933120 |
 | showOnlyAddedEmojisAndStickers | off | TESTED | Sticker panel only: trending strip and suggested packs gone after reopening the chat. Emoji panel not covered |
@@ -130,7 +130,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | Setting | Desktop default | iOS status |
 |---|---|---|
 | showAttachButtonInMessageField | on | TESTED (run 43084196247) |
-| showCommandsButtonInMessageField | on | UNTESTED (run 43113668579) |
+| showCommandsButtonInMessageField | on | UNTESTED (on run 43169707215 a bot's "Open" menu button stayed; fixed in 2b9d870d, not built) |
 | showEmojiButtonInMessageField | on | TESTED |
 | showMicrophoneButtonInMessageField | on | TESTED |
 | showAutoDeleteButtonInMessageField | on | TESTED (the "1mo" timer button disappears) |
@@ -180,6 +180,8 @@ Some rows group several related desktop settings, so the row count is lower than
 
 | Feature | Status | Notes |
 |---|---|---|
-| Stay Connected in Background | LOG ONLY | Heartbeat and location updates continued for 170 s in the background (run 43012742764). Shows the system location indicator. Catching a deletion from another device not yet tried |
+| Stay Connected in Background | TESTED | Kept a deletion sent from another device while the app was in the background (TESTING row 43). Shows the system location indicator |
 | All accounts receive updates at once | UNTESTED | Part of keep-alive |
 | Debug log and test override files | TESTED | Test aids; to be removed or hidden before release |
+| Link cleaner for outgoing messages | UNTESTED | Requested by the user 2026-11-12. "Remove Tracking from Links I Send" drops known tracking parameters; "Strict Link Cleaning" drops every parameter a site does not need, after Link Cleaner (corbindavenport/link-cleaner-js, MIT). Only text the system link detector recognises as a web link is changed, bare domains included; Telegram links and code are left alone. Edited messages are not covered |
+| Edit Sticker on premium stickers | UNTESTED | Requested by the user 2026-11-12. Offered when Send Premium Stickers as a Copy is on; the edited sticker is a new upload |
