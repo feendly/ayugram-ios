@@ -2477,9 +2477,9 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                 return false
             }
 
-            // AyuGram: without real Premium, a premium sticker is re-uploaded and sent as a plain copy.
-            // With local Premium on, the server would refuse the original, so the copy is always used.
-            if fileReference.media.isPremiumSticker && (AyuGramSettings.bool(.localPremium) || (AyuGramSettings.bool(.premiumStickersAsCopy) && !strongSelf.presentationInterfaceState.isPremium)) && (!AyuGramSettings.bool(.stickerConfirmation) || strongSelf.ayuSendConfirmed) {
+            // AyuGram: with "Send Premium Stickers as a Copy" on, a premium sticker is re-uploaded and sent as a plain copy
+            // (when the account has no real Premium, including when local Premium is on). With the switch off it is sent normally.
+            if AyuGramSettings.bool(.premiumStickersAsCopy) && fileReference.media.isPremiumSticker && (!strongSelf.presentationInterfaceState.isPremium || AyuGramSettings.bool(.localPremium)) && (!AyuGramSettings.bool(.stickerConfirmation) || strongSelf.ayuSendConfirmed) {
                 strongSelf.ayuSendStickerCopy(fileReference)
                 return true
             }
