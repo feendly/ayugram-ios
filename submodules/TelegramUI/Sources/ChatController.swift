@@ -11739,12 +11739,13 @@ extension ChatControllerImpl {
         let file = fileReference.media
         let account = self.context.account
         let threadId = self.chatLocation.threadId
+        let replySubject = self.presentationInterfaceState.interfaceState.replyMessageSubject?.subjectModel
         AyuGramSettings.debugLog("sticker copy start mime=\(file.mimeType)")
         let fetchDisposable = fetchedMediaResource(mediaBox: account.postbox.mediaBox, userLocation: .other, userContentType: MediaResourceUserContentType(file: file), reference: fileReference.resourceReference(file.resource)).startStandalone()
         let _ = (account.postbox.mediaBox.resourceData(file.resource)
         |> filter { $0.complete }
         |> take(1)
-        |> deliverOnMainQueue).startStandalone(next: { data in
+        |> deliverOnMainQueue).startStandalone(next: { [weak self] data in
             fetchDisposable.dispose()
             guard let content = try? Data(contentsOf: URL(fileURLWithPath: data.path)), !content.isEmpty else {
                 AyuGramSettings.debugLog("sticker copy FAILED to read data")
@@ -11778,7 +11779,25 @@ extension ChatControllerImpl {
 
             let copy = TelegramMediaFile(fileId: EngineMedia.Id(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: file.immediateThumbnailData, mimeType: file.mimeType, size: Int64(content.count), attributes: attributes, alternativeRepresentations: [])
             AyuGramSettings.debugLog("sticker copy enqueue bytes=\(content.count)")
-            let _ = enqueueMessages(account: account, peerId: peerId, messages: [.message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: copy), threadId: threadId, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])]).startStandalone()
+            let _ = enqueueMessages(account: account, peerId: peerId, messages: [.message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: copy), threadId: threadId, replyToMessageId: replySubject, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])]).startStandalone()
+            // Same follow-up as a normal sticker send: close the sticker panel and clear the reply.
+            if let strongSelf = self {
+                strongSelf.chatDisplayNode.collapseInput()
+                strongSelf.updateChatPresentationInterfaceState(animated: true, interactive: false, { current in
+                    var current = current
+                    current = current.updatedInterfaceState { interfaceState in
+                        var interfaceState = interfaceState
+                        interfaceState = interfaceState.withUpdatedReplyMessageSubject(nil).withUpdatedSendMessageEffect(nil).withUpdatedPostSuggestionState(nil)
+                        return interfaceState
+                    }.updatedInputMode { current in
+                        if case let .media(mode, maybeExpanded, focused) = current, maybeExpanded != nil {
+                            return .media(mode: mode, expanded: nil, focused: focused)
+                        }
+                        return current
+                    }
+                    return current
+                })
+            }
         })
     }
 }

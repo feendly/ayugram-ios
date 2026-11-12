@@ -96,6 +96,10 @@ public func chatListItemStrings(strings: PresentationStrings, nameDisplayOrder: 
     if let ayuMessage = message, ayuMessage.id.peerId.namespace != Namespaces.Peer.CloudUser, ayuMessage.flags.contains(.Incoming), let ayuAuthorId = ayuMessage.author?.id, AyuFilters.isShadowBanned(ayuAuthorId.id._internalGetInt64Value()) {
         return (nil, false, "Filtered message", [], nil, nil, nil)
     }
+    // AyuGram: blocked users do not show in the chat list preview of groups either
+    if AyuGramSettings.bool(.hideFromBlocked), let ayuMessage = message, ayuMessage.id.peerId.namespace != Namespaces.Peer.CloudUser, ayuMessage.flags.contains(.Incoming), let ayuBlockedAuthorId = ayuMessage.author?.id, AyuFilters.isBlocked(ayuBlockedAuthorId.toInt64()) {
+        return (nil, false, "Filtered message", [], nil, nil, nil)
+    }
     
     var hideAuthor = false
     var messageText: String
