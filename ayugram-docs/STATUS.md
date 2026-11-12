@@ -16,10 +16,10 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 40 |
+| TESTED | 41 |
 | LOG ONLY | 7 |
 | UNTESTED | 21 |
-| TODO | 32 |
+| TODO | 31 |
 | N/A | 10 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
@@ -132,7 +132,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | showAttachButtonInMessageField | on | TESTED (run 43084196247) |
 | showCommandsButtonInMessageField | on | UNTESTED (run 43113668579) |
 | showEmojiButtonInMessageField | on | TESTED |
-| showMicrophoneButtonInMessageField | on | TODO |
+| showMicrophoneButtonInMessageField | on | TESTED (icon hidden; background fix in run 43161070387) |
 | showAutoDeleteButtonInMessageField | on | UNTESTED (run 43113668579) |
 | showGiftButtonInMessageField | on | UNTESTED (run 43113668579) |
 | showAiEditorButtonInMessageField | on | TODO |

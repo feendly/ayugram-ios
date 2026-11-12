@@ -90,6 +90,8 @@ A feature counts as done only when its row says PASS.
 | 65 | Edit history sheet | run 43147318173 | Long-press "ghost 5 from nash v2", Edit History | Sheet with earlier versions, time and copy | "Edit History (1 earlier version)", "Nov 11, 2026 at 3:55:58 AM", the old text, Copy Version 1, Cancel. Copy itself not checked | PASS |
 | 66 | Filter applies to the open chat at once (fixed) | run 43147318173 | Long-press "sch", Add to Filters, without leaving the chat | Matching messages vanish immediately | "sch" and "sch x" disappeared at once | PASS |
 | 67 | Shadow ban applies at once; hidden in chat list preview | run 43147318173 | - | - | Not re-run; same refresh call as the filter case | NOT TESTED |
+| 68 | Premium sticker copy with Local Premium on | run 43147318173 | Override `localPremium` on before launch, copy switch on; tap a star-badged "Bird of Paradise" sticker | Sent as a copy | Log `sticker copy start` and `enqueue bytes=34398`; delivered. A regular sticker also sent normally | PASS |
+| 69 | Hide microphone button | run 43154802111 | Override off, open a chat | No mic button | Icon gone, but its empty round background stayed | PASS with gap (fix in run 43161070387) |
 
 ## Notes
 
@@ -119,3 +121,5 @@ A feature counts as done only when its row says PASS.
 - A test group named "Test" (nash and luki only) exists for group features since 2026-11-11.
 - 2026-11-11 late: with luki active, tapping a trending GIF sent it to nash without the confirmation alert. Trending and search GIFs use a separate send path (bot results) that the confirmation did not cover; row 41's pass was for saved GIFs only. Fix in run 43147318173.
 - With Local Premium on, every account logged in on the device shows as Premium inside the app (nash shows a star when viewed from luki).
+- Premium sticker copy rule (user's decision, 2026-11-12): it applies to premium stickers only. Copy switch on: sent as a copy when the account has no real Premium, including with Local Premium on. Copy switch off: sent normally, which the server refuses for an account without real Premium (three such failed sends from the user at 12:48 AM are in the luki-nash chat). Run 43154802111 briefly forced the copy whenever Local Premium was on; that was reverted.
+- The build PC's C: drive is full (83 MB free on 2026-11-12); artifact downloads now use F:\ayugram-ios\tmp for temp files.
