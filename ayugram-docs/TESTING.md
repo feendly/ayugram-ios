@@ -78,6 +78,7 @@ A feature counts as done only when its row says PASS.
 | 53 | Hide emoji button in message field | run 43113668579 | Override off, reopen chat | No emoji/sticker button in the field | Button gone | PASS |
 | 54 | Hide commands, auto-delete and gift buttons | run 43113668579 | - | - | The test chat shows none of these buttons to begin with | NOT TESTED |
 | 55 | Streamer mode hides the phone confirmation card | run 43113668579 | - | - | Checked on luki, which has no such card; not checked on nash | NOT TESTED |
+| 56 | Hide reactions in groups | run 43113668579 | In the Test group nash sends "g1" and reacts with a heart; override `showGroupReactions` off; reopen the group | Reaction not shown | Heart shown before, hidden after | PASS |
 
 ## Notes
 
@@ -104,3 +105,4 @@ A feature counts as done only when its row says PASS.
 - The two iPad reboots on 2026-11-11 (09:40 and 17:29 device time) were low-battery shutdowns: each has a LowBatteryLog at 1% capacity. The logs show the screen held on for hours, AyuGram in the foreground, and (second time) AyuGram's location keep-alive holding the system awake for 43 min. Not a crash or kernel panic.
 - Third shutdown, 19:02 device time, 90 s after installing run 43094601854: LowBatteryLog again, but at 16% reported charge with only 3367 mV (the earlier ones were at 1%). Five more LowBatteryLogs exist from 26 Sep to 4 Nov, before AyuGram was ever installed. Reading: a worn battery whose voltage collapses under load (install, app launch, screen on, VNC, location). No panic logs; the install itself is not the cause, the load spike at low charge is.
 - Over VNC, pressing a star-badged sticker in the pack preview sent it directly (no menu appeared); the press that sent it was a mouse click on a neighbouring cell, so the exact gesture is unclear.
+- A test group named "Test" (nash and luki only) exists for group features since 2026-11-11.

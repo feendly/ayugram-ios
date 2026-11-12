@@ -16,10 +16,10 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 34 |
+| TESTED | 35 |
 | LOG ONLY | 7 |
 | UNTESTED | 23 |
-| TODO | 36 |
+| TODO | 35 |
 | N/A | 10 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
@@ -65,7 +65,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | filtersEnabled (regex filters) | off | TESTED (filter "blockme" hid nash's message for luki) |
 | filtersEnabledInChats | off | TESTED |
 | hideFromBlocked | off | TODO |
-| shadowBanIds | empty | TODO |
+| shadowBanIds | empty | UNTESTED (run 43125223413; via message menu, shown in the filter list as user:<id>) |
 | filterZalgo | off | UNTESTED (run 43012742764) |
 | Per-chat filters, import/export | - | TODO |
 
@@ -116,7 +116,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | improveLinkPreviews | off | TODO | |
 | hideFastShare | off | UNTESTED | run 43084196247 |
 | showChannelReactions | on | UNTESTED | Run 43002933120 |
-| showGroupReactions | on | UNTESTED | Run 43002933120 |
+| showGroupReactions | on | TESTED | Run 43002933120 |
 | showPrivateChatReactions | on | TESTED | Reaction hidden with the switch off |
 | wideMultiplier | 1.0 | N/A | Desktop window layout |
 | hideNotificationCounters | off | TESTED | Chats tab counter only (run 43084196247) |
