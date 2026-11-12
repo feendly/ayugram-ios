@@ -92,6 +92,9 @@ A feature counts as done only when its row says PASS.
 | 67 | Shadow ban applies at once; hidden in chat list preview | run 43147318173 | - | - | Not re-run; same refresh call as the filter case | NOT TESTED |
 | 68 | Premium sticker copy with Local Premium on | run 43147318173 | Override `localPremium` on before launch, copy switch on; tap a star-badged "Bird of Paradise" sticker | Sent as a copy | Log `sticker copy start` and `enqueue bytes=34398`; delivered. A regular sticker also sent normally | PASS |
 | 69 | Hide microphone button | run 43154802111 | Override off, open a chat | No mic button | Icon gone, but its empty round background stayed | PASS with gap (fix in run 43161070387) |
+| 70 | Sticker copy rule: Local Premium on, copy on | run 43161070387 | Overrides on; tap a star-badged sticker | Sent as a copy | Log `sticker copy start` / `enqueue bytes=34398`; delivered at 2:39 AM | PASS |
+| 71 | Sticker copy rule: Local Premium on, copy off | run 43161070387 | Copy override off; tap a star-badged sticker | Sent normally (server refuses it) | No copy log line; message at 2:40 AM shows the failed mark | PASS (behaves as specified) |
+| 72 | Hide microphone button (fixed) | run 43161070387 | Override off, open a chat | No mic button or background | Field shows no mic and no empty circle | PASS |
 
 ## Notes
 

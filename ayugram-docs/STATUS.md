@@ -132,7 +132,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | showAttachButtonInMessageField | on | TESTED (run 43084196247) |
 | showCommandsButtonInMessageField | on | UNTESTED (run 43113668579) |
 | showEmojiButtonInMessageField | on | TESTED |
-| showMicrophoneButtonInMessageField | on | TESTED (icon hidden; background fix in run 43161070387) |
+| showMicrophoneButtonInMessageField | on | TESTED |
 | showAutoDeleteButtonInMessageField | on | UNTESTED (run 43113668579) |
 | showGiftButtonInMessageField | on | UNTESTED (run 43113668579) |
 | showAiEditorButtonInMessageField | on | TODO |
