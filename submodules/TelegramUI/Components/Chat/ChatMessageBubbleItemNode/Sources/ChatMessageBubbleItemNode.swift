@@ -4462,7 +4462,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
         } else if case .semanticallyMerged = updatedMergedTop {
             forceBackgroundSide = true
         }
-        let mergeType = ChatMessageBackgroundMergeType(top: updatedMergedTop == .fullyMerged, bottom: updatedMergedBottom == .fullyMerged, side: forceBackgroundSide)
+        let mergeType = ChatMessageBackgroundMergeType(top: updatedMergedTop == .fullyMerged, bottom: updatedMergedBottom == .fullyMerged, side: forceBackgroundSide || AyuGramSettings.bool(.removeMessageTail))
         let backgroundType: ChatMessageBackgroundType
         if hideBackground {
             backgroundType = .none

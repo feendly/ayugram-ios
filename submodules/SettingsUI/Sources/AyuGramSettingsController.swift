@@ -355,6 +355,8 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.semiTransparentDeletedMessages, "Dim Deleted Messages"),
         (.streamerMode, "Streamer Mode (Hide Phone Number)"),
         (.premiumStickersAsCopy, "Send Premium Stickers as a Copy"),
+        (.squareAvatars, "Rounded-Square Avatars (Restart to Apply)"),
+        (.removeMessageTail, "No Tail on Message Bubbles"),
         (.hideNotificationCounters, "Hide Unread Counter on Chats Tab"),
         (.gifConfirmation, "Confirm Before Sending GIFs"),
         (.disableGreetingSticker, "No Greeting Sticker in Empty Chats"),

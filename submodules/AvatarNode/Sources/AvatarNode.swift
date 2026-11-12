@@ -268,6 +268,14 @@ public func avatarNodeResolvedImage(context genericContext: AccountContext, peer
 
 /// The drawing parameters `ContentNode.setPeer(context:…)` builds for a peer, for the photo path (`hasImage`) and the
 /// letters/icon path. Shared with `AvatarComponent`.
+// AyuGram: optional rounded-square avatars instead of circles
+private func ayuAvatarClipStyle(_ clipStyle: AvatarNodeClipStyle) -> AvatarNodeClipStyle {
+    if clipStyle == .round && AyuGramSettings.bool(.squareAvatars) {
+        return .roundedRect
+    }
+    return clipStyle
+}
+
 public func avatarNodePeerParameters(context genericContext: AccountContext, accountPeerId: EnginePeer.Id, theme: PresentationTheme, peer: EnginePeer?, icon: AvatarNodeIcon, font: UIFont, hasImage: Bool, clipStyle: AvatarNodeClipStyle, cutoutRect: CGRect?) -> AvatarNodeParameters {
     let colors = calculateAvatarColors(context: genericContext, explicitColorIndex: nil, peerId: peer?.id ?? EnginePeer.Id(0), nameColor: peer?.nameColor, icon: icon, theme: theme)
     return AvatarNodeParameters(theme: theme, accountPeerId: accountPeerId, peerId: peer?.id ?? EnginePeer.Id(0), colors: colors, letters: peer?.displayLetters ?? [], font: font, icon: icon, explicitColorIndex: nil, hasImage: hasImage, clipStyle: clipStyle, cutoutRect: cutoutRect)
@@ -873,6 +881,7 @@ public final class AvatarNode: ASDisplayNode {
             storeUnrounded: Bool = false,
             cutoutRect: CGRect? = nil
         ) {
+            let clipStyle = ayuAvatarClipStyle(clipStyle)
             var synchronousLoad = synchronousLoad
             var representation: TelegramMediaImageRepresentation?
             var icon = AvatarNodeIcon.none
@@ -1001,6 +1010,7 @@ public final class AvatarNode: ASDisplayNode {
             displayDimensions: CGSize = CGSize(width: 60.0, height: 60.0),
             storeUnrounded: Bool = false
         ) {
+            let clipStyle = ayuAvatarClipStyle(clipStyle)
             let smallProfileImage = peer?.smallProfileImage
             let params = Params(
                 peerId: peer?.id,
@@ -1080,6 +1090,7 @@ public final class AvatarNode: ASDisplayNode {
             storeUnrounded: Bool = false,
             cutoutRect: CGRect? = nil
         ) {
+            let clipStyle = ayuAvatarClipStyle(clipStyle)
             let resolved = avatarNodeResolvedImage(context: genericContext, peer: peer, overrideImage: overrideImage, synchronousLoad: synchronousLoad)
             let synchronousLoad = resolved.synchronousLoad
             let representation = resolved.representation
