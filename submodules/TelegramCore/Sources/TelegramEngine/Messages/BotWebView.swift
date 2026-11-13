@@ -314,6 +314,8 @@ func _internal_requestWebView(postbox: Postbox, network: Network, stateManager: 
             switch result {
                 case let .webViewResultUrl(webViewResultUrlData):
                 let (webViewFlags, queryId, url) = (webViewResultUrlData.flags, webViewResultUrlData.queryId, webViewResultUrlData.url)
+                // AyuGram: test aid, records which platform the server put into the mini app address
+                AyuGramSettings.debugLog("webview url platform android=\(url.contains("tgWebAppPlatform=android")) ios=\(url.contains("tgWebAppPlatform=ios"))")
                 var resultFlags: RequestWebViewResult.Flags = []
                 if (webViewFlags & (1 << 1)) != 0 {
                     resultFlags.insert(.fullSize)

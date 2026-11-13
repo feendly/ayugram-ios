@@ -121,7 +121,7 @@ A feature counts as done only when its row says PASS.
 | 96 | Blocked users in chat list preview | run 43349311751 | Override on; luki blocks nash; scroll the Test group row off and back | "Filtered message" in the preview | Row kept "gdel1" until redrawn, then "nash / Filtered message". nash unblocked afterwards | PASS |
 | 97 | Hide All Chats folder tab | run 43349311751 | Override on; start the app on luki (folders Shield, ZoloCheat, sources) | No All Chats tab; app opens on the first folder; full list still reachable | Tabs Shield, ZoloCheat, sources; opened on Shield; tabs switch; Chats tab long-press > All Chats shows the full list | PASS |
 | 98 | Collapse similar channels | run 43358340179 | nash joins Telegram News; then taps the "You joined the channel" notice | No strip after joining; strip opens on tap | Notice alone after joining; Similar Channels strip appeared on tap | PASS |
-| 99 | Report Android to mini apps | run 43358340179 | Override on; nash starts Durger King and taps Order Food | Mini app told the platform is Android | Stopped at the mini app Terms of Use prompt (cancelled). This mini app would not show the platform anyway | NOT TESTED |
+| 99 | Report Android to mini apps | run 43358340179 | Override on; nash starts Durger King and taps Order Food | Mini app told the platform is Android | Terms of Use agreed on the user's instruction; the mini app opened normally but shows no platform, so the value could not be read | NOT TESTED (log line added) |
 
 ## Notes
 
