@@ -292,6 +292,7 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.useScheduledMessages, "Send via Schedule (No Online)"),
         (.sendWithoutSoundInGhost, "Send Silently in Ghost Mode"),
         (.sendWithoutSoundAlways, "Always Send Silently"),
+        (.suggestGhostModeBeforeViewingStory, "Offer Ghost Mode Before Viewing Stories"),
         (.lockSendReadMessages, "Lock Read Receipts"),
         (.lockSendReadStories, "Lock Story Views"),
         (.lockSendOnlinePackets, "Lock Online Status"),

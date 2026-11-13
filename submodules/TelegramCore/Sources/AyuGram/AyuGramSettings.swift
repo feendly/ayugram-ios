@@ -81,6 +81,7 @@ public final class AyuGramSettings {
         case hideFromBlocked
         case cleanLinks
         case cleanLinksStrict
+        case suggestGhostModeBeforeViewingStory
 
         public var defaultValue: Bool {
             switch self {
@@ -144,7 +145,7 @@ public final class AyuGramSettings {
                 return false
             case .showLReadToggleInDrawer, .showStreamerToggleInDrawer:
                 return false
-            case .showSReadToggleInDrawer, .showGhostToggleInDrawer:
+            case .showSReadToggleInDrawer, .showGhostToggleInDrawer, .suggestGhostModeBeforeViewingStory:
                 return true
             case .unlimitedRecentStickers, .showOnlyAddedEmojisAndStickers, .hideFromBlocked, .cleanLinks, .cleanLinksStrict:
                 return false

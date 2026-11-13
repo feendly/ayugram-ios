@@ -269,6 +269,8 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController 
     
     private var rawStorySubscriptions: EngineStorySubscriptions?
     private var shouldFixStorySubscriptionOrder: Bool = false
+    // AyuGram: set while the story is reopened after answering No to the ghost mode prompt
+    private var ayuStoryPromptAnswered = false
     private var fixedStorySubscriptionOrder: [EnginePeer.Id] = []
     private(set) var orderedStorySubscriptions: EngineStorySubscriptions?
     private var displayedStoriesTooltip: Bool = false
@@ -4452,6 +4454,24 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController 
     }
     
     public func openStories(peerId: EnginePeer.Id, completion: @escaping (StoryContainerScreen) -> Void = { _ in }) {
+        // AyuGram: offer ghost mode before viewing someone else's stories, as on desktop
+        if peerId != self.context.account.peerId && !self.ayuStoryPromptAnswered && AyuGramSettings.bool(.suggestGhostModeBeforeViewingStory) && AyuGramSettings.bool(.sendReadStories) && !AyuGramSettings.bool(.lockSendReadStories) && !AyuGramSettings.isGhostModeActive {
+            self.present(textAlertController(context: self.context, title: "Ghost Mode", text: "Turn on Ghost Mode before viewing this story? The author will not see that you viewed it.", actions: [TextAlertAction(type: .genericAction, title: "No", action: { [weak self] in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.ayuStoryPromptAnswered = true
+                strongSelf.openStories(peerId: peerId, completion: completion)
+                strongSelf.ayuStoryPromptAnswered = false
+            }), TextAlertAction(type: .defaultAction, title: "Yes", action: { [weak self] in
+                guard let strongSelf = self else {
+                    return
+                }
+                AyuGramSettings.setGhostModeActive(true)
+                strongSelf.openStories(peerId: peerId, completion: completion)
+            })]), in: .window(.root))
+            return
+        }
         if let navigationBarView = self.chatListDisplayNode.navigationBarView.view as? ChatListNavigationBar.View {
             if navigationBarView.storiesUnlocked {
                 self.shouldFixStorySubscriptionOrder = true
