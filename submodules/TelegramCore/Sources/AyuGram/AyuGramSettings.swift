@@ -85,6 +85,8 @@ public final class AyuGramSettings {
         case hideAllChatsFolder
         case collapseSimilarChannels
         case spoofWebviewAsAndroid
+        case channelBottomButtonDiscuss
+        case channelBottomButtonHidden
 
         public var defaultValue: Bool {
             switch self {
@@ -148,9 +150,9 @@ public final class AyuGramSettings {
                 return false
             case .showLReadToggleInDrawer, .showStreamerToggleInDrawer:
                 return false
-            case .showSReadToggleInDrawer, .showGhostToggleInDrawer, .suggestGhostModeBeforeViewingStory, .collapseSimilarChannels:
+            case .showSReadToggleInDrawer, .showGhostToggleInDrawer, .suggestGhostModeBeforeViewingStory, .collapseSimilarChannels, .channelBottomButtonDiscuss:
                 return true
-            case .unlimitedRecentStickers, .showOnlyAddedEmojisAndStickers, .hideFromBlocked, .cleanLinks, .cleanLinksStrict, .hideAllChatsFolder, .spoofWebviewAsAndroid:
+            case .unlimitedRecentStickers, .showOnlyAddedEmojisAndStickers, .hideFromBlocked, .cleanLinks, .cleanLinksStrict, .hideAllChatsFolder, .spoofWebviewAsAndroid, .channelBottomButtonHidden:
                 return false
             }
         }

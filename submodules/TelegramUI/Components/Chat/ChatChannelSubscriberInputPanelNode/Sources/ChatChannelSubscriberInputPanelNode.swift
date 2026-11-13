@@ -225,6 +225,8 @@ public final class ChatChannelSubscriberInputPanelNode: ChatInputPanelNode {
     private var action: SubscriberAction?
     
     private let actionDisposable = MetaDisposable()
+    // AyuGram: the mute button of a channel is showing "Discuss" instead
+    private var ayuDiscussActive = false
     private let badgeDisposable = MetaDisposable()
     private var isJoining: Bool = false
     /// Add to News and Add to Chats stay pending until the stored channel shows their result, not just until their
@@ -396,7 +398,16 @@ public final class ChatChannelSubscriberInputPanelNode: ChatInputPanelNode {
         case .kicked:
             break
         case .muteNotifications, .unmuteNotifications:
-            if let context = self.context, let presentationInterfaceState = self.presentationInterfaceState, let peer = presentationInterfaceState.renderedPeer?.peer {
+            if self.ayuDiscussActive {
+                // AyuGram: open the channel's discussion group
+                let ayuInteraction = self.interfaceInteraction
+                self.actionDisposable.set((context.engine.data.get(TelegramEngine.EngineData.Item.Peer.LinkedDiscussionPeerId(id: peer.id))
+                |> deliverOnMainQueue).startStrict(next: { ayuLinked in
+                    if case let .known(ayuLinkedId) = ayuLinked, let ayuDiscussionId = ayuLinkedId {
+                        ayuInteraction?.navigateToChat(ayuDiscussionId)
+                    }
+                }))
+            } else if let context = self.context, let presentationInterfaceState = self.presentationInterfaceState, let peer = presentationInterfaceState.renderedPeer?.peer {
                 self.actionDisposable.set(context.engine.peers.togglePeerMuted(peerId: peer.id, threadId: nil).startStrict())
             }
         case .hidePinnedMessages, .unpinMessages:
@@ -900,6 +911,19 @@ public final class ChatChannelSubscriberInputPanelNode: ChatInputPanelNode {
                 break
             }
             centerAction = (title, isAccent)
+            
+            // AyuGram: what a channel shows in place of Mute / Unmute
+            self.ayuDiscussActive = false
+            if action == .muteNotifications || action == .unmuteNotifications, let ayuChannel = peer as? TelegramChannel, case let .broadcast(ayuBroadcastInfo) = ayuChannel.info {
+                if AyuGramSettings.bool(.channelBottomButtonHidden) {
+                    centerAction = nil
+                } else if AyuGramSettings.bool(.channelBottomButtonDiscuss) && ayuBroadcastInfo.flags.contains(.hasDiscussionGroup) {
+                    self.ayuDiscussActive = true
+                    centerAction = ("Discuss", isAccent)
+                }
+            }
+        } else {
+            self.ayuDiscussActive = false
         }
         
         let islandContent: NewsChannelIslandView.Content?
@@ -920,7 +944,8 @@ public final class ChatChannelSubscriberInputPanelNode: ChatInputPanelNode {
         
         if let peer = interfaceState.renderedPeer?.peer as? TelegramChannel {
             if case .broadcast = peer.info, interfaceState.starGiftsAvailable {
-                displayGift = true
+                // AyuGram: the gift button switch also covers a channel's bottom bar
+                displayGift = AyuGramSettings.bool(.showGiftButtonInMessageField)
             }
             if case let .broadcast(broadcastInfo) = peer.info, broadcastInfo.flags.contains(.hasMonoforum) {
                 displaySuggestPost = true

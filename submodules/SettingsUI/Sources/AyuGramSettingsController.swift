@@ -373,6 +373,8 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.hideAllChatsFolder, "Hide All Chats Folder Tab (Restart to Apply)"),
         (.collapseSimilarChannels, "Collapse Similar Channels After Joining"),
         (.spoofWebviewAsAndroid, "Report Android to Mini Apps"),
+        (.channelBottomButtonDiscuss, "Channel Bottom Button: Discuss Instead of Mute"),
+        (.channelBottomButtonHidden, "Channel Bottom Button: Hide"),
         (.gifConfirmation, "Confirm Before Sending GIFs"),
         (.disableGreetingSticker, "No Greeting Sticker in Empty Chats"),
         (.voiceConfirmation, "Confirm Before Sending Recordings"),
