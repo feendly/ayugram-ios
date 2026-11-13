@@ -7,7 +7,10 @@ import MtProtoKit
 #if os(macOS)
 private let botWebViewPlatform = "macos"
 #else
-private let botWebViewPlatform = "ios"
+// AyuGram: mini apps can be told the client is Android
+private var botWebViewPlatform: String {
+    return AyuGramSettings.bool(.spoofWebviewAsAndroid) ? "android" : "ios"
+}
 #endif
 
 public enum RequestSimpleWebViewSource : Equatable {

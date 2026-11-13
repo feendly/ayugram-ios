@@ -132,7 +132,16 @@ func _internal_requestRecommendedChannels(account: Account, peerId: EnginePeer.I
                         }
                     }
                 }
-                if let entry = CodableEntry(CachedRecommendedChannels(peerIds: peers.map(\.id), count: count, isHidden: false, timestamp: Int32(Date().timeIntervalSince1970))) {
+                // AyuGram: a channel's similar channels start collapsed; a list the user already opened or closed keeps its state
+                var ayuIsHidden = false
+                if peerId != nil {
+                    if let ayuPrevious = transaction.retrieveItemCacheEntry(id: entryId(peerId: peerId))?.get(CachedRecommendedChannels.self) {
+                        ayuIsHidden = ayuPrevious.isHidden
+                    } else {
+                        ayuIsHidden = AyuGramSettings.bool(.collapseSimilarChannels)
+                    }
+                }
+                if let entry = CodableEntry(CachedRecommendedChannels(peerIds: peers.map(\.id), count: count, isHidden: ayuIsHidden, timestamp: Int32(Date().timeIntervalSince1970))) {
                     transaction.putItemCacheEntry(id: entryId(peerId: peerId), entry: entry)
                 }
                 return peers
