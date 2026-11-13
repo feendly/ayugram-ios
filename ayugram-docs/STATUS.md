@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43358340179 installed; next run building).
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43371882622 installed).
 
 Status values:
 
@@ -170,7 +170,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | Message shot (messages as image) | TODO | 7 options |
 | Forward without author / from restricted chats / repeat message | TODO | Copy and save in restricted chats is implemented (UNTESTED, no restricted chat at hand) |
 | Translator providers (Telegram, Google, Yandex, native) | TODO | |
-| Webview options (spoof Android, larger size) | TODO | "Report Android to Mini Apps" is coded (UNTESTED: the Durger King mini app opens with it on but does not show the platform; a log line added for the next build); the two size options are not |
+| Webview options (spoof Android, larger size) | TODO | "Report Android to Mini Apps" is coded (TESTED by log: the mini app address from the server says ios with it off and android with it on); the two size options are not |
 | `tg://ayu` settings links | TESTED | `tg://ayusettings` opens the AyuGram screen |
 | Saved music, cover search | TODO | Low priority |
 | Crash reporting to AyuGram | N/A | Deliberately not ported |
