@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43322077655 installed; run 43330220187 building).
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43330220187 installed).
 
 Status values:
 

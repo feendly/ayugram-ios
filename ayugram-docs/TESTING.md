@@ -117,6 +117,8 @@ A feature counts as done only when its row says PASS.
 | 92 | Link cleaner, strict | run 43322077655 | Override `cleanLinksStrict` on; send "strict https://www.youtube.com/watch?v=abc123&list=PL1&si=zzz&t=42 and example.com/p?id=5&x=1#frag" | YouTube keeps v and t; the other link loses everything | Sent as "strict https://www.youtube.com/watch?v=abc123&t=42 and example.com/p" | PASS |
 | 93 | Edit Sticker on a premium sticker | run 43322077655 | Hold a Bird of Paradise sticker in the sticker panel (3 s press over VNC), Edit Sticker, tick, Send Sticker | Editor opens; edited sticker is sent | Menu shows Edit Sticker; editor opened; sticker delivered at 8:10 PM as a still image | PASS |
 | 94 | Bot menu button (fixed) | run 43322077655 | nash opens VIRUS GAME BOT with the override off | No "Open" button | Button gone; message field starts at the attach button | PASS |
+| 95 | Sticker copy send: panel and reply follow-up | run 43330220187 | Swipe a message to reply, tap stickers from Bird of Paradise and recents | A premium sticker goes out as a copy, as a reply, and the reply bar clears | Five stickers sent, all as replies with the reply bar cleared, but none was a premium sticker: the log has no `sticker copy` line, so they went the normal path. The copy follow-up itself is not exercised | NOT TESTED |
+| 96 | Blocked users in chat list preview | run 43330220187 | - | "Filtered message" in the preview | Not run (needs nash blocked again) | NOT TESTED |
 
 ## Notes
 
@@ -157,3 +159,4 @@ A feature counts as done only when its row says PASS.
 - Mouse-wheel scrolling does nothing over VNC; lists are scrolled with a scripted drag.
 - 2026-11-12 evening, luki-nash chat: a duck sticker (7:41 PM), the two link-cleaner test messages (8:08 PM) and the edited bird sticker (8:10 PM) are from these tests. The user was also sending stickers there at the time.
 - Over VNC the sticker preview menu in the panel needs a press of about 3 s.
+- Row 95 left five bird stickers from luki in the luki-nash chat (9:09 to 9:12 PM). Without real or Local Premium the panel shows no badge on premium stickers that I could make out over VNC; swipe-left on a message sets a reply over VNC.
