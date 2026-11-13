@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43349311751 installed).
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43349311751 installed; run 43358340179 building).
 
 Status values:
 
@@ -18,8 +18,8 @@ Status values:
 |---|---|
 | TESTED | 58 |
 | LOG ONLY | 5 |
-| UNTESTED | 17 |
-| TODO | 21 |
+| UNTESTED | 18 |
+| TODO | 20 |
 | N/A | 11 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
@@ -83,7 +83,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | disableNotificationsDelay | off | N/A | Desktop delays its own notifications while another device is online; iOS notifications come from Apple's push service and have no such delay to remove |
 | disableGreetingSticker | off | UNTESTED | Run 43002933120 |
 | hidePremiumStatuses | off | TESTED | Chat list only: the status icon next to a contact's name disappears |
-| collapseSimilarChannels | on | TODO | |
+| collapseSimilarChannels | on | UNTESTED | Similar channels under the "you joined" notice start collapsed; tapping the notice opens them (run 43358340179). Channels whose list was already loaded keep their state |
 | hideSimilarChannels | off | UNTESTED | Run 43002933120 |
 | showOnlyAddedEmojisAndStickers | off | TESTED | Sticker panel only: trending strip and suggested packs gone after reopening the chat. Emoji panel not covered |
 | unlimitedRecentStickers | off | UNTESTED | Keeps up to 200 recent stickers on the device instead of 20. Needs more than 20 different stickers sent to check |
@@ -170,7 +170,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | Message shot (messages as image) | TODO | 7 options |
 | Forward without author / from restricted chats / repeat message | TODO | Copy and save in restricted chats is implemented (UNTESTED, no restricted chat at hand) |
 | Translator providers (Telegram, Google, Yandex, native) | TODO | |
-| Webview options (spoof Android, larger size) | TODO | 3 options |
+| Webview options (spoof Android, larger size) | TODO | "Report Android to Mini Apps" is coded (UNTESTED, run 43358340179); the two size options are not |
 | `tg://ayu` settings links | TESTED | `tg://ayusettings` opens the AyuGram screen |
 | Saved music, cover search | TODO | Low priority |
 | Crash reporting to AyuGram | N/A | Deliberately not ported |
