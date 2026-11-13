@@ -118,7 +118,8 @@ A feature counts as done only when its row says PASS.
 | 93 | Edit Sticker on a premium sticker | run 43322077655 | Hold a Bird of Paradise sticker in the sticker panel (3 s press over VNC), Edit Sticker, tick, Send Sticker | Editor opens; edited sticker is sent | Menu shows Edit Sticker; editor opened; sticker delivered at 8:10 PM as a still image | PASS |
 | 94 | Bot menu button (fixed) | run 43322077655 | nash opens VIRUS GAME BOT with the override off | No "Open" button | Button gone; message field starts at the attach button | PASS |
 | 95 | Sticker copy send: panel and reply follow-up | run 43330220187 | Swipe a message to reply, tap stickers from Bird of Paradise and recents | A premium sticker goes out as a copy, as a reply, and the reply bar clears | Five stickers sent, all as replies with the reply bar cleared, but none was a premium sticker: the log has no `sticker copy` line, so they went the normal path. The copy follow-up itself is not exercised | PASS (confirmed by the user on 2026-11-12 after sending a premium sticker as a reply; not seen by me) |
-| 96 | Blocked users in chat list preview | run 43330220187 | - | "Filtered message" in the preview | Not run (needs nash blocked again) | NOT TESTED |
+| 96 | Blocked users in chat list preview | run 43349311751 | Override on; luki blocks nash; scroll the Test group row off and back | "Filtered message" in the preview | Row kept "gdel1" until redrawn, then "nash / Filtered message". nash unblocked afterwards | PASS |
+| 97 | Hide All Chats folder tab | run 43349311751 | Override on; start the app on luki (folders Shield, ZoloCheat, sources) | No All Chats tab; app opens on the first folder; full list still reachable | Tabs Shield, ZoloCheat, sources; opened on Shield; tabs switch; Chats tab long-press > All Chats shows the full list | PASS |
 
 ## Notes
 

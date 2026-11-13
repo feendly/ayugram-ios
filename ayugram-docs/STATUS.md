@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43330220187 installed; run 43349311751 building).
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43349311751 installed).
 
 Status values:
 
@@ -16,9 +16,9 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 57 |
+| TESTED | 58 |
 | LOG ONLY | 5 |
-| UNTESTED | 18 |
+| UNTESTED | 17 |
 | TODO | 21 |
 | N/A | 11 |
 
@@ -64,7 +64,7 @@ Some rows group several related desktop settings, so the row count is lower than
 |---|---|---|
 | filtersEnabled (regex filters) | off | TESTED (filter "blockme" hid nash's message for luki) |
 | filtersEnabledInChats | off | TESTED |
-| hideFromBlocked | off | TESTED (groups only: after luki blocked nash, nash's messages and join notice disappeared from the Test group. Only for users whose blocked state the app has loaded or changed since this version. The chat list preview still shows the hidden message) |
+| hideFromBlocked | off | TESTED (groups only: after luki blocked nash, nash's messages and join notice disappeared from the Test group. Only for users whose blocked state the app has loaded or changed since this version. The chat list preview shows "Filtered message" once the row is redrawn; the author's name stays) |
 | shadowBanIds | empty | TESTED (via message menu, shown in the filter list as user:<id>) |
 | filterZalgo | off | TESTED (nash's zalgo message hidden for luki, "Filtered message" in the chat list) |
 | Per-chat filters, import/export | - | TODO |
@@ -121,7 +121,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | wideMultiplier | 1.0 | N/A | Desktop window layout |
 | hideNotificationCounters | off | TESTED | Chats tab counter only (run 43084196247) |
 | hideNotificationBadge | off | UNTESTED | The home screen cannot be reached over VNC; needs a look at the app icon on the iPad itself |
-| hideAllChatsFolder | off | UNTESTED | Hides the All Chats tab when there is at least one folder and starts on the first folder (run 43349311751). The All Chats list stays reachable by swiping and from the Chats tab menu |
+| hideAllChatsFolder | off | TESTED | Hides the All Chats tab when there is at least one folder and starts on the first folder. The All Chats list stays reachable from the Chats tab long-press menu (no tab is highlighted then); swiping does not reach it |
 | channelBottomButton | Discuss | TODO | |
 | quickAdminShortcuts | on | TODO | |
 
