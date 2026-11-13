@@ -120,6 +120,8 @@ A feature counts as done only when its row says PASS.
 | 95 | Sticker copy send: panel and reply follow-up | run 43330220187 | Swipe a message to reply, tap stickers from Bird of Paradise and recents | A premium sticker goes out as a copy, as a reply, and the reply bar clears | Five stickers sent, all as replies with the reply bar cleared, but none was a premium sticker: the log has no `sticker copy` line, so they went the normal path. The copy follow-up itself is not exercised | PASS (confirmed by the user on 2026-11-12 after sending a premium sticker as a reply; not seen by me) |
 | 96 | Blocked users in chat list preview | run 43349311751 | Override on; luki blocks nash; scroll the Test group row off and back | "Filtered message" in the preview | Row kept "gdel1" until redrawn, then "nash / Filtered message". nash unblocked afterwards | PASS |
 | 97 | Hide All Chats folder tab | run 43349311751 | Override on; start the app on luki (folders Shield, ZoloCheat, sources) | No All Chats tab; app opens on the first folder; full list still reachable | Tabs Shield, ZoloCheat, sources; opened on Shield; tabs switch; Chats tab long-press > All Chats shows the full list | PASS |
+| 98 | Collapse similar channels | run 43358340179 | nash joins Telegram News; then taps the "You joined the channel" notice | No strip after joining; strip opens on tap | Notice alone after joining; Similar Channels strip appeared on tap | PASS |
+| 99 | Report Android to mini apps | run 43358340179 | Override on; nash starts Durger King and taps Order Food | Mini app told the platform is Android | Stopped at the mini app Terms of Use prompt (cancelled). This mini app would not show the platform anyway | NOT TESTED |
 
 ## Notes
 
@@ -161,3 +163,4 @@ A feature counts as done only when its row says PASS.
 - 2026-11-12 evening, luki-nash chat: a duck sticker (7:41 PM), the two link-cleaner test messages (8:08 PM) and the edited bird sticker (8:10 PM) are from these tests. The user was also sending stickers there at the time.
 - Over VNC the sticker preview menu in the panel needs a press of about 3 s.
 - Row 95 left five bird stickers from luki in the luki-nash chat (9:09 to 9:12 PM). Without real or Local Premium the panel shows no badge on premium stickers that I could make out over VNC; swipe-left on a message sets a reply over VNC.
+- Rows 98 and 99 (with the user's go-ahead): nash is now a member of Telegram News and has a started Durger King bot chat. The iPad came back in landscape after a battery outage.
