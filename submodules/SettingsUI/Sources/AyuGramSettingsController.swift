@@ -370,6 +370,7 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.squareAvatars, "Rounded-Square Avatars (Restart to Apply)"),
         (.removeMessageTail, "No Tail on Message Bubbles"),
         (.hideNotificationCounters, "Hide Unread Counter on Chats Tab"),
+        (.hideAllChatsFolder, "Hide All Chats Folder Tab (Restart to Apply)"),
         (.gifConfirmation, "Confirm Before Sending GIFs"),
         (.disableGreetingSticker, "No Greeting Sticker in Empty Chats"),
         (.voiceConfirmation, "Confirm Before Sending Recordings"),

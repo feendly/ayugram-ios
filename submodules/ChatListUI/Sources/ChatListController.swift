@@ -4141,6 +4141,13 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController 
                 }
             }
             
+            // AyuGram: the All Chats tab can be hidden when there is at least one folder.
+            // Only the tab goes; the list itself stays reachable by swiping or from the Chats tab menu.
+            let ayuHideAllChats = AyuGramSettings.bool(.hideAllChatsFolder) && filterItems.contains(where: { $0.id != .all })
+            if ayuHideAllChats {
+                filterItems.removeAll(where: { $0.id == .all })
+            }
+
             var resolvedItems = filterItems
             if case .chatList(.root) = strongSelf.location {
             } else {
@@ -4156,7 +4163,11 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController 
                     firstItemEntryId = .filter(id)
             }
             
-            var selectedEntryId = !strongSelf.initializedFilters ? firstItemEntryId : strongSelf.chatListDisplayNode.mainContainerNode.currentItemFilter
+            var ayuFirstItemEntryId = firstItemEntryId
+            if ayuHideAllChats, let ayuFirstTab = resolvedItems.first {
+                ayuFirstItemEntryId = ayuFirstTab.id
+            }
+            var selectedEntryId = !strongSelf.initializedFilters ? ayuFirstItemEntryId : strongSelf.chatListDisplayNode.mainContainerNode.currentItemFilter
             var resetCurrentEntry = false
             if !resolvedItems.contains(where: { $0.id == selectedEntryId }) {
                 resetCurrentEntry = true
@@ -4177,6 +4188,10 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController 
                 } else {
                     selectedEntryId = .all
                 }
+            }
+            if ayuHideAllChats, !strongSelf.initializedFilters, selectedEntryId == .all, let ayuFirstTab = resolvedItems.first {
+                selectedEntryId = ayuFirstTab.id
+                resetCurrentEntry = true
             }
             let filtersLimit = isPremium == false ? limits.maxFoldersCount : nil
             strongSelf.tabContainerData = (resolvedItems, false, filtersLimit)

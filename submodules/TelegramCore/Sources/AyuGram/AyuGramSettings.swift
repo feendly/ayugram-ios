@@ -82,6 +82,7 @@ public final class AyuGramSettings {
         case cleanLinks
         case cleanLinksStrict
         case suggestGhostModeBeforeViewingStory
+        case hideAllChatsFolder
 
         public var defaultValue: Bool {
             switch self {
@@ -147,7 +148,7 @@ public final class AyuGramSettings {
                 return false
             case .showSReadToggleInDrawer, .showGhostToggleInDrawer, .suggestGhostModeBeforeViewingStory:
                 return true
-            case .unlimitedRecentStickers, .showOnlyAddedEmojisAndStickers, .hideFromBlocked, .cleanLinks, .cleanLinksStrict:
+            case .unlimitedRecentStickers, .showOnlyAddedEmojisAndStickers, .hideFromBlocked, .cleanLinks, .cleanLinksStrict, .hideAllChatsFolder:
                 return false
             }
         }
