@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43330220187 installed).
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43330220187 installed; run 43349311751 building).
 
 Status values:
 
@@ -18,9 +18,9 @@ Status values:
 |---|---|
 | TESTED | 57 |
 | LOG ONLY | 5 |
-| UNTESTED | 16 |
-| TODO | 24 |
-| N/A | 10 |
+| UNTESTED | 18 |
+| TODO | 21 |
+| N/A | 11 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
 
@@ -37,7 +37,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | markReadAfterAction | on | LOG ONLY | Reacting sends one read receipt (log `read forced`, `read push SENT`) |
 | useScheduledMessages | off | TESTED | Only with online status off, as on desktop. Message arrives about 12 s later; input field clears at once (run 43012742764) |
 | sendWithoutSound | Never | UNTESTED | Two switches: always, or only in ghost mode. Not observable from the sender's side |
-| suggestGhostModeBeforeViewingStory | on | TODO | |
+| suggestGhostModeBeforeViewingStory | on | UNTESTED | Prompt when opening someone's stories from the chat list (run 43349311751). Ghost Mode stays on afterwards; desktop turns it off again when the story closes. Stories opened from a profile or a chat avatar are not covered |
 | Per-setting "locked" flags (5) | off | TESTED | Five Lock switches. With Read Receipts locked, switching Ghost Mode on and off left it alone and changed the other four |
 | useGlobalGhostMode (per-account ghost) | on | TODO | iOS build is global only |
 | "Read message" context action | - | TESTED | "Send Read Receipt" in the long-press menu; nash saw two ticks (run 43002933120) |
@@ -80,7 +80,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | disableStories | off | UNTESTED | Switch on; no stories were available to compare |
 | disableCustomBackgrounds | off | UNTESTED | run 43084196247 |
 | disableOpenLinkWarning | off | UNTESTED | Needs a message with a hidden link |
-| disableNotificationsDelay | off | TODO | |
+| disableNotificationsDelay | off | N/A | Desktop delays its own notifications while another device is online; iOS notifications come from Apple's push service and have no such delay to remove |
 | disableGreetingSticker | off | UNTESTED | Run 43002933120 |
 | hidePremiumStatuses | off | TESTED | Chat list only: the status icon next to a contact's name disappears |
 | collapseSimilarChannels | on | TODO | |
@@ -121,7 +121,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | wideMultiplier | 1.0 | N/A | Desktop window layout |
 | hideNotificationCounters | off | TESTED | Chats tab counter only (run 43084196247) |
 | hideNotificationBadge | off | UNTESTED | The home screen cannot be reached over VNC; needs a look at the app icon on the iPad itself |
-| hideAllChatsFolder | off | TODO | |
+| hideAllChatsFolder | off | UNTESTED | Hides the All Chats tab when there is at least one folder and starts on the first folder (run 43349311751). The All Chats list stays reachable by swiping and from the Chats tab menu |
 | channelBottomButton | Discuss | TODO | |
 | quickAdminShortcuts | on | TODO | |
 
