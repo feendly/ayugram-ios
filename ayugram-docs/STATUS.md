@@ -75,7 +75,7 @@ Some rows group several related desktop settings, so the row count is lower than
 |---|---|---|---|
 | disableAds | on | UNTESTED | Needs a channel that shows ads; the one checked (32K subscribers) showed none even with the switch off |
 | localPremium | off | TESTED | Client side: premium flag for the logged-in accounts (star, premium-only rows). Server-enforced features stay locked. Restart to apply |
-| premiumStickersAsCopy | on | TESTED | Not in AyuGram Desktop; added at the user's request. Re-uploads a premium sticker and sends the copy. Animated stickers tested; user confirmed it shows as a sticker on another device; video stickers not checked |
+| premiumStickersAsCopy | on | TESTED | Not in AyuGram Desktop; added at the user's request. Re-uploads a premium sticker and sends the copy. Animated stickers tested; user confirmed it shows as a sticker on another device; video stickers not checked. From run 43330220187 the copy send closes the panel, clears the reply bar and keeps the reply like a normal send (confirmed by the user) |
 | Filtered/hidden messages in chat list preview | - | TESTED | Shows "Filtered message" |
 | disableStories | off | UNTESTED | Switch on; no stories were available to compare |
 | disableCustomBackgrounds | off | UNTESTED | run 43084196247 |
