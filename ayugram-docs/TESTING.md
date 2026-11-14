@@ -122,6 +122,9 @@ A feature counts as done only when its row says PASS.
 | 97 | Hide All Chats folder tab | run 43349311751 | Override on; start the app on luki (folders Shield, ZoloCheat, sources) | No All Chats tab; app opens on the first folder; full list still reachable | Tabs Shield, ZoloCheat, sources; opened on Shield; tabs switch; Chats tab long-press > All Chats shows the full list | PASS |
 | 98 | Collapse similar channels | run 43358340179 | nash joins Telegram News; then taps the "You joined the channel" notice | No strip after joining; strip opens on tap | Notice alone after joining; Similar Channels strip appeared on tap | PASS |
 | 99 | Report Android to mini apps | run 43358340179 | Override on; nash starts Durger King and taps Order Food | Mini app told the platform is Android | Terms of Use agreed on the user's instruction. Run 43371882622: log `webview url platform android=false ios=true` with the option off, `android=true ios=false` with it on; the mini app opened normally both times | PASS (log) |
+| 100 | Channel bottom button: Discuss | run 43527721168 | nash opens a joined channel with a discussion group (default settings), taps the bottom button; then a joined channel without one | "Discuss" opens the group; channel without a group keeps Mute | "Discuss" shown and opened the linked group; Telegram News (no group) shows Mute; with the option overridden off the first channel shows Mute again | PASS |
+| 101 | Channel bottom button: Hide | run 43527721168 | Override on; reopen a joined channel | No centre button | Centre button gone, search button stays | PASS |
+| 102 | Gift button switch in the channel bar | run 43527721168 | Override `showGiftButtonInMessageField` off; reopen a joined channel | Gift button gone from the bottom bar | Gone; back when the override is cleared | PASS |
 
 ## Notes
 

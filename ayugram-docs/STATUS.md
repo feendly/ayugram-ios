@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-12 (run 43371882622 installed).
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-13 (run 43527721168 installed).
 
 Status values:
 
@@ -16,10 +16,10 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 59 |
+| TESTED | 61 |
 | LOG ONLY | 5 |
-| UNTESTED | 17 |
-| TODO | 20 |
+| UNTESTED | 16 |
+| TODO | 19 |
 | N/A | 11 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
@@ -122,7 +122,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | hideNotificationCounters | off | TESTED | Chats tab counter only (run 43084196247) |
 | hideNotificationBadge | off | UNTESTED | The home screen cannot be reached over VNC; needs a look at the app icon on the iPad itself |
 | hideAllChatsFolder | off | TESTED | Hides the All Chats tab when there is at least one folder and starts on the first folder. The All Chats list stays reachable from the Chats tab long-press menu (no tab is highlighted then); swiping does not reach it |
-| channelBottomButton | Discuss | TODO | |
+| channelBottomButton | Discuss | TESTED | Two switches: "Discuss Instead of Mute" (on by default; only for channels with a discussion group, others keep Mute) and "Hide". Discuss opens the linked group (run 43527721168) |
 | quickAdminShortcuts | on | TODO | |
 
 ## Message field buttons
@@ -134,7 +134,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | showEmojiButtonInMessageField | on | TESTED |
 | showMicrophoneButtonInMessageField | on | TESTED |
 | showAutoDeleteButtonInMessageField | on | TESTED (the "1mo" timer button disappears) |
-| showGiftButtonInMessageField | on | UNTESTED (no chat at hand shows the button in the message field; the gift button in a channel's bottom bar is a different control and is not hidden) |
+| showGiftButtonInMessageField | on | TESTED | Hides the gift button in a channel's bottom bar (run 43527721168). No chat at hand shows the button in the message field itself, so that place is unverified |
 | showAiEditorButtonInMessageField | on | TODO |
 | showAttachPopup | on | N/A (hover popup) |
 | showEmojiPopup | on | N/A (hover popup) |
