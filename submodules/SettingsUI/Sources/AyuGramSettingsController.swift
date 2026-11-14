@@ -372,6 +372,8 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.removeMessageTail, "No Tail on Message Bubbles"),
         (.singleCornerRadius, "Round Avatars for Forums Too (Restart to Apply)"),
         (.simpleQuotesAndReplies, "Simple Quotes and Replies"),
+        (.replaceBottomInfoWithIcons, "Icons Instead of Edited and Deleted Marks"),
+        (.improveLinkPreviews, "Improve Link Previews"),
         (.hideNotificationCounters, "Hide Unread Counter on Chats Tab"),
         (.hideAllChatsFolder, "Hide All Chats Folder Tab (Restart to Apply)"),
         (.collapseSimilarChannels, "Collapse Similar Channels After Joining"),

@@ -151,7 +151,15 @@ public func webpagePreviewWithProgress(account: Account, urls: [String], webpage
                 }
             }
             
-            return account.network.requestWithAdditionalInfo(Api.functions.messages.getWebPagePreview(flags: 0, message: urls.joined(separator: " "), entities: nil), info: .progress)
+            // AyuGram: request the preview from a mirror with a richer preview; the message keeps the original link
+            let ayuUrls = urls.map(AyuGramSettings.betterLinkPreview)
+            let ayuSourceUrl: (String) -> String = { url in
+                if urls.count == 1 && urls[0] != ayuUrls[0] {
+                    return urls[0]
+                }
+                return url
+            }
+            return account.network.requestWithAdditionalInfo(Api.functions.messages.getWebPagePreview(flags: 0, message: ayuUrls.joined(separator: " "), entities: nil), info: .progress)
             |> `catch` { _ -> Signal<NetworkRequestResult<Api.messages.WebPagePreview>, NoError> in
                 return .single(.result(.webPagePreview(.init(media: .messageMediaEmpty, chats: [], users: []))))
             }
@@ -183,15 +191,15 @@ public func webpagePreviewWithProgress(account: Account, urls: [String], webpage
                                 
                                 if let media = telegramMediaWebpageFromApiWebpage(webpage), let url = media.content.url {
                                     if case .Loaded = media.content {
-                                        return .single(.result(WebpagePreviewResult.Result(webpage: media, sourceUrl: url)))
+                                        return .single(.result(WebpagePreviewResult.Result(webpage: media, sourceUrl: ayuSourceUrl(url))))
                                     } else {
-                                        return .single(.result(WebpagePreviewResult.Result(webpage: media, sourceUrl: url)))
+                                        return .single(.result(WebpagePreviewResult.Result(webpage: media, sourceUrl: ayuSourceUrl(url))))
                                         |> then(
                                             account.stateManager.updatedWebpage(media.webpageId)
                                             |> take(1)
                                             |> map { next -> WebpagePreviewWithProgressResult in
                                                 if let next, let url = next.content.url {
-                                                    return .result(WebpagePreviewResult.Result(webpage: next, sourceUrl: url))
+                                                    return .result(WebpagePreviewResult.Result(webpage: next, sourceUrl: ayuSourceUrl(url)))
                                                 } else {
                                                     return .result(nil)
                                                 }

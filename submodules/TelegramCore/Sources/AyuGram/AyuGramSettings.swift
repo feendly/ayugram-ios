@@ -90,6 +90,8 @@ public final class AyuGramSettings {
         case singleCornerRadius
         case simpleQuotesAndReplies
         case showAiEditorButtonInMessageField
+        case replaceBottomInfoWithIcons
+        case improveLinkPreviews
 
         public var defaultValue: Bool {
             switch self {
@@ -153,9 +155,9 @@ public final class AyuGramSettings {
                 return false
             case .showLReadToggleInDrawer, .showStreamerToggleInDrawer:
                 return false
-            case .showSReadToggleInDrawer, .showGhostToggleInDrawer, .suggestGhostModeBeforeViewingStory, .collapseSimilarChannels, .channelBottomButtonDiscuss, .showAiEditorButtonInMessageField:
+            case .showSReadToggleInDrawer, .showGhostToggleInDrawer, .suggestGhostModeBeforeViewingStory, .collapseSimilarChannels, .channelBottomButtonDiscuss, .showAiEditorButtonInMessageField, .replaceBottomInfoWithIcons:
                 return true
-            case .unlimitedRecentStickers, .showOnlyAddedEmojisAndStickers, .hideFromBlocked, .cleanLinks, .cleanLinksStrict, .hideAllChatsFolder, .spoofWebviewAsAndroid, .channelBottomButtonHidden, .singleCornerRadius, .simpleQuotesAndReplies:
+            case .unlimitedRecentStickers, .showOnlyAddedEmojisAndStickers, .hideFromBlocked, .cleanLinks, .cleanLinksStrict, .hideAllChatsFolder, .spoofWebviewAsAndroid, .channelBottomButtonHidden, .singleCornerRadius, .simpleQuotesAndReplies, .improveLinkPreviews:
                 return false
             }
         }
@@ -183,6 +185,9 @@ public final class AyuGramSettings {
 
     /// Text shown next to the time of a message the server deleted.
     public static var deletedMark: String {
+        if bool(.replaceBottomInfoWithIcons) {
+            return "\u{1F5D1}"
+        }
         if let value = defaults.string(forKey: "ayu.deletedMark"), !value.isEmpty {
             return value
         }
@@ -195,6 +200,9 @@ public final class AyuGramSettings {
 
     /// Custom replacement for the "edited" label; nil means the stock label.
     public static var editedMark: String? {
+        if bool(.replaceBottomInfoWithIcons) {
+            return "\u{270E}"
+        }
         if let value = defaults.string(forKey: "ayu.editedMark"), !value.isEmpty {
             return value
         }
@@ -203,6 +211,33 @@ public final class AyuGramSettings {
 
     public static func setEditedMark(_ value: String) {
         defaults.set(value, forKey: "ayu.editedMark")
+    }
+
+    /// Link used to request a preview: swaps a few hosts for mirrors that return richer previews.
+    public static func betterLinkPreview(_ url: String) -> String {
+        if !bool(.improveLinkPreviews) {
+            return url
+        }
+        guard var components = URLComponents(string: url), let rawHost = components.host, !rawHost.isEmpty else {
+            return url
+        }
+        let host = rawHost.lowercased()
+        if host == "twitter.com" || host == "x.com" {
+            components.host = "fixupx.com"
+        } else if host == "tiktok.com" || host.hasSuffix(".tiktok.com") {
+            components.host = host.replacingOccurrences(of: "tiktok.com", with: "kktiktok.com")
+        } else if host == "reddit.com" || host == "www.reddit.com" {
+            components.host = "vxreddit.com"
+        } else if host == "instagram.com" || host == "www.instagram.com" {
+            components.host = "kkclip.com"
+        } else if host == "pixiv.net" || host == "www.pixiv.net" {
+            components.host = "phixiv.net"
+        } else {
+            return url
+        }
+        let result = components.string ?? url
+        debugLog("link preview \(url) -> \(result)")
+        return result
     }
 
     // MARK: Test hooks
