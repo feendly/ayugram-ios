@@ -128,6 +128,7 @@ A feature counts as done only when its row says PASS.
 | 103 | Simple quotes and replies | run 43536445199 | Override on; reopen Telegram News and look at a link preview block | No fill behind the block, side line kept | Fill gone, side line kept; fill back with the override cleared | PASS |
 | 104 | AI editor button switch | run 43536445199 | Type a four-line draft (not sent) with the option on, then override it off and type again | AI button above the attach button, then gone | Shown with the option on; gone with it off. Draft deleted afterwards | PASS |
 | 105 | Round avatars for forums too | run 43536445199 | - | Forum avatar round | Not run: no forum chat on either account; two public groups tried were not forums | NOT RUN |
+| 106 | Hide similar channels | run 43536445199 | Override on; reopen Telegram News (joined on November 13, panel showing) | Similar Channels panel gone | Gone; back with the override cleared | PASS |
 
 ## Notes
 

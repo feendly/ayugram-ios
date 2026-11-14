@@ -16,9 +16,9 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 63 |
+| TESTED | 64 |
 | LOG ONLY | 5 |
-| UNTESTED | 17 |
+| UNTESTED | 16 |
 | TODO | 16 |
 | N/A | 11 |
 
@@ -84,7 +84,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | disableGreetingSticker | off | UNTESTED | Run 43002933120 |
 | hidePremiumStatuses | off | TESTED | Chat list only: the status icon next to a contact's name disappears |
 | collapseSimilarChannels | on | TESTED | Similar channels under the "you joined" notice start collapsed; tapping the notice opens them. Channels whose list was already loaded keep their state |
-| hideSimilarChannels | off | UNTESTED | Run 43002933120 |
+| hideSimilarChannels | off | TESTED | The Similar Channels panel shown after joining a channel is gone with the switch on (run 43536445199) |
 | showOnlyAddedEmojisAndStickers | off | TESTED | Sticker panel only: trending strip and suggested packs gone after reopening the chat. Emoji panel not covered |
 | unlimitedRecentStickers | off | UNTESTED | Keeps up to 200 recent stickers on the device instead of 20. Needs more than 20 different stickers sent to check |
 
