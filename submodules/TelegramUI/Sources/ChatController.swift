@@ -6269,6 +6269,39 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                             f(.dismissWithoutContent)
                             self?.interfaceInteraction?.beginMessageSearch(.everything, "")
                         })))
+                        
+                        // AyuGram: quick admin shortcuts
+                        if AyuGramSettings.bool(.quickAdminShortcuts), let channel = peer as? TelegramChannel {
+                            let isAdmin = channel.flags.contains(.isCreator) || channel.adminRights != nil
+                            var isGroup = false
+                            if case .group = channel.info {
+                                isGroup = true
+                            }
+                            if isAdmin {
+                                items.append(.action(ContextMenuActionItem(text: strongSelf.presentationData.strings.Group_Info_AdminLog, icon: { theme in
+                                    return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/List"), color: theme.actionSheet.primaryTextColor)
+                                }, action: { _, f in
+                                    f(.dismissWithoutContent)
+                                    guard let strongSelf = self else {
+                                        return
+                                    }
+                                    strongSelf.view.endEditing(true)
+                                    strongSelf.push(context.sharedContext.makeChatRecentActionsController(context: context, peer: EnginePeer(channel), adminPeerId: nil, starsState: nil))
+                                })))
+                            }
+                            if isGroup || isAdmin {
+                                items.append(.action(ContextMenuActionItem(text: strongSelf.presentationData.strings.GroupInfo_Administrators, icon: { theme in
+                                    return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Promote"), color: theme.actionSheet.primaryTextColor)
+                                }, action: { _, f in
+                                    f(.dismissWithoutContent)
+                                    guard let strongSelf = self else {
+                                        return
+                                    }
+                                    strongSelf.view.endEditing(true)
+                                    strongSelf.push(channelAdminsController(context: context, updatedPresentationData: strongSelf.updatedPresentationData, peerId: channel.id))
+                                })))
+                            }
+                        }
                                                 
                         return items
                     }

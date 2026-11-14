@@ -374,6 +374,7 @@ private func ayuGramSettingsControllerEntries() -> [AyuGramSettingsEntry] {
         (.simpleQuotesAndReplies, "Simple Quotes and Replies"),
         (.replaceBottomInfoWithIcons, "Icons Instead of Edited and Deleted Marks"),
         (.improveLinkPreviews, "Improve Link Previews"),
+        (.quickAdminShortcuts, "Quick Admin Shortcuts (Hold Chat Avatar)"),
         (.hideNotificationCounters, "Hide Unread Counter on Chats Tab"),
         (.hideAllChatsFolder, "Hide All Chats Folder Tab (Restart to Apply)"),
         (.collapseSimilarChannels, "Collapse Similar Channels After Joining"),
