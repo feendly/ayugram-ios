@@ -1,7 +1,7 @@
 # AyuGram for iOS: feature status
 
 One row per AyuGram Desktop setting or feature (source: `ayu/ayu_settings.h`
-and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-13 (run 43527721168 installed).
+and the `ayu/features` and `ayu/ui` folders). Updated 2026-11-13 (run 43536445199 installed).
 
 Status values:
 
@@ -16,10 +16,10 @@ Status values:
 
 | Status | Rows |
 |---|---|
-| TESTED | 61 |
+| TESTED | 63 |
 | LOG ONLY | 5 |
-| UNTESTED | 16 |
-| TODO | 19 |
+| UNTESTED | 17 |
+| TODO | 16 |
 | N/A | 11 |
 
 Some rows group several related desktop settings, so the row count is lower than the number of individual settings.
@@ -108,9 +108,9 @@ Some rows group several related desktop settings, so the row count is lower than
 | messageBubbleRadius | 16 | N/A | Stock setting exists: Appearance, Message Corners |
 | removeMessageTail | off | TESTED | |
 | avatarCorners | 23 | TESTED | On/off switch for rounded squares, not a radius slider; restart to apply |
-| singleCornerRadius | off | TODO | |
+| singleCornerRadius | off | UNTESTED | "Round Avatars for Forums Too": forum chats use the same avatar shape as other chats. No forum chat at hand to look at |
 | materialSwitches | on | N/A | iOS uses system switches |
-| simpleQuotesAndReplies | off | TODO | |
+| simpleQuotesAndReplies | off | TESTED | Reply, quote and link preview blocks lose the fill and emoji pattern; the side line stays (run 43536445199, checked on a link preview) |
 | replaceBottomInfoWithIcons | on | TODO | |
 | adaptiveCoverColor | on | TODO | |
 | improveLinkPreviews | off | TODO | |
@@ -135,7 +135,7 @@ Some rows group several related desktop settings, so the row count is lower than
 | showMicrophoneButtonInMessageField | on | TESTED |
 | showAutoDeleteButtonInMessageField | on | TESTED (the "1mo" timer button disappears) |
 | showGiftButtonInMessageField | on | TESTED | Hides the gift button in a channel's bottom bar (run 43527721168). No chat at hand shows the button in the message field itself, so that place is unverified |
-| showAiEditorButtonInMessageField | on | TODO |
+| showAiEditorButtonInMessageField | on | TESTED | The AI button that appears above the attach button once a draft reaches three lines (run 43536445199) |
 | showAttachPopup | on | N/A (hover popup) |
 | showEmojiPopup | on | N/A (hover popup) |
 

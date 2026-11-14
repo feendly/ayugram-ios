@@ -125,6 +125,9 @@ A feature counts as done only when its row says PASS.
 | 100 | Channel bottom button: Discuss | run 43527721168 | nash opens a joined channel with a discussion group (default settings), taps the bottom button; then a joined channel without one | "Discuss" opens the group; channel without a group keeps Mute | "Discuss" shown and opened the linked group; Telegram News (no group) shows Mute; with the option overridden off the first channel shows Mute again | PASS |
 | 101 | Channel bottom button: Hide | run 43527721168 | Override on; reopen a joined channel | No centre button | Centre button gone, search button stays | PASS |
 | 102 | Gift button switch in the channel bar | run 43527721168 | Override `showGiftButtonInMessageField` off; reopen a joined channel | Gift button gone from the bottom bar | Gone; back when the override is cleared | PASS |
+| 103 | Simple quotes and replies | run 43536445199 | Override on; reopen Telegram News and look at a link preview block | No fill behind the block, side line kept | Fill gone, side line kept; fill back with the override cleared | PASS |
+| 104 | AI editor button switch | run 43536445199 | Type a four-line draft (not sent) with the option on, then override it off and type again | AI button above the attach button, then gone | Shown with the option on; gone with it off. Draft deleted afterwards | PASS |
+| 105 | Round avatars for forums too | run 43536445199 | - | Forum avatar round | Not run: no forum chat on either account; two public groups tried were not forums | NOT RUN |
 
 ## Notes
 
