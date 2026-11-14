@@ -273,6 +273,10 @@ private func ayuAvatarClipStyle(_ clipStyle: AvatarNodeClipStyle) -> AvatarNodeC
     if clipStyle == .round && AyuGramSettings.bool(.squareAvatars) {
         return .roundedRect
     }
+    // AyuGram: one shape for every avatar, forums included
+    if clipStyle == .roundedRect && AyuGramSettings.bool(.singleCornerRadius) && !AyuGramSettings.bool(.squareAvatars) {
+        return .round
+    }
     return clipStyle
 }
 

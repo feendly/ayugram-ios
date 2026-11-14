@@ -3805,7 +3805,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
         var isAIButtonVisible = false
         var attachmentPillHeight: CGFloat = 40.0
         let inputHasNonWhitespaceText = !(self.richTextInputNode?.inputContentIsEmptyWhitespaceTrimmed ?? true)
-        if self.isAIEnabled, inputHasNonWhitespaceText, let node = self.richTextInputNode {
+        if self.isAIEnabled, AyuGramSettings.bool(.showAiEditorButtonInMessageField), inputHasNonWhitespaceText, let node = self.richTextInputNode {
             let threeLineHeight = self.threeLineFieldHeight(forWidth: baseWidth, node: node, metrics: metrics, bottomInset: bottomInset, textFieldInsets: textFieldInsets)
             if textInputHeight >= threeLineHeight - 0.5 {
                 isAIButtonVisible = true

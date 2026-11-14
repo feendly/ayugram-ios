@@ -623,6 +623,10 @@ public final class MessageInlineBlockBackgroundView: UIView {
         patternAlpha: CGFloat = 1.0,
         animation: ListViewItemUpdateAnimation
     ) {
+        // AyuGram: simple quotes and replies have no fill and no emoji pattern
+        let ayuSimple = AyuGramSettings.bool(.simpleQuotesAndReplies)
+        let isTransparent = isTransparent || ayuSimple
+        let pattern = ayuSimple ? nil : pattern
         let params = Params(
             size: size,
             isTransparent: isTransparent,
