@@ -129,6 +129,8 @@ A feature counts as done only when its row says PASS.
 | 104 | AI editor button switch | run 43536445199 | Type a four-line draft (not sent) with the option on, then override it off and type again | AI button above the attach button, then gone | Shown with the option on; gone with it off. Draft deleted afterwards | PASS |
 | 105 | Round avatars for forums too | run 43536445199 | - | Forum avatar round | Not run: no forum chat on either account; two public groups tried were not forums | NOT RUN |
 | 106 | Hide similar channels | run 43536445199 | Override on; reopen Telegram News (joined on November 13, panel showing) | Similar Channels panel gone | Gone; back with the override cleared | PASS |
+| 107 | Icons instead of edited and deleted marks | run 43556106622 | Default on; as nash open the luki chat, look at kept deleted messages; send "edi icon test" to luki and edit it; then override off and reopen | Bin glyph on deleted, pencil glyph on edited; old marks with it off | Bin on the two deleted messages of November 11 and pencil on the edited message; with the override off the deleted ones show the broom mark again | PASS |
+| 108 | Improve link previews | run 43556106622 | Override on; type `x.com/...` as a draft | Log line `link preview ... -> fixupx.com` | No log line: a link without a scheme was not rewritten. Fixed in code; typing over VNC also dropped letters, so no valid link was entered | FAIL, retest on next build |
 
 ## Notes
 
@@ -171,3 +173,4 @@ A feature counts as done only when its row says PASS.
 - Over VNC the sticker preview menu in the panel needs a press of about 3 s.
 - Row 95 left five bird stickers from luki in the luki-nash chat (9:09 to 9:12 PM). Without real or Local Premium the panel shows no badge on premium stickers that I could make out over VNC; swipe-left on a message sets a reply over VNC.
 - Rows 98 and 99 (with the user's go-ahead): nash is now a member of Telegram News and has a started Durger King bot chat. The iPad came back in landscape after a battery outage.
+- Row 107 left one message from nash in the luki-nash chat ("edi icon test v2", 1:57 AM November 14). Typing over VNC drops letters when sent quickly.
