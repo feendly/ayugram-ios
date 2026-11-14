@@ -219,7 +219,9 @@ public final class AyuGramSettings {
         if !bool(.improveLinkPreviews) {
             return url
         }
-        guard var components = URLComponents(string: url), let rawHost = components.host, !rawHost.isEmpty else {
+        // Links typed without a scheme ("x.com/...") have no host until one is added
+        let normalized = url.contains("://") ? url : "https://" + url
+        guard var components = URLComponents(string: normalized), let rawHost = components.host, !rawHost.isEmpty else {
             return url
         }
         let host = rawHost.lowercased()
